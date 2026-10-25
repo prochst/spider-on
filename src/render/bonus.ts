@@ -3,7 +3,8 @@
 // to stand out from the flies. The theme system in chapter 2.5 will take
 // over the colours; the shapes stay.
 
-import type { BonusKind, BonusPackage } from "../game/bonus";
+import type { BonusKind, BonusNotice, BonusNoticeKind, BonusPackage } from "../game/bonus";
+import { BONUS_POINTS } from "../game/config";
 import { ringPoint } from "../game/geometry";
 import type { View } from "./view";
 
@@ -97,4 +98,36 @@ function roundedSquare(ctx: CanvasRenderingContext2D, s: number): void {
   ctx.arcTo(-s, s, -s, -s, r);
   ctx.arcTo(-s, -s, s, -s, r);
   ctx.closePath();
+}
+
+// Each line fits inside the innermost ring.
+const NOTICE_LINES: Record<BonusNoticeKind, string[]> = {
+  points: [`+${BONUS_POINTS} BODŮ`],
+  slowdown: ["ZPOMALENÍ", "NEPŘÁTEL"],
+  life: ["+1 ŽIVOT"],
+  livesFull: ["ŽIVOTY", "JSOU PLNÉ"],
+};
+const NOTICE_COLORS: Record<BonusNoticeKind, string> = { ...COLORS, livesFull: COLORS.life };
+const NOTICE_FONT_SIZE = 0.06;
+/** The message fades out during its last half second. */
+const NOTICE_FADE_TIME = 0.5;
+
+/** What the last eaten package gave, in the middle of the web (spec chapter 4). */
+export function drawBonusNotice(ctx: CanvasRenderingContext2D, view: View, notice: BonusNotice): void {
+  const lines = NOTICE_LINES[notice.kind];
+  const color = NOTICE_COLORS[notice.kind];
+  const size = Math.round(NOTICE_FONT_SIZE * view.unit);
+  const lineHeight = size * 1.2;
+
+  ctx.save();
+  ctx.globalAlpha = Math.min(1, notice.timeLeft / NOTICE_FADE_TIME);
+  ctx.fillStyle = color;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 14;
+  ctx.font = `700 ${size}px system-ui, sans-serif`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  const top = view.cy - ((lines.length - 1) * lineHeight) / 2;
+  lines.forEach((line, i) => ctx.fillText(line, view.cx, top + i * lineHeight));
+  ctx.restore();
 }

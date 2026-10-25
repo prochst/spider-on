@@ -4,7 +4,15 @@
 // happens lives here.
 
 import { type BonusKind, createBonusState, updateBonus } from "./bonus";
-import { BONUS_FIRST_ROUND, BONUS_POINTS, FLY_POINTS, MAX_LIVES, ROUND_BONUS_PER_ROUND, START_LIVES } from "./config";
+import {
+  BONUS_FIRST_ROUND,
+  BONUS_NOTICE_TIME,
+  BONUS_POINTS,
+  FLY_POINTS,
+  MAX_LIVES,
+  ROUND_BONUS_PER_ROUND,
+  START_LIVES,
+} from "./config";
 import { createField, type Field, playerHitsEnemy, steerPlayer, stepField } from "./field";
 import { collectFlies, fliesLeft } from "./flies";
 import { difficultyForRound, enemiesForDifficulty, ringCountForRound } from "./progression";
@@ -109,7 +117,7 @@ function playStep(game: Game, dt: number): void {
     addPoints(session, collected * FLY_POINTS);
   }
   const eaten = updateBonus(field.bonus, field.flies, field.player, angleBefore, dt, game.random);
-  if (eaten) applyBonus(session, eaten);
+  if (eaten) applyBonus(game, eaten);
   // The last fly wins over a crash in the same step: the player reached it first.
   if (fliesLeft(field.flies) === 0) {
     finishRound(game);
@@ -119,9 +127,12 @@ function playStep(game: Game, dt: number): void {
 }
 
 /** The slowdown is already running inside the field; points and lives belong to the session. */
-function applyBonus(session: Session, kind: BonusKind): void {
+function applyBonus(game: Game, kind: BonusKind): void {
+  const { session } = game;
+  const livesFull = kind === "life" && session.lives >= MAX_LIVES;
   if (kind === "points") addPoints(session, BONUS_POINTS);
   if (kind === "life") session.lives = Math.min(session.lives + 1, MAX_LIVES);
+  game.field.bonus.notice = { kind: livesFull ? "livesFull" : kind, timeLeft: BONUS_NOTICE_TIME };
 }
 
 function finishRound(game: Game): void {

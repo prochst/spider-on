@@ -18,6 +18,9 @@ Viz [prompty/2-hra/04-ai-a-balicky.md](../../prompty/2-hra/04-ai-a-balicky.md). 
 - **Zpomalení o 40 % a pak o dalších 20 %.** Na pokyn uživatele klesla základní rychlost z 0,7 na 0,42 a pak na 0,336 R/s. Nepřátelé mají rychlost jako násobek hráčovy, takže zpomalili s ní. Agent změny nejdřív zapsal do specifikace (verze 0.6 a 0.7), pak upravil jednu konstantu v `config.ts`.
 - **Snazší změna kruhu.** Uživatel napsal, že se těžko trefuje do zóny před vláknem a „změna vlevo a vpravo se mi nepovedla vůbec“. Agent to vyložil tak, že u bočních vláken zkoušel šipky vlevo a vpravo, které hra neznala. Přidal proto funkci `turnForDirection`: směr na obrazovce porovná se směrem vlákna, ke kterému pavouk míří. U pravého vlákna je šipka vpravo „ven“, vlevo „dovnitř“. Stejné pravidlo specifikace předepisuje pro tah po touchpadu, takže ho kapitola 2.6 použije znovu. Zónu pro zapamatování pokynu agent rozšířil z 15° na 30°. Spolu se zpomalením má hráč na vnějším kruhu na stisk 1,4 s místo původních 0,34 s. Protože 15° bylo výslovné rozhodnutí uživatele z kapitoly 1.1, agent mu změnu předložil k potvrzení a uživatel ji schválil.
 - **Šipky podle směru na obrazovce.** Po ručním testu sloučené verze uživatel potvrdil, že rychlost je dobrá, a chtěl, aby všechny šipky odpovídaly směru přesunu na obrazovce: po svislém vlákně nahoru a dolů, po vodorovném vlevo a vpravo. Původní „dolů = dovnitř, nahoru = ven“ ze specifikace působilo u dolního vlákna obráceně. Díky funkci `turnForDirection` z předchozího kroku to byla změna mapování kláves na pár řádků. Specifikace má verzi 0.8.
+- **Mírnější obtížnost.** Hra byla podle uživatele i po zpomalení od začátku těžká. Nepřátelé teď lezou 0,3× až 0,9× rychlosti hráče místo 0,75× až 1,3×. Zadání „interval 0,3 až 0,9“ agent vyložil jako rozpětí celé hry: pomalý 0,3×, rychlý 0,6× a od stupně 10 rychlí nepřátelé přidávají 0,05× za stupeň až do 0,9×. Rychlý 0,6× vyšel i z přepočtu starého rozpětí na nové. Tabulka obtížnosti zrychluje nepřátele po jednom: 1 pomalý, 1 rychlý, 2 pomalí, 1 pomalý a 1 rychlý, 2 rychlí, 3 pomalí, 2 pomalí a 1 rychlý, 1 pomalý a 2 rychlí, 3 rychlí. Agent ji v kódu zapsal jako tabulku řádek po řádku, stejně jako ve specifikaci, místo vzorce s dělením a zbytkem, který tam byl dřív. Typ `EnemySetup` je teď seznam rychlostí, jedna pro každého nepřítele. Specifikace má verzi 0.9.
+- **Zpráva o získaném bonusu.** Po sebrání balíčku se ve středu pavučiny na 3 s ukáže barvou balíčku „+250 BODŮ“, „ZPOMALENÍ NEPŘÁTEL“ nebo „+1 ŽIVOT“ a posledních půl sekundy pohasíná. Agent domyslel i případ, který zadání neřešilo: balíček se životem při plných pěti životech. Hráč by jinak viděl „+1 ŽIVOT“, i když žádný nedostal, proto se ukáže „ŽIVOTY JSOU PLNÉ“. Odpočet běží v logice (`bonus.notice`), vykreslení jen čte zbývající čas.
+- **Balíčky dočasně od 1. kola.** Aby uživatel nemusel kvůli testu balíčků dohrát pět kol, agent nastavil `BONUS_FIRST_ROUND = 1`. Test počítá s hodnotou z konfigurace, takže po návratu na 6 zůstane platný.
 
 ## Kde se agent spletl
 
@@ -33,14 +36,14 @@ Viz [prompty/2-hra/04-ai-a-balicky.md](../../prompty/2-hra/04-ai-a-balicky.md). 
 - **Šířka zóny.** Agent nabídl tři možnosti (15°, 30°, 45°) a doporučil 30°. Uživatel zvolil 30°.
 - **Vzhled balíčků.** Agent ho ukazuje v pull requestu na náhledu, uživatel rozhodne, jestli tvary a barvy sedí.
 - **Stará verze z mezipaměti.** Po sloučení ovládání podle směru uživatel hlásil, že dole fungují šipky nahoru a dolů obráceně. Přesně tak se chovala předchozí verze. Agent nový kód přehrál v prohlížeči, ověřil, že nasazení doběhlo, a poradil stránku znovu načíst bez mezipaměti (Ctrl+Shift+R). Potom šipky fungovaly správně. GitHub Pages nechává stránku v mezipaměti až 10 minut.
-- **Balíčky od prvního kola.** Aby uživatel nemusel kvůli testu balíčků dohrát pět kol, agent dočasně nastavil `BONUS_FIRST_ROUND = 1`. Test počítá s hodnotou z konfigurace, takže po návratu na 6 zůstane platný.
+- **Výklad „intervalu 0,3 až 0,9“.** Šlo to číst i jako pomalý 0,3× a rychlý 0,9×. Agent zvolil rozpětí celé hry, protože uživatel chtěl hlavně snazší začátek, a výklad napsal do pull requestu, aby ho uživatel mohl při ručním testu opravit.
 - **Upřesnění specifikace 0.6**: balíček nebere poslední mouchu a nepřítel se rozhoduje ve chvíli příchodu na vlákno.
 
 ## Metriky
 
 - Nové soubory: 7 v `src/` (náhoda, AI, balíčky, vykreslení balíčků, 3 testy), upravených 9.
-- Testy: 114 (33 nových), všechny procházejí.
-- Velikost sestavené hry: 17,0 kB JavaScriptu (6,5 kB po kompresi).
+- Testy: 117 (36 nových), všechny procházejí.
+- Velikost sestavené hry: 18,2 kB JavaScriptu (7,1 kB po kompresi).
 - Iterace: dvě kola poznatků uživatele, oprava 2 a pak 10 testů, dva pokusy o náhled balíčků.
 
 ## Poučení

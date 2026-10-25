@@ -16,6 +16,9 @@ import type { Spider } from "./spider";
 
 export type BonusKind = "points" | "slowdown" | "life";
 export type BonusPackage = { ring: number; angle: number; kind: BonusKind };
+/** What the player got from a package; "livesFull" is a life package eaten with all lives already. */
+export type BonusNoticeKind = BonusKind | "livesFull";
+export type BonusNotice = { kind: BonusNoticeKind; timeLeft: number };
 
 export type BonusState = {
   /** Packages appear only from round 6 on. */
@@ -25,12 +28,14 @@ export type BonusState = {
   package: BonusPackage | null;
   /** Angle the player still has to crawl before the enemies speed up again; 0 when there is no slowdown. */
   slowdownLeft: number;
+  /** Message about the last eaten package, shown in the middle of the web for a while. */
+  notice: BonusNotice | null;
 };
 
 const FULL_LAP = 2 * Math.PI;
 
 export function createBonusState(enabled: boolean, random: Random): BonusState {
-  return { enabled, wait: randomBetween(random, BONUS_DELAY_MIN, BONUS_DELAY_MAX), package: null, slowdownLeft: 0 };
+  return { enabled, wait: randomBetween(random, BONUS_DELAY_MIN, BONUS_DELAY_MAX), package: null, slowdownLeft: 0, notice: null };
 }
 
 export function rollBonusKind(random: Random): BonusKind {
@@ -80,6 +85,10 @@ export function updateBonus(
   dt: number,
   random: Random,
 ): BonusKind | null {
+  if (state.notice) {
+    state.notice.timeLeft -= dt;
+    if (state.notice.timeLeft <= 0) state.notice = null;
+  }
   const progress = playerProgress(player, angleBefore);
   if (state.slowdownLeft > 0) state.slowdownLeft = Math.max(0, state.slowdownLeft - progress);
 

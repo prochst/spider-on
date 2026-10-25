@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.8. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.9. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -38,6 +38,8 @@ Hra běží v prohlížeči, na Androidu a na iOS. Výchozí grafický styl je n
 | Zpomalení nepřátel | 22 % | Všichni nepřátelé lezou poloviční rychlostí, dokud hráčův pavouk neoběhne jeden celý okruh (360°) |
 | Život navíc | 3 % | +1 život (nejvýš 5) |
 
+- Po sebrání balíčku se ve **středu pavučiny na 3 s (laditelné)** ukáže, co hráč získal: „+250 bodů“, „Zpomalení nepřátel“, nebo „+1 život“ (při plném počtu životů „Životy jsou plné“). Zpráva ke konci pohasne a zmizí i při srážce.
+
 ## 5. Pohyb hráče
 
 - Hráčův pavouk leze **proti směru hodinových ručiček** a nemůže zastavit ani couvat.
@@ -60,16 +62,20 @@ Hra rozlišuje **číslo kola** (počítá se od 1 a jen roste, používá se pr
 | --- | --- | --- |
 | 3 kruhy | 1 až 3 | 1, 2, 3 |
 | 4 kruhy | 4 až 9 | 3, 4, 5, 6, 7, 8 |
-| 5 kruhů | 10 a další | 5, 6, 7, 8, … (každé kolo o stupeň výš) |
+| 5 kruhů | 10 a další | 5, 6, 7, 8, 9, 10, … (každé kolo o stupeň výš) |
 
 | Stupeň obtížnosti | Nepřátelé |
 | --- | --- |
 | 1 | 1 pomalý |
 | 2 | 1 rychlý |
 | 3 | 2 pomalí |
-| 4 | 2 rychlí |
-| 5 | 3 pomalí |
-| 6 a vyšší | 3 rychlí, rychlost +3 % za každý stupeň nad 6, nejvýš 1,3× |
+| 4 | 1 pomalý, 1 rychlý |
+| 5 | 2 rychlí |
+| 6 | 3 pomalí |
+| 7 | 2 pomalí, 1 rychlý |
+| 8 | 1 pomalý, 2 rychlí |
+| 9 | 3 rychlí |
+| 10 a vyšší | 3 rychlí, rychlost +0,05× za každý stupeň nad 9, nejvýš 0,9× |
 
 - Kolo končí sebráním poslední mouchy. Hra se zastaví a ukáže obrazovku **Kolo dokončeno** (kapitola 12). Další kolo začne **až na pokyn hráče**, s plnou pavučinou much. Když hráč sebere poslední mouchu ve stejném okamžiku, kdy se srazí, platí sebrání a kolo je dokončené.
 - Při přechodu na větší plochu obrazovka Kolo dokončeno hráče upozorní, že pavučina se rozrůstá.
@@ -77,7 +83,7 @@ Hra rozlišuje **číslo kola** (počítá se od 1 a jen roste, používá se pr
 ## 7. Nepřátelští pavouci
 
 - Lezou **po směru hodinových ručiček**, nikdy nezastaví.
-- Rychlost se zadává jako násobek hráčovy základní rychlosti: **pomalý 0,75×, rychlý 1,0× (laditelné)**. Nepřátelé plyn nemají.
+- Rychlost se zadává jako násobek hráčovy základní rychlosti: **pomalý 0,3×, rychlý 0,6×, nejrychlejší 0,9× (laditelné)**. Všechny rychlosti nepřátel leží v rozmezí 0,3× až 0,9× rychlosti hráče. Nepřátelé plyn nemají.
 - **Chování (AI)**: na každém přechodovém vlákně se nepřítel rozhodne ve chvíli, kdy na vlákno dorazí:
   - s pravděpodobností `p` přeleze o **jeden** kruh směrem ke kruhu, na který míří hráč (cílový kruh hráčova pokynu, jinak jeho aktuální kruh),
   - jinak pokračuje po svém kruhu.
@@ -147,7 +153,7 @@ Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do poz
 ## 14. Šablony vzhledu
 
 - Vzhled je oddělený od pravidel. Herní logika zná jen pozice, směry a stavy, nic neví o barvách ani tvarech.
-- Šablona definuje paletu, písmo a kreslicí funkce pro: pozadí, pavučinu, přechodová vlákna, mouchu, bonusové balíčky (každý obsah zvlášť), hráčova pavouka, nepřátelského pavouka, zpomaleného nepřítele, efekt srážky, HUD a dotykové ovládání.
+- Šablona definuje paletu, písmo a kreslicí funkce pro: pozadí, pavučinu, přechodová vlákna, mouchu, bonusové balíčky (každý obsah zvlášť), zprávu o získaném bonusu, hráčova pavouka, nepřátelského pavouka, zpomaleného nepřítele, efekt srážky, HUD a dotykové ovládání.
 - Výchozí šablona je **Neon**. Druhá šablona **Čmáranice** (tužka na čtverečkovaném papíře) přijde později jako ukázka přidání šablony.
 - Šablona se vybírá v Nastavení. Volba se pamatuje.
 
@@ -176,5 +182,6 @@ Další rozhodnutí uživatele:
 
 - Po ručním testování (verze 0.6): základní rychlost pohybu snížena o 40 %, z 0,7 na 0,42 R/s. Nepřátelé, jejichž rychlost je násobkem základní, se zpomalili s ní.
 - Po dalším testování (verze 0.7): rychlost snížena o dalších 20 % na 0,336 R/s. Změna kruhu byla těžko trefitelná, proto se zóna pro zapamatování pokynu rozšířila z 15° na 30° a přibyly šipky vlevo a vpravo pro boční vlákna.
+- Verze 0.9: hra byla i po zpomalení od začátku těžká. Rychlosti nepřátel se posunuly do rozmezí 0,3× až 0,9× hráčovy rychlosti (dřív 0,75× až 1,3×) a tabulka obtížnosti zrychluje nepřátele po jednom (stupně 4, 7 a 8 jsou nové). Po sebrání balíčku se na 3 s ukáže, co hráč získal.
 - Verze 0.8: všechny šipky ovládají změnu kruhu podle směru na obrazovce, ne „nahoru = ven, dolů = dovnitř“.
 - Dočasně pro ruční test: balíčky se objevují už od 1. kola (`BONUS_FIRST_ROUND = 1`). Pravidlo „od 6. kola“ dál platí a po testu se hodnota vrátí.

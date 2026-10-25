@@ -13,7 +13,7 @@ function angleBetween(a: number, b: number): number {
 describe("createField", () => {
   it("puts the player on the outer ring at the bottom", () => {
     for (let rings = MIN_RING_COUNT; rings <= MAX_RING_COUNT; rings++) {
-      const { player } = createField(rings, { count: 0, speedFactor: 1 });
+      const { player } = createField(rings, []);
       expect(player.ring).toBe(rings - 1);
       expect(player.angle).toBeCloseTo(Math.PI / 2);
       expect(player.direction).toBe(-1);
@@ -22,7 +22,7 @@ describe("createField", () => {
 
   it("puts enemies on inner rings at least a quarter of the web away", () => {
     for (let rings = MIN_RING_COUNT; rings <= MAX_RING_COUNT; rings++) {
-      const field = createField(rings, { count: 3, speedFactor: ENEMY_FAST_FACTOR });
+      const field = createField(rings, [ENEMY_FAST_FACTOR, ENEMY_FAST_FACTOR, ENEMY_FAST_FACTOR]);
       expect(field.enemies).toHaveLength(3);
       for (const enemy of field.enemies) {
         expect(enemy.ring).toBeLessThan(rings - 1);
@@ -33,14 +33,14 @@ describe("createField", () => {
   });
 
   it("gives enemies their speed relative to the player", () => {
-    const field = createField(3, { count: 1, speedFactor: ENEMY_SLOW_FACTOR });
+    const field = createField(3, [ENEMY_SLOW_FACTOR]);
     expect(field.enemies[0]?.speed).toBeCloseTo(PLAYER_SPEED * ENEMY_SLOW_FACTOR);
   });
 });
 
 describe("stepField", () => {
   it("moves the player and every enemy", () => {
-    const field = createField(4, { count: 2, speedFactor: 1 });
+    const field = createField(4, [1, 1]);
     const before = [field.player, ...field.enemies].map((s) => s.angle);
     stepField(field, FIXED_STEP, false, random);
     const after = [field.player, ...field.enemies].map((s) => s.angle);
@@ -48,8 +48,8 @@ describe("stepField", () => {
   });
 
   it("speeds up only the player with the throttle", () => {
-    const plain = createField(3, { count: 1, speedFactor: 1 });
-    const fast = createField(3, { count: 1, speedFactor: 1 });
+    const plain = createField(3, [1]);
+    const fast = createField(3, [1]);
     stepField(plain, 0.1, false, random);
     stepField(fast, 0.1, true, random);
     expect(fast.player.angle).toBeLessThan(plain.player.angle);
@@ -59,11 +59,11 @@ describe("stepField", () => {
 
 describe("playerHitsEnemy", () => {
   it("does not report a crash at the start", () => {
-    for (const rings of [3, 4, 5]) expect(playerHitsEnemy(createField(rings, { count: 3, speedFactor: 1 }))).toBe(false);
+    for (const rings of [3, 4, 5]) expect(playerHitsEnemy(createField(rings, [1, 1, 1]))).toBe(false);
   });
 
   it("reports a head-on meeting on the same ring", () => {
-    const field = createField(3, { count: 1, speedFactor: 1 });
+    const field = createField(3, [1]);
     const enemy = field.enemies[0]!;
     enemy.ring = field.player.ring;
     enemy.angle = field.player.angle - 0.5;
@@ -76,7 +76,7 @@ describe("playerHitsEnemy", () => {
   });
 
   it("ignores enemies on a neighbouring ring", () => {
-    const field = createField(3, { count: 1, speedFactor: 1 });
+    const field = createField(3, [1]);
     const enemy = field.enemies[0]!;
     enemy.ring = 1;
     enemy.angle = field.player.angle;
@@ -86,7 +86,7 @@ describe("playerHitsEnemy", () => {
 
 describe("enemy behaviour in the field", () => {
   it("climbs toward the player at a gate when the draw says so", () => {
-    const field = createField(3, { count: 1, speedFactor: 1 });
+    const field = createField(3, [1]);
     const enemy = field.enemies[0]!;
     // Just before the right gate (0°), crawling clockwise on the inner ring.
     enemy.angle = 2 * Math.PI - 0.01;
@@ -95,7 +95,7 @@ describe("enemy behaviour in the field", () => {
   });
 
   it("keeps its ring when the draw says no", () => {
-    const field = createField(3, { count: 1, speedFactor: 1 });
+    const field = createField(3, [1]);
     const enemy = field.enemies[0]!;
     enemy.angle = 2 * Math.PI - 0.01;
     for (let i = 0; i < 10; i++) stepField(field, FIXED_STEP, false, () => 0.999);
@@ -104,8 +104,8 @@ describe("enemy behaviour in the field", () => {
   });
 
   it("slows the enemies to half speed during a slowdown", () => {
-    const normal = createField(3, { count: 1, speedFactor: 1 });
-    const slowed = createField(3, { count: 1, speedFactor: 1 });
+    const normal = createField(3, [1]);
+    const slowed = createField(3, [1]);
     slowed.bonus.slowdownLeft = 2 * Math.PI;
     stepField(normal, 0.1, false, random);
     stepField(slowed, 0.1, false, random);

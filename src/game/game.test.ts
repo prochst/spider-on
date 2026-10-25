@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   BONUS_FIRST_ROUND,
+  BONUS_NOTICE_TIME,
   BONUS_POINTS,
   CRASH_DURATION,
   FIXED_STEP,
@@ -237,6 +238,21 @@ describe("bonus packages", () => {
     expect(full.session.lives).toBe(MAX_LIVES);
   });
 
+  it("tell what the player got for three seconds", () => {
+    const game = roundWithPackage("slowdown");
+    simulate(game, PAST_FIRST_FLY);
+    expect(game.field.bonus.notice?.kind).toBe("slowdown");
+    simulate(game, BONUS_NOTICE_TIME);
+    expect(game.field.bonus.notice).toBeNull();
+  });
+
+  it("say so when a life package finds all lives full", () => {
+    const game = roundWithPackage("life");
+    game.session.lives = MAX_LIVES;
+    simulate(game, PAST_FIRST_FLY);
+    expect(game.field.bonus.notice?.kind).toBe("livesFull");
+  });
+
   it("lose the package and the slowdown after a crash", () => {
     const game = roundWithPackage("slowdown");
     simulate(game, PAST_FIRST_FLY);
@@ -245,6 +261,7 @@ describe("bonus packages", () => {
     simulate(game, CRASH_DURATION);
     expect(game.field.bonus.slowdownLeft).toBe(0);
     expect(game.field.bonus.package).toBeNull();
+    expect(game.field.bonus.notice).toBeNull();
   });
 });
 
