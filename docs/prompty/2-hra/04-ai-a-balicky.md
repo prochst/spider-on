@@ -18,3 +18,11 @@ Samostatné zadání pro kapitolu nebylo, agent pokračoval podle odsouhlasenéh
 ## 3. Pravidlo pro další postup
 
 > Po sloučení PR nezačínej automaticky další krok, počkej na ruční test a pokyn k opravě nebo k pokračování podle plánu
+
+## 4. Ovládání podle směru na obrazovce
+
+Po ručním testu sloučené verze:
+
+> Rychlost je už je dobrá.
+> Chci změnit ovládání přechodu na jiný kruh., tak aby stisknutá šipka odpovídala požadovanému směru přesunu:
+> když se chci přesunout po vertikální cestě, tak se používají šipky nahoru a dolů z pohledu herní desky a ne, že dolu je dovnitř kruhu a nahoru je ven z kruhu. Podobně u horizontálního přesunu budou fungovat šipky vlevo a vpravo.

@@ -14,3 +14,4 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **Hraj hru po každé kapitole.** Testy ověří pravidla, ale ne tempo. To, že je hra o 40 % rychlejší, než má být, poznal až člověk. ([kapitola 2.4](kapitoly/2-hra/04-ai-a-balicky.md))
 - **Při opravě hledej i sourozence chyby.** Oprava jen toho, co spadlo, nechá stejnou chybu na dalších místech. ([kapitola 2.4](kapitoly/2-hra/04-ai-a-balicky.md))
 - **Řekni, kde je změna vidět.** Uživatel zkoušel web, kam se nesloučený pull request ještě nedostal, a zpětná vazba se týkala staré verze. ([kapitola 2.4](kapitoly/2-hra/04-ai-a-balicky.md))
+- **Ovládání ověřuj v ruce, ne na papíře.** „Šipka dolů = dovnitř“ ve specifikaci znělo logicky, ve hře působilo u dolního vlákna obráceně. ([kapitola 2.4](kapitoly/2-hra/04-ai-a-balicky.md))

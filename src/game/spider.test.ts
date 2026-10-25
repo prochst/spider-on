@@ -207,8 +207,10 @@ describe("turnForDirection", () => {
     expect(turnForDirection(towardGate(180), 1, 0)).toBe("in");
     // Top gate (270°): up is out.
     expect(turnForDirection(towardGate(270), 0, -1)).toBe("out");
-    // Bottom gate (90°): down is out.
+    expect(turnForDirection(towardGate(270), 0, 1)).toBe("in");
+    // Bottom gate (90°): down is out, up is in.
     expect(turnForDirection(towardGate(90), 0, 1)).toBe("out");
+    expect(turnForDirection(towardGate(90), 0, -1)).toBe("in");
   });
 
   it("ignores directions across the spoke", () => {

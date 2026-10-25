@@ -2,7 +2,7 @@
 // position (event.code), so W and S sit in the same place on Czech and
 // English layouts. Touch controls arrive in chapter 2.6.
 
-export type KeyCommand = "confirm" | "cancel" | "in" | "out" | "left" | "right" | "debugCrash" | "debugClear";
+export type KeyCommand = "confirm" | "cancel" | "up" | "down" | "left" | "right" | "debugCrash" | "debugClear";
 
 export type KeyboardHandlers = {
   command(command: KeyCommand): void;
@@ -16,11 +16,11 @@ const COMMAND_KEYS: Record<string, KeyCommand> = {
   Space: "confirm",
   Escape: "cancel",
   KeyP: "cancel",
-  ArrowDown: "in",
-  KeyS: "in",
-  ArrowUp: "out",
-  KeyW: "out",
-  // Left and right mean along the side gate spokes: toward or away from the centre.
+  // Arrows are directions on screen; the game reads them along the gate spoke ahead.
+  ArrowUp: "up",
+  KeyW: "up",
+  ArrowDown: "down",
+  KeyS: "down",
   ArrowLeft: "left",
   KeyA: "left",
   ArrowRight: "right",

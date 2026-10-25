@@ -66,8 +66,8 @@ export function steer(game: Game, turn: Turn): boolean {
 
 /**
  * Steers by a direction on screen (x right, y down), read along the gate
- * spoke the player heads for. The left and right arrows use it; so will
- * swipes on the touchpad.
+ * spoke the player heads for. The arrow keys use it; so will swipes on
+ * the touchpad.
  */
 export function steerToward(game: Game, dx: number, dy: number): boolean {
   const turn = turnForDirection(game.field.player, dx, dy);
