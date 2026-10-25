@@ -132,3 +132,28 @@ export function spiderPosition(spider: Spider, ringCount: number): Point {
   const r = ringRadius(crossing.from, ringCount) * (1 - t) + ringRadius(crossing.to, ringCount) * t;
   return { x: Math.cos(spider.angle) * r, y: Math.sin(spider.angle) * r };
 }
+
+/** Angle of the gate spoke the spider is heading for, or climbing on. */
+export function headingGateAngle(spider: Spider): number {
+  if (spider.crossing) return spider.angle;
+  return normalizeAngle(spider.angle + spider.direction * distanceToGate(spider));
+}
+
+// A swipe within 45° of the spoke counts; one closer to perpendicular is ignored.
+const SWIPE_COS_LIMIT = Math.SQRT1_2;
+
+/**
+ * Translates a direction on screen (x right, y down) into a turn on the gate
+ * spoke the spider is heading for: along the spoke away from the centre is
+ * "out", toward the centre "in", across the spoke nothing (spec chapter 11).
+ * The touchpad uses it for swipes, the keyboard for the left and right arrows.
+ */
+export function turnForDirection(spider: Spider, dx: number, dy: number): Turn | null {
+  const length = Math.hypot(dx, dy);
+  if (length === 0) return null;
+  const gate = headingGateAngle(spider);
+  const along = (dx * Math.cos(gate) + dy * Math.sin(gate)) / length;
+  if (along >= SWIPE_COS_LIMIT) return "out";
+  if (along <= -SWIPE_COS_LIMIT) return "in";
+  return null;
+}

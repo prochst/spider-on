@@ -7,3 +7,14 @@ Samostatné zadání pro kapitolu nebylo, agent pokračoval podle odsouhlasenéh
 > Poznatky z ručního testování:
 >
 > 1. zpomalit rychlost pohybu o 40%
+
+## 2. Další poznatky z ručního testování
+
+> Poznatky z ručního testování:
+>
+> * Stále velká rychlost, spomal o dalších 20%
+> * je těžké strefit se do stisknutí klávesy pro změnu kruhu, změna vlevo a vpravo se mi nepovedla vůbec
+
+## 3. Pravidlo pro další postup
+
+> Po sloučení PR nezačínej automaticky další krok, počkej na ruční test a pokyn k opravě nebo k pokračování podle plánu

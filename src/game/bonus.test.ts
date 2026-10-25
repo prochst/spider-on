@@ -21,6 +21,11 @@ function angleBetween(a: number, b: number): number {
   return Math.min(d, 2 * Math.PI - d);
 }
 
+/** Time to crawl the given angle on the outer ring of three. */
+function timeToCrawl(degrees: number): number {
+  return (degrees * DEG * ringRadius(2, 3)) / PLAYER_SPEED;
+}
+
 function playerAt(ring: number, angleDeg: number): Spider {
   return createSpider(ring, angleDeg * DEG, -1, PLAYER_SPEED);
 }
@@ -115,7 +120,7 @@ describe("updateBonus", () => {
 
   it("is eaten on the same ring and starts the wait for the next one", () => {
     const state = stateWithPackage(2, 75, "points");
-    expect(crawl(state, playerAt(2, 90), 0.5)).toEqual(["points"]);
+    expect(crawl(state, playerAt(2, 90), timeToCrawl(20))).toEqual(["points"]);
     expect(state.package).toBeNull();
     expect(state.wait).toBeGreaterThanOrEqual(BONUS_DELAY_MIN);
   });
@@ -124,19 +129,19 @@ describe("updateBonus", () => {
     const state = stateWithPackage(1, 75, "points");
     expect(crawl(state, playerAt(2, 90), 0.1)).toEqual([]);
     expect(state.package).not.toBeNull();
-    expect(crawl(state, playerAt(2, 80), 0.5)).toEqual([]);
+    expect(crawl(state, playerAt(2, 80), timeToCrawl(10))).toEqual([]);
     expect(state.package).toBeNull();
   });
 
   it("slows the enemies until the player has crawled one full lap", () => {
     const state = stateWithPackage(2, 75, "slowdown");
     const player = playerAt(2, 90);
-    crawl(state, player, 0.5);
+    crawl(state, player, timeToCrawl(20));
     expect(state.slowdownLeft).toBeGreaterThan(0);
     const lap = (2 * Math.PI * ringRadius(2, 3)) / PLAYER_SPEED;
-    crawl(state, player, lap - 0.5);
+    crawl(state, player, lap - timeToCrawl(40));
     expect(state.slowdownLeft).toBeGreaterThan(0);
-    crawl(state, player, 1);
+    crawl(state, player, timeToCrawl(40));
     expect(state.slowdownLeft).toBe(0);
   });
 });

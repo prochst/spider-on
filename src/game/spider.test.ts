@@ -1,7 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { CROSSING_TIME, FIXED_STEP, PLAYER_SPEED, THROTTLE_FACTOR } from "./config";
+import { CROSSING_TIME, FIXED_STEP, PLAYER_SPEED, THROTTLE_FACTOR, TURN_ZONE } from "./config";
 import { normalizeAngle, ringRadius } from "./geometry";
-import { createSpider, distanceToGate, requestTurn, type Spider, spiderPosition, stepSpider } from "./spider";
+import {
+  createSpider,
+  distanceToGate,
+  requestTurn,
+  type Spider,
+  spiderPosition,
+  stepSpider,
+  turnForDirection,
+} from "./spider";
 
 const RINGS = 3;
 const DEG = Math.PI / 180;
@@ -70,14 +78,16 @@ describe("distanceToGate", () => {
 });
 
 describe("requestTurn", () => {
-  it("ignores a turn asked for before the 15° zone", () => {
-    const p = player(2, 90 + 16);
+  const ZONE_DEG = TURN_ZONE / DEG;
+
+  it("ignores a turn asked for before the zone", () => {
+    const p = player(2, 90 + ZONE_DEG + 1);
     expect(requestTurn(p, "in", RINGS, false)).toBe(false);
     expect(p.pending).toBeNull();
   });
 
   it("remembers a turn inside the zone and climbs on reaching the gate", () => {
-    const p = player(2, 90 + 14);
+    const p = player(2, 90 + ZONE_DEG - 1);
     expect(requestTurn(p, "in", RINGS, false)).toBe(true);
     runUntilCrawling(p);
     expect(p.ring).toBe(1);
@@ -182,5 +192,35 @@ describe("spiderPosition", () => {
     const pos = spiderPosition(p, RINGS);
     expect(pos.x).toBeCloseTo(0);
     expect(pos.y).toBeCloseTo((ringRadius(2, RINGS) + ringRadius(1, RINGS)) / 2);
+  });
+});
+
+describe("turnForDirection", () => {
+  const towardGate = (gateDeg: number) => createSpider(1, (gateDeg + 10) * DEG, -1, PLAYER_SPEED);
+
+  it("reads a screen direction along the spoke the spider heads for", () => {
+    // Right gate: right is out, left is in.
+    expect(turnForDirection(towardGate(0), 1, 0)).toBe("out");
+    expect(turnForDirection(towardGate(0), -1, 0)).toBe("in");
+    // Left gate: the other way round.
+    expect(turnForDirection(towardGate(180), -1, 0)).toBe("out");
+    expect(turnForDirection(towardGate(180), 1, 0)).toBe("in");
+    // Top gate (270°): up is out.
+    expect(turnForDirection(towardGate(270), 0, -1)).toBe("out");
+    // Bottom gate (90°): down is out.
+    expect(turnForDirection(towardGate(90), 0, 1)).toBe("out");
+  });
+
+  it("ignores directions across the spoke", () => {
+    expect(turnForDirection(towardGate(0), 0, 1)).toBeNull();
+    expect(turnForDirection(towardGate(90), 1, 0.2)).toBeNull();
+    expect(turnForDirection(towardGate(0), 0, 0)).toBeNull();
+  });
+
+  it("uses the spoke being climbed during a crossing", () => {
+    const s = createSpider(2, 1 * DEG, -1, PLAYER_SPEED);
+    requestTurn(s, "in", RINGS, false);
+    while (!s.crossing) stepSpider(s, FIXED_STEP, RINGS);
+    expect(turnForDirection(s, -1, 0)).toBe("in");
   });
 });

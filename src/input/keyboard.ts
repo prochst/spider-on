@@ -2,7 +2,7 @@
 // position (event.code), so W and S sit in the same place on Czech and
 // English layouts. Touch controls arrive in chapter 2.6.
 
-export type KeyCommand = "confirm" | "cancel" | "in" | "out" | "debugCrash" | "debugClear";
+export type KeyCommand = "confirm" | "cancel" | "in" | "out" | "left" | "right" | "debugCrash" | "debugClear";
 
 export type KeyboardHandlers = {
   command(command: KeyCommand): void;
@@ -20,6 +20,11 @@ const COMMAND_KEYS: Record<string, KeyCommand> = {
   KeyS: "in",
   ArrowUp: "out",
   KeyW: "out",
+  // Left and right mean along the side gate spokes: toward or away from the centre.
+  ArrowLeft: "left",
+  KeyA: "left",
+  ArrowRight: "right",
+  KeyD: "right",
 };
 const DEBUG_KEYS: Record<string, KeyCommand> = { KeyK: "debugCrash", KeyC: "debugClear" };
 const THROTTLE_KEYS = new Set(["Space", "ShiftLeft", "ShiftRight"]);
