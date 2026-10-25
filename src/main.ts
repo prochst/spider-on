@@ -2,7 +2,7 @@
 // the menus and the keyboard.
 
 import { FIXED_STEP } from "./game/config";
-import { type Command, crash, createGame, dispatch, update } from "./game/game";
+import { type Command, crash, createGame, dispatch, steer, update } from "./game/game";
 import { planSteps } from "./game/fixedStep";
 import { cancelEvent, confirmEvent } from "./game/screens";
 import { type KeyCommand, listenToKeyboard } from "./input/keyboard";
@@ -25,6 +25,8 @@ const ctx = required(canvas.getContext("2d"), "Canvas 2D support");
 const debug = new URLSearchParams(window.location.search).has("debug");
 
 const game = createGame();
+// Lets the browser console and automated checks look at the state while debugging.
+if (debug) Object.assign(window, { spiderOn: game });
 const overlay = createOverlay(uiRoot, send);
 
 function send(command: Command): void {
@@ -39,6 +41,10 @@ function onKey(key: KeyCommand): void {
       if (command) send(command);
       return;
     }
+    case "in":
+    case "out":
+      steer(game, key);
+      return;
     case "debugCrash":
       if (crash(game)) overlay.sync(game);
       return;
@@ -48,7 +54,15 @@ function onKey(key: KeyCommand): void {
   }
 }
 
-listenToKeyboard(onKey, debug);
+listenToKeyboard(
+  {
+    command: onKey,
+    throttle: (held) => {
+      game.throttle = held;
+    },
+  },
+  debug,
+);
 
 // The spec asks for a pause whenever the player looks away.
 window.addEventListener("blur", () => send({ type: "pause" }));
