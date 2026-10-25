@@ -1,72 +1,92 @@
-// Placeholder for phase 1: draws the empty neon web so the deploy pipeline has
-// something to show. The game loop, rendering and themes arrive in phase 2.
-import { GATE_SPOKES, MIN_RING_COUNT, SPOKE_COUNT } from "./game/config";
-import { ringPoint, ringRadius, SPOKE_STEP } from "./game/geometry";
+// Wires the pure game logic to the browser: the fixed-step loop, the canvas,
+// the menus and the keyboard.
 
-// The game starts on the smallest web.
-const ringCount = MIN_RING_COUNT;
+import { FIXED_STEP } from "./game/config";
+import { type Command, crash, createGame, dispatch, update } from "./game/game";
+import { planSteps } from "./game/fixedStep";
+import { cancelEvent, confirmEvent } from "./game/screens";
+import { type KeyCommand, listenToKeyboard } from "./input/keyboard";
+import { drawScene } from "./render/scene";
+import { createView, type View } from "./render/view";
+import { createOverlay } from "./ui/overlay";
+import "./ui/overlay.css";
 
-const canvas = document.querySelector<HTMLCanvasElement>("#game");
-if (!canvas) throw new Error("Missing #game canvas");
-const ctx = canvas.getContext("2d");
-if (!ctx) throw new Error("Canvas 2D is not supported");
-
-function draw(context: CanvasRenderingContext2D, target: HTMLCanvasElement): void {
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const width = target.clientWidth;
-  const height = target.clientHeight;
-  target.width = Math.round(width * dpr);
-  target.height = Math.round(height * dpr);
-  context.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-  const size = Math.min(width, height);
-  const unit = (size / 2) * 0.9;
-  const cx = width / 2;
-  const cy = height / 2;
-
-  context.fillStyle = "#07060f";
-  context.fillRect(0, 0, width, height);
-  context.lineCap = "round";
-
-  for (let spoke = 0; spoke < SPOKE_COUNT; spoke++) {
-    const isGate = (GATE_SPOKES as readonly number[]).includes(spoke);
-    const angle = spoke * SPOKE_STEP;
-    const from = isGate ? ringRadius(0, ringCount) : 0.06;
-    const to = isGate ? ringRadius(ringCount - 1, ringCount) : 1.02;
-    context.strokeStyle = isGate ? "#ff6ad5" : "rgba(90, 220, 255, 0.3)";
-    context.shadowColor = isGate ? "#ff6ad5" : "transparent";
-    context.shadowBlur = isGate ? 10 : 0;
-    context.lineWidth = isGate ? 2 : 1;
-    context.beginPath();
-    context.moveTo(cx + Math.cos(angle) * from * unit, cy + Math.sin(angle) * from * unit);
-    context.lineTo(cx + Math.cos(angle) * to * unit, cy + Math.sin(angle) * to * unit);
-    context.stroke();
-  }
-
-  context.strokeStyle = "rgba(120, 235, 255, 0.95)";
-  context.shadowColor = "#4fe3ff";
-  context.shadowBlur = 8;
-  context.lineWidth = 1.6;
-  for (let ring = 0; ring < ringCount; ring++) {
-    context.beginPath();
-    for (let i = 0; i <= 240; i++) {
-      const p = ringPoint(ring, ringCount, (i / 240) * Math.PI * 2);
-      const x = cx + p.x * unit;
-      const y = cy + p.y * unit;
-      if (i === 0) context.moveTo(x, y);
-      else context.lineTo(x, y);
-    }
-    context.stroke();
-  }
-
-  context.shadowBlur = 12;
-  context.fillStyle = "#c9f6ff";
-  context.textAlign = "center";
-  context.textBaseline = "middle";
-  context.font = `700 ${Math.round(size * 0.06)}px system-ui, sans-serif`;
-  context.fillText("SPIDER ON", cx, cy);
+function required<T>(value: T | null, what: string): T {
+  if (value === null) throw new Error(`Missing ${what}`);
+  return value;
 }
 
-const render = () => draw(ctx, canvas);
-window.addEventListener("resize", render);
-render();
+const canvas = required(document.querySelector<HTMLCanvasElement>("#game"), "#game canvas");
+const uiRoot = required(document.querySelector<HTMLElement>("#ui"), "#ui root");
+const ctx = required(canvas.getContext("2d"), "Canvas 2D support");
+
+// ?debug in the address enables shortcuts for screens the game cannot reach
+// yet: K simulates a crash, C clears the round.
+const debug = new URLSearchParams(window.location.search).has("debug");
+
+const game = createGame();
+const overlay = createOverlay(uiRoot, send);
+
+function send(command: Command): void {
+  if (dispatch(game, command)) overlay.sync(game);
+}
+
+function onKey(key: KeyCommand): void {
+  switch (key) {
+    case "confirm":
+    case "cancel": {
+      const command = key === "confirm" ? confirmEvent(game.screen) : cancelEvent(game.screen);
+      if (command) send(command);
+      return;
+    }
+    case "debugCrash":
+      if (crash(game)) overlay.sync(game);
+      return;
+    case "debugClear":
+      send({ type: "roundCleared" });
+      return;
+  }
+}
+
+listenToKeyboard(onKey, debug);
+
+// The spec asks for a pause whenever the player looks away.
+window.addEventListener("blur", () => send({ type: "pause" }));
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) send({ type: "pause" });
+});
+
+let view: View = createView(1, 1);
+
+function resize(): void {
+  // Sharp lines on HiDPI screens; above 2× the extra pixels cost more than they show.
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  canvas.width = Math.round(width * dpr);
+  canvas.height = Math.round(height * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  view = createView(width, height);
+}
+
+window.addEventListener("resize", resize);
+resize();
+
+let lastTime: number | null = null;
+let remainder = 0;
+
+function frame(now: number): void {
+  const frameTime = lastTime === null ? 0 : (now - lastTime) / 1000;
+  lastTime = now;
+  const plan = planSteps(remainder, frameTime);
+  remainder = plan.remainder;
+  for (let i = 0; i < plan.steps; i++) update(game, FIXED_STEP);
+
+  // The crash animation ends on its own, so the menu may need to change after an update.
+  overlay.sync(game);
+  drawScene(ctx, view, game);
+  requestAnimationFrame(frame);
+}
+
+overlay.sync(game);
+requestAnimationFrame(frame);

@@ -1,0 +1,72 @@
+#ui {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  font-family: system-ui, sans-serif;
+  color: #c9f6ff;
+}
+
+.panel {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: min(18rem, 80vw);
+  padding: 1.5rem 2rem;
+  background: rgba(7, 6, 15, 0.82);
+  border: 1px solid rgba(120, 235, 255, 0.5);
+  border-radius: 0.75rem;
+  box-shadow: 0 0 24px rgba(79, 227, 255, 0.25);
+  text-align: center;
+}
+
+.panel[hidden],
+.pause-button[hidden] {
+  display: none;
+}
+
+.panel h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.8rem;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 12px #4fe3ff;
+}
+
+.panel p {
+  margin: 0;
+  opacity: 0.8;
+}
+
+#ui button {
+  pointer-events: auto;
+  font: inherit;
+  font-weight: 600;
+  color: inherit;
+  background: transparent;
+  border: 1px solid #ff6ad5;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.panel button {
+  width: 100%;
+  padding: 0.6rem 1rem;
+}
+
+#ui button:hover,
+#ui button:focus-visible {
+  outline: none;
+  background: rgba(255, 106, 213, 0.18);
+  box-shadow: 0 0 14px rgba(255, 106, 213, 0.6);
+}
+
+.pause-button {
+  position: fixed;
+  top: max(0.75rem, env(safe-area-inset-top));
+  right: max(0.75rem, env(safe-area-inset-right));
+  width: 2.75rem;
+  height: 2.75rem;
+}
