@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.7. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.8. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -112,9 +112,7 @@ Hra rozlišuje **číslo kola** (počítá se od 1 a jen roste, používá se pr
 
 | Akce | Klávesy |
 | --- | --- |
-| Dovnitř (ke středu) | Šipka dolů nebo S |
-| Ven (k okraji) | Šipka nahoru nebo W |
-| Po bočním vlákně | Šipka vlevo nebo vpravo (A, D): u pravého vlákna je vpravo „ven“ a vlevo „dovnitř“, u levého obráceně, stejně jako tah po touchpadu |
+| Změna kruhu | Šipky (nebo W, A, S, D) ve směru přesunu na obrazovce: po svislém vlákně nahoru a dolů, po vodorovném vlevo a vpravo. U dolního vlákna je tedy šipka dolů „ven“, u horního „dovnitř“. Šipka napříč vláknem se ignoruje, stejně jako tah po touchpadu. |
 | Plyn | Mezerník nebo Shift (držet) |
 | Spustit kolo | Enter nebo mezerník |
 | Pauza | P nebo Esc |
@@ -178,3 +176,4 @@ Další rozhodnutí uživatele:
 
 - Po ručním testování (verze 0.6): základní rychlost pohybu snížena o 40 %, z 0,7 na 0,42 R/s. Nepřátelé, jejichž rychlost je násobkem základní, se zpomalili s ní.
 - Po dalším testování (verze 0.7): rychlost snížena o dalších 20 % na 0,336 R/s. Změna kruhu byla těžko trefitelná, proto se zóna pro zapamatování pokynu rozšířila z 15° na 30° a přibyly šipky vlevo a vpravo pro boční vlákna.
+- Verze 0.8: všechny šipky ovládají změnu kruhu podle směru na obrazovce, ne „nahoru = ven, dolů = dovnitř“.

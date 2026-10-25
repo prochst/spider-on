@@ -146,7 +146,7 @@ const SWIPE_COS_LIMIT = Math.SQRT1_2;
  * Translates a direction on screen (x right, y down) into a turn on the gate
  * spoke the spider is heading for: along the spoke away from the centre is
  * "out", toward the centre "in", across the spoke nothing (spec chapter 11).
- * The touchpad uses it for swipes, the keyboard for the left and right arrows.
+ * The keyboard uses it for the arrows, the touchpad for swipes.
  */
 export function turnForDirection(spider: Spider, dx: number, dy: number): Turn | null {
   const length = Math.hypot(dx, dy);

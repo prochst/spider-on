@@ -8,7 +8,6 @@ import {
   createGame,
   debugEatAllFlies,
   dispatch,
-  steer,
   steerToward,
   update,
 } from "./game/game";
@@ -45,6 +44,9 @@ function send(command: Command): void {
   if (dispatch(game, command)) overlay.sync(game);
 }
 
+// Screen directions with y pointing down, as on the canvas.
+const ARROW_DIRECTIONS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] } as const;
+
 function onKey(key: KeyCommand): void {
   switch (key) {
     case "confirm":
@@ -53,14 +55,14 @@ function onKey(key: KeyCommand): void {
       if (command) send(command);
       return;
     }
-    case "in":
-    case "out":
-      steer(game, key);
-      return;
+    case "up":
+    case "down":
     case "left":
-    case "right":
-      steerToward(game, key === "left" ? -1 : 1, 0);
+    case "right": {
+      const [dx, dy] = ARROW_DIRECTIONS[key];
+      steerToward(game, dx, dy);
       return;
+    }
     case "debugCrash":
       if (crash(game)) overlay.sync(game);
       return;
