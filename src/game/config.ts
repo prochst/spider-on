@@ -59,11 +59,8 @@ export const AI_TURN_CHANCE_START = 0.6;
 export const AI_TURN_CHANCE_STEP = 0.05;
 export const AI_TURN_CHANCE_MAX = 0.95;
 
-/**
- * Bonus packages appear from this round on (spec chapter 4). TEMPORARY: 1 so
- * the packages can be tried by hand; the spec value is 6.
- */
-export const BONUS_FIRST_ROUND = 1;
+/** Bonus packages appear from this round on (spec chapter 4). */
+export const BONUS_FIRST_ROUND = 4;
 /** The next package appears after a random wait in this range, in seconds. */
 export const BONUS_DELAY_MIN = 5;
 export const BONUS_DELAY_MAX = 20;

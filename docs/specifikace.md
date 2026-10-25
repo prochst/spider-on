@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.10. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.11. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -26,7 +26,7 @@ Hra běží v prohlížeči, na Androidu a na iOS. Výchozí grafický styl je n
 
 ## 4. Bonusové balíčky
 
-- Bonusové balíčky se objevují **od 6. kola**. Mouchy zůstávají a kolo dál končí sebráním poslední mouchy, balíček je navíc.
+- Bonusové balíčky se objevují **od 4. kola**. Mouchy zůstávají a kolo dál končí sebráním poslední mouchy, balíček je navíc.
 - Na ploše je nejvýš **jeden balíček**. Objeví se místo jedné ještě nesebrané mouchy, náhodně vybrané z much na **protější polovině plochy**, než je hráčův pavouk (úhlově 90° až 270° od pavouka, na libovolném kruhu). Moucha pod balíčkem se tím počítá jako sebraná. Balíček nikdy nenahradí poslední nesebranou mouchu, aby kolo dál končilo jejím sebráním. Když na protější polovině žádná moucha není, balíček počká, až se nějaká objeví na protější straně.
 - Balíček zůstává, dokud ho pavouk **nesebere**, nebo dokud kolem něj **neproleze po jiném kruhu** (pavouk mine úhel balíčku, když je na jiném kruhu). Pak zmizí.
 - Další balíček se objeví po **náhodné době 5 až 20 s (laditelné)** od zmizení nebo sebrání předchozího. První balíček v kole se objeví stejně náhodně od začátku kola.
@@ -182,7 +182,7 @@ Další rozhodnutí uživatele:
 
 - Po ručním testování (verze 0.6): základní rychlost pohybu snížena o 40 %, z 0,7 na 0,42 R/s. Nepřátelé, jejichž rychlost je násobkem základní, se zpomalili s ní.
 - Po dalším testování (verze 0.7): rychlost snížena o dalších 20 % na 0,336 R/s. Změna kruhu byla těžko trefitelná, proto se zóna pro zapamatování pokynu rozšířila z 15° na 30° a přibyly šipky vlevo a vpravo pro boční vlákna.
-- Verze 0.10: nepřátelé ještě pomalejší, rozmezí 0,2× až 0,8×. Rychlí nepřátelé zrychlují pomalu s každým stupněm obtížnosti už od stupně 2, ne až od stupně 10.
-- Verze 0.9: hra byla i po zpomalení od začátku těžká. Rychlosti nepřátel se posunuly do rozmezí 0,3× až 0,9× hráčovy rychlosti (dřív 0,75× až 1,3×) a tabulka obtížnosti zrychluje nepřátele po jednom (stupně 4, 7 a 8 jsou nové). Po sebrání balíčku se na 3 s ukáže, co hráč získal.
 - Verze 0.8: všechny šipky ovládají změnu kruhu podle směru na obrazovce, ne „nahoru = ven, dolů = dovnitř“.
-- Dočasně pro ruční test: balíčky se objevují už od 1. kola (`BONUS_FIRST_ROUND = 1`). Pravidlo „od 6. kola“ dál platí a po testu se hodnota vrátí.
+- Verze 0.9: hra byla i po zpomalení od začátku těžká. Rychlosti nepřátel se posunuly do rozmezí 0,3× až 0,9× hráčovy rychlosti (dřív 0,75× až 1,3×) a tabulka obtížnosti zrychluje nepřátele po jednom (stupně 4, 7 a 8 jsou nové). Po sebrání balíčku se na 3 s ukáže, co hráč získal.
+- Verze 0.10: nepřátelé ještě pomalejší, rozmezí 0,2× až 0,8×. Rychlí nepřátelé zrychlují pomalu s každým stupněm obtížnosti už od stupně 2, ne až od stupně 10.
+- Verze 0.11: po ručním testu balíčků (dočasně od 1. kola) se balíčky objevují od 4. kola místo od 6. Začínají tak spolu s větší pavučinou o 4 kruzích.

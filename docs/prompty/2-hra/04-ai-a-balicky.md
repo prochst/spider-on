@@ -45,3 +45,7 @@ Po ručním testu verze se šipkami podle směru (napoprvé prohlížeč ukazova
 ## 7. Ještě pomalejší nepřátelé
 
 > Sniž ještě rychlost nepřátel na interval 0,2 až 0,8 a rychlost rychlejších nepřátel zvyšuj jen pomalu podle stupně obtížnosti
+
+## 8. Konec testu balíčků
+
+> Vrať balíčky ale ne na 6 ale už na 4 kolo. a pokračuj dalším krokem

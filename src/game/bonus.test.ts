@@ -94,7 +94,7 @@ describe("updateBonus", () => {
     return eaten;
   }
 
-  it("does nothing before round 6", () => {
+  it("does nothing before the first bonus round", () => {
     const state = createBonusState(false, random);
     crawl(state, playerAt(2, 90), 30);
     expect(state.package).toBeNull();
