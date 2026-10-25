@@ -6,6 +6,7 @@ import type { Game } from "../game/game";
 import type { Point } from "../game/geometry";
 import { spiderPosition } from "../game/spider";
 import type { View } from "./view";
+import { drawBonusPackage } from "./bonus";
 import { drawFlies } from "./flies";
 import { drawSpiders } from "./spiders";
 import { drawWeb } from "./web";
@@ -17,7 +18,8 @@ const CRASH_COLOR = "#ff4f6d";
 // Screens where the web is visible; on the others the menu covers a dimmed web.
 const WEB_SCREENS = new Set(["ready", "playing", "crash", "paused", "roundComplete", "gameOver"]);
 
-export function drawScene(ctx: CanvasRenderingContext2D, view: View, game: Game): void {
+/** time is in seconds and only drives animations such as the pulsing packages. */
+export function drawScene(ctx: CanvasRenderingContext2D, view: View, game: Game, time: number): void {
   ctx.fillStyle = BACKGROUND;
   ctx.fillRect(0, 0, view.width, view.height);
 
@@ -27,6 +29,8 @@ export function drawScene(ctx: CanvasRenderingContext2D, view: View, game: Game)
   ctx.globalAlpha = 1;
   if (inGame) {
     drawFlies(ctx, view, game.field.flies, game.field.ringCount);
+    const pack = game.field.bonus.package;
+    if (pack) drawBonusPackage(ctx, view, pack, game.field.ringCount, time);
     drawSpiders(ctx, view, game.field);
   }
 

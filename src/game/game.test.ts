@@ -1,5 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { CRASH_DURATION, FIXED_STEP, FLY_POINTS, ROUND_BONUS_PER_ROUND, START_LIVES } from "./config";
+import {
+  BONUS_POINTS,
+  CRASH_DURATION,
+  FIXED_STEP,
+  FLY_POINTS,
+  MAX_LIVES,
+  ROUND_BONUS_PER_ROUND,
+  PLAYER_SPEED,
+  START_LIVES,
+  TURN_ZONE,
+} from "./config";
+import { ringRadius } from "./geometry";
 import { crash, createGame, createSession, dispatch, type Game, steer, update } from "./game";
 
 function simulate(game: Game, seconds: number): void {
@@ -8,7 +19,7 @@ function simulate(game: Game, seconds: number): void {
 }
 
 function startRound(): Game {
-  const game = createGame();
+  const game = createGame(1);
   dispatch(game, { type: "play" });
   dispatch(game, { type: "start" });
   return game;
@@ -16,13 +27,13 @@ function startRound(): Game {
 
 describe("game", () => {
   it("starts on the title with a fresh session", () => {
-    const game = createGame();
+    const game = createGame(1);
     expect(game.screen.name).toBe("title");
     expect(game.session).toEqual(createSession());
   });
 
   it("moves the spiders only while the round is running", () => {
-    const game = createGame();
+    const game = createGame(1);
     dispatch(game, { type: "play" });
     const start = game.field.player.angle;
     simulate(game, 1);
@@ -38,14 +49,15 @@ describe("game", () => {
   });
 
   it("steers only while the round is running", () => {
-    const game = createGame();
+    const game = createGame(1);
     dispatch(game, { type: "play" });
     expect(steer(game, "in")).toBe(false);
     dispatch(game, { type: "start" });
     // The player starts on the bottom gate, so the next gate is a quarter lap
-    // away: about 2.1 s on the outer ring, the turn zone opens after 1.7 s.
+    // away; the turn zone opens 15° before it.
     expect(steer(game, "in")).toBe(false);
-    simulate(game, 1.9);
+    const angularSpeed = PLAYER_SPEED / ringRadius(2, 3);
+    simulate(game, (Math.PI / 2 - TURN_ZONE / 2) / angularSpeed);
     expect(steer(game, "in")).toBe(true);
   });
 
@@ -54,11 +66,14 @@ describe("game", () => {
     simulate(game, 1);
     crash(game);
     simulate(game, CRASH_DURATION);
-    expect(game.field).toEqual(createGame().field);
+    const fresh = createGame(1).field;
+    expect(game.field.player).toEqual(fresh.player);
+    expect(game.field.enemies).toEqual(fresh.enemies);
+    expect(game.field.flies).toEqual(fresh.flies);
   });
 
   it("reports commands the current screen ignores", () => {
-    const game = createGame();
+    const game = createGame(1);
     expect(dispatch(game, { type: "pause" })).toBe(false);
     expect(dispatch(game, { type: "play" })).toBe(true);
   });
@@ -172,5 +187,72 @@ describe("flies and scoring", () => {
     simulate(game, 1);
     expect(game.screen.name).not.toBe("playing");
     expect(game.session.lives).toBe(START_LIVES - 1);
+  });
+});
+
+describe("bonus packages", () => {
+  function roundWithPackage(kind: "points" | "slowdown" | "life"): Game {
+    const game = startRound();
+    // The first fly ahead of the player sits 15° before the start, on the outer ring.
+    const fly = game.field.flies.find((f) => f.ring === 2 && Math.abs(f.angle - 75 * (Math.PI / 180)) < 1e-9)!;
+    fly.collected = true;
+    game.field.bonus.package = { ring: 2, angle: fly.angle, kind };
+    return game;
+  }
+
+  it("appear only from round 6", () => {
+    const game = startRound();
+    const enabled: boolean[] = [];
+    for (let round = 1; round <= 7; round++) {
+      enabled.push(game.field.bonus.enabled);
+      clearRound(game);
+      dispatch(game, { type: "nextRound" });
+      dispatch(game, { type: "start" });
+    }
+    expect(enabled).toEqual([false, false, false, false, false, true, true]);
+  });
+
+  it("give 250 points", () => {
+    const game = roundWithPackage("points");
+    simulate(game, 0.5);
+    expect(game.session.score).toBe(BONUS_POINTS);
+  });
+
+  it("give an extra life, but never more than five", () => {
+    const game = roundWithPackage("life");
+    simulate(game, 0.5);
+    expect(game.session.lives).toBe(START_LIVES + 1);
+
+    const full = roundWithPackage("life");
+    full.session.lives = MAX_LIVES;
+    simulate(full, 0.5);
+    expect(full.session.lives).toBe(MAX_LIVES);
+  });
+
+  it("lose the package and the slowdown after a crash", () => {
+    const game = roundWithPackage("slowdown");
+    simulate(game, 0.5);
+    expect(game.field.bonus.slowdownLeft).toBeGreaterThan(0);
+    crash(game);
+    simulate(game, CRASH_DURATION);
+    expect(game.field.bonus.slowdownLeft).toBe(0);
+    expect(game.field.bonus.package).toBeNull();
+  });
+});
+
+describe("determinism", () => {
+  it("plays the same game twice from the same seed", () => {
+    const play = (seed: number) => {
+      const game = createGame(seed);
+      dispatch(game, { type: "play" });
+      dispatch(game, { type: "start" });
+      for (let i = 0; i < 120 * 20 && game.screen.name === "playing"; i++) {
+        if (i % 240 === 200) steer(game, i % 480 < 240 ? "in" : "out");
+        update(game, FIXED_STEP);
+      }
+      return JSON.stringify({ screen: game.screen, session: game.session, field: game.field });
+    };
+    expect(play(5)).toBe(play(5));
+    expect(play(5)).not.toBe(play(6));
   });
 });

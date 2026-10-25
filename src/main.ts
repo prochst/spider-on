@@ -24,7 +24,10 @@ const ctx = required(canvas.getContext("2d"), "Canvas 2D support");
 // quickly: K simulates a crash, C eats all flies and so clears the round.
 const debug = new URLSearchParams(window.location.search).has("debug");
 
-const game = createGame();
+// The logic only ever uses this seed. With ?debug&seed=123 a game can be replayed exactly.
+const params = new URLSearchParams(window.location.search);
+const seed = debug && params.has("seed") ? Number(params.get("seed")) : Math.floor(Math.random() * 2 ** 32);
+const game = createGame(seed);
 // Lets the browser console and automated checks look at the state while debugging.
 if (debug) Object.assign(window, { spiderOn: game });
 const overlay = createOverlay(uiRoot, send);
@@ -98,7 +101,7 @@ function frame(now: number): void {
 
   // The crash animation ends on its own, so the menu may need to change after an update.
   overlay.sync(game);
-  drawScene(ctx, view, game);
+  drawScene(ctx, view, game, now / 1000);
   requestAnimationFrame(frame);
 }
 

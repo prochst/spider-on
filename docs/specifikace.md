@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.5. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.6. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -27,7 +27,7 @@ Hra běží v prohlížeči, na Androidu a na iOS. Výchozí grafický styl je n
 ## 4. Bonusové balíčky
 
 - Bonusové balíčky se objevují **od 6. kola**. Mouchy zůstávají a kolo dál končí sebráním poslední mouchy, balíček je navíc.
-- Na ploše je nejvýš **jeden balíček**. Objeví se místo jedné ještě nesebrané mouchy, náhodně vybrané z much na **protější polovině plochy**, než je hráčův pavouk (úhlově 90° až 270° od pavouka, na libovolném kruhu). Moucha pod balíčkem se tím počítá jako sebraná.
+- Na ploše je nejvýš **jeden balíček**. Objeví se místo jedné ještě nesebrané mouchy, náhodně vybrané z much na **protější polovině plochy**, než je hráčův pavouk (úhlově 90° až 270° od pavouka, na libovolném kruhu). Moucha pod balíčkem se tím počítá jako sebraná. Balíček nikdy nenahradí poslední nesebranou mouchu, aby kolo dál končilo jejím sebráním. Když na protější polovině žádná moucha není, balíček počká, až se nějaká objeví na protější straně.
 - Balíček zůstává, dokud ho pavouk **nesebere**, nebo dokud kolem něj **neproleze po jiném kruhu** (pavouk mine úhel balíčku, když je na jiném kruhu). Pak zmizí.
 - Další balíček se objeví po **náhodné době 5 až 20 s (laditelné)** od zmizení nebo sebrání předchozího. První balíček v kole se objeví stejně náhodně od začátku kola.
 - Obsah balíčku se určí náhodně při jeho objevení a hráč ho pozná podle vzhledu:
@@ -42,7 +42,7 @@ Hra běží v prohlížeči, na Androidu a na iOS. Výchozí grafický styl je n
 
 - Hráčův pavouk leze **proti směru hodinových ručiček** a nemůže zastavit ani couvat.
 - Rychlost je konstantní obvodová rychlost, ne úhlová. Na vnitřním kruhu tedy oběhne kolo rychleji než na vnějším.
-  - Základní rychlost: **0,7 R/s (laditelné)**.
+  - Základní rychlost: **0,42 R/s (laditelné)**.
   - S plynem: **1,7× základní (laditelné)**.
 - **Změna kruhu**: hráč zadá směr „dovnitř“ nebo „ven“.
   - Pokyn se zapamatuje, jen když ho hráč zadá v posledních **15° před přechodovým vláknem**. Provede se po dosažení vlákna a pak se smaže. Pokyn zadaný dřív se ignoruje. Pavouk mine vlákno za zlomek sekundy, takže „přímo na vlákně“ znamená během přelézání: pokyn ve stejném směru tam přidá další kruh (viz níže). Pokyn zadaný hned po minutí vlákna patří už k dalšímu vláknu a ignoruje se.
@@ -78,7 +78,7 @@ Hra rozlišuje **číslo kola** (počítá se od 1 a jen roste, používá se pr
 
 - Lezou **po směru hodinových ručiček**, nikdy nezastaví.
 - Rychlost se zadává jako násobek hráčovy základní rychlosti: **pomalý 0,75×, rychlý 1,0× (laditelné)**. Nepřátelé plyn nemají.
-- **Chování (AI)**: na každém přechodovém vlákně se nepřítel rozhodne:
+- **Chování (AI)**: na každém přechodovém vlákně se nepřítel rozhodne ve chvíli, kdy na vlákno dorazí:
   - s pravděpodobností `p` přeleze o **jeden** kruh směrem ke kruhu, na který míří hráč (cílový kruh hráčova pokynu, jinak jeho aktuální kruh),
   - jinak pokračuje po svém kruhu.
   - `p` roste se stupněm obtížnosti: **0,6 na stupni 1, +0,05 za každý další, nejvýš 0,95 (laditelné)**.
@@ -173,3 +173,6 @@ Otevřené otázky z verze 0.1 rozhodl uživatel 25. 10. 2026:
 2. Po srážce se obnoví celé herní pole.
 3. Pokyn ke změně kruhu se zapamatuje jen v posledních 15° před přechodem.
 4. Dotykové ovládání jako u přenosných konzolí: na šířku, vpravo touchpad, vlevo plyn.
+Další rozhodnutí uživatele:
+
+- Po ručním testování (verze 0.6): základní rychlost pohybu snížena o 40 %, z 0,7 na 0,42 R/s. Nepřátelé, jejichž rychlost je násobkem základní, se zpomalili s ní.

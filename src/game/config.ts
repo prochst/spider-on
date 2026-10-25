@@ -27,7 +27,7 @@ export const START_LIVES = 3;
 export const MAX_LIVES = 5;
 
 /** Player speed along the ring in R per second; constant along the ring, so inner laps are quicker. */
-export const PLAYER_SPEED = 0.7;
+export const PLAYER_SPEED = 0.42;
 /** Speed multiplier while the throttle is held. */
 export const THROTTLE_FACTOR = 1.7;
 /** A ring change is remembered only when asked for this close before a gate spoke (15°). */
@@ -52,3 +52,21 @@ export const ROUND_BONUS_PER_ROUND = 100;
 /** The first extra life comes at this score, then one every EXTRA_LIFE_EVERY points. */
 export const EXTRA_LIFE_FIRST = 5000;
 export const EXTRA_LIFE_EVERY = 10000;
+
+/** Chance that an enemy climbs toward the player at a gate: 0.6 on level 1, +0.05 per level, at most 0.95. */
+export const AI_TURN_CHANCE_START = 0.6;
+export const AI_TURN_CHANCE_STEP = 0.05;
+export const AI_TURN_CHANCE_MAX = 0.95;
+
+/** Bonus packages appear from this round on (spec chapter 4). */
+export const BONUS_FIRST_ROUND = 6;
+/** The next package appears after a random wait in this range, in seconds. */
+export const BONUS_DELAY_MIN = 5;
+export const BONUS_DELAY_MAX = 20;
+export const BONUS_POINTS = 250;
+/** Chances of the package contents; they add up to 1. */
+export const BONUS_CHANCE_POINTS = 0.75;
+export const BONUS_CHANCE_SLOWDOWN = 0.22;
+export const BONUS_CHANCE_LIFE = 0.03;
+/** Enemy speed multiplier while the slowdown lasts (one full lap of the player). */
+export const SLOWDOWN_FACTOR = 0.5;

@@ -3,11 +3,13 @@
 // commands and calls update() with fixed steps; everything that decides what
 // happens lives here.
 
-import { FLY_POINTS, ROUND_BONUS_PER_ROUND, START_LIVES } from "./config";
+import { type BonusKind, createBonusState, updateBonus } from "./bonus";
+import { BONUS_FIRST_ROUND, BONUS_POINTS, FLY_POINTS, MAX_LIVES, ROUND_BONUS_PER_ROUND, START_LIVES } from "./config";
 import { createField, type Field, playerHitsEnemy, steerPlayer, stepField } from "./field";
 import { collectFlies, fliesLeft } from "./flies";
 import { difficultyForRound, enemiesForDifficulty, ringCountForRound } from "./progression";
 import { type PlayerEvent, type Screen, type ScreenEvent, TITLE, tickScreen, transition } from "./screens";
+import { createRandom, type Random } from "./random";
 import { addPoints } from "./scoring";
 import type { Turn } from "./spider";
 
@@ -29,6 +31,8 @@ export type Game = {
   field: Field;
   /** Whether the player holds the throttle; the input layer keeps it current. */
   throttle: boolean;
+  /** The only source of chance in the game; the same seed replays the same game. */
+  random: Random;
 };
 
 /** Crashes and cleared rounds are not commands: the simulation decides them in update(). */
@@ -38,12 +42,15 @@ export function createSession(): Session {
   return { round: 1, lives: START_LIVES, score: 0, roundPoints: 0, roundBonus: 0 };
 }
 
-function createRoundField(round: number): Field {
-  return createField(ringCountForRound(round), enemiesForDifficulty(difficultyForRound(round)));
+function createRoundField(round: number, random: Random): Field {
+  const level = difficultyForRound(round);
+  const bonus = createBonusState(round >= BONUS_FIRST_ROUND, random);
+  return createField(ringCountForRound(round), enemiesForDifficulty(level), level, bonus);
 }
 
-export function createGame(): Game {
-  return { screen: TITLE, session: createSession(), field: createRoundField(1), throttle: false };
+export function createGame(seed: number): Game {
+  const random = createRandom(seed);
+  return { screen: TITLE, session: createSession(), field: createRoundField(1, random), throttle: false, random };
 }
 
 /** Applies a command. Returns false when the current screen ignores it. */
@@ -76,24 +83,35 @@ export function update(game: Game, dt: number): void {
   const previous = game.screen;
   game.screen = tickScreen(game.screen, dt);
   // After a crash the whole field starts over, flies included (spec chapter 8).
-  if (previous.name === "crash" && game.screen.name === "ready") game.field = createRoundField(game.session.round);
+  if (previous.name === "crash" && game.screen.name === "ready") {
+    game.field = createRoundField(game.session.round, game.random);
+  }
 }
 
 function playStep(game: Game, dt: number): void {
   const { field, session } = game;
-  stepField(field, dt, game.throttle);
+  const angleBefore = field.player.angle;
+  stepField(field, dt, game.throttle, game.random);
 
   const collected = collectFlies(field.flies, field.player);
   if (collected > 0) {
     session.roundPoints += collected * FLY_POINTS;
     addPoints(session, collected * FLY_POINTS);
   }
+  const eaten = updateBonus(field.bonus, field.flies, field.player, angleBefore, dt, game.random);
+  if (eaten) applyBonus(session, eaten);
   // The last fly wins over a crash in the same step: the player reached it first.
   if (fliesLeft(field.flies) === 0) {
     finishRound(game);
     return;
   }
   if (playerHitsEnemy(field)) crash(game);
+}
+
+/** The slowdown is already running inside the field; points and lives belong to the session. */
+function applyBonus(session: Session, kind: BonusKind): void {
+  if (kind === "points") addPoints(session, BONUS_POINTS);
+  if (kind === "life") session.lives = Math.min(session.lives + 1, MAX_LIVES);
 }
 
 function finishRound(game: Game): void {
@@ -110,7 +128,7 @@ function applyEvent(game: Game, event: ScreenEvent): boolean {
   if (event.type === "nextRound") game.session.round += 1;
   if (event.type === "play" || event.type === "nextRound") {
     game.session.roundPoints = 0;
-    game.field = createRoundField(game.session.round);
+    game.field = createRoundField(game.session.round, game.random);
   }
   game.screen = next;
   return true;
