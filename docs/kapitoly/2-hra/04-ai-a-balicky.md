@@ -32,6 +32,8 @@ Viz [prompty/2-hra/04-ai-a-balicky.md](../../prompty/2-hra/04-ai-a-balicky.md). 
 - **Nové pravidlo postupu.** Uživatel určil, že agent po sloučení pull requestu nezačne další kapitolu sám, ale počká na ruční test a pokyn. Pravidlo přibylo do `CLAUDE.md`, aby platilo i pro další vlákna.
 - **Šířka zóny.** Agent nabídl tři možnosti (15°, 30°, 45°) a doporučil 30°. Uživatel zvolil 30°.
 - **Vzhled balíčků.** Agent ho ukazuje v pull requestu na náhledu, uživatel rozhodne, jestli tvary a barvy sedí.
+- **Stará verze z mezipaměti.** Po sloučení ovládání podle směru uživatel hlásil, že dole fungují šipky nahoru a dolů obráceně. Přesně tak se chovala předchozí verze. Agent nový kód přehrál v prohlížeči, ověřil, že nasazení doběhlo, a poradil stránku znovu načíst bez mezipaměti (Ctrl+Shift+R). Potom šipky fungovaly správně. GitHub Pages nechává stránku v mezipaměti až 10 minut.
+- **Balíčky od prvního kola.** Aby uživatel nemusel kvůli testu balíčků dohrát pět kol, agent dočasně nastavil `BONUS_FIRST_ROUND = 1`. Test počítá s hodnotou z konfigurace, takže po návratu na 6 zůstane platný.
 - **Upřesnění specifikace 0.6**: balíček nebere poslední mouchu a nepřítel se rozhoduje ve chvíli příchodu na vlákno.
 
 ## Metriky
@@ -47,5 +49,6 @@ Viz [prompty/2-hra/04-ai-a-balicky.md](../../prompty/2-hra/04-ai-a-balicky.md). 
 - Časy a vzdálenosti v testech počítej z konstant. Laditelné hodnoty se změní, jakmile člověk hru poprvé zkusí.
 - Ruční hraní odhalí věci, na které testy nemají měřítko: tempo, obtížnost, čitelnost. Hraj sloučenou verzi po každé kapitole.
 - Když opravuješ chybu, hledej i stejná místa, která zatím nespadla. Agent po první opravě testů přepsal jen dva rozbité, a o kolo později spadlo deset dalších se stejnou chybou.
+- Když ruční test hlásí přesně chování předchozí verze, nejdřív ověř, že běží ta nová. Nasazení i mezipaměť prohlížeče umí přidat několik minut zpoždění.
 - Ovládání navržené od stolu se nemusí osvědčit. Pravidlo „dolů = dovnitř“ vypadalo ve specifikaci logicky, ale v ruce působilo u dolního vlákna obráceně. Teprve hraní ukázalo, že přirozené je ovládání podle směru na obrazovce.
 - Ujasni si, kterou verzi člověk zkouší. Bez nasazení každého pull requestu zvlášť vidí na webu jen `main`.
