@@ -78,16 +78,28 @@ export function requestTurn(spider: Spider, turn: Turn, ringCount: number, throt
   return true;
 }
 
+/**
+ * Angle the spider crawls in dt seconds. Angular speed from the ring radius
+ * keeps the speed along the ring constant. The ring sags a little between
+ * spokes, so the true path is about 1 % shorter than the circle; too little
+ * to notice in play.
+ */
+function angularTravel(spider: Spider, dt: number, ringCount: number, speedFactor: number): number {
+  return (spider.speed * speedFactor * dt) / ringRadius(spider.ring, ringCount);
+}
+
+/** Whether the spider, crawling along its ring, gets to the next gate spoke within dt. */
+export function reachesGate(spider: Spider, dt: number, ringCount: number, speedFactor = 1): boolean {
+  return !spider.crossing && angularTravel(spider, dt, ringCount, speedFactor) >= distanceToGate(spider);
+}
+
 /** Moves the spider by dt seconds; speedFactor is the throttle or a slowdown. */
 export function stepSpider(spider: Spider, dt: number, ringCount: number, speedFactor = 1): void {
   if (spider.crossing) {
     stepCrossing(spider, spider.crossing, dt);
     return;
   }
-  // Angular speed from the ring radius keeps the speed along the ring
-  // constant. The ring sags a little between spokes, so the true path is
-  // about 1 % shorter than the circle; too little to notice in play.
-  const travel = (spider.speed * speedFactor * dt) / ringRadius(spider.ring, ringCount);
+  const travel = angularTravel(spider, dt, ringCount, speedFactor);
   const gateDistance = distanceToGate(spider);
   if (spider.pending && travel >= gateDistance) {
     // The rest of this step (under 1/120 s) is dropped so the climb starts exactly on the spoke.

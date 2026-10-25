@@ -10,3 +10,5 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **Nejasnou větu ve specifikaci rovnou přepiš.** Když agent musí pravidlo vyložit, ať výklad zapíše do specifikace, ne jen do kódu. Při další změně pak nikdo nemusí výklad zpětně luštit z implementace. ([kapitola 2.2](kapitoly/2-hra/02-pohyb-pavouku.md))
 - **Tabulky ze specifikace testuj opisem tabulky.** Test, který porovná výstup kódu s řádkem čísel ze specifikace, zkontroluje člověk za pár sekund. ([kapitola 2.3](kapitoly/2-hra/03-mouchy-a-bodovani.md))
 - **Ptej se, co se stane mezi dvěma kroky.** U simulace v pevných krocích může rychlý objekt jiný přeskočit. Ať agent spočítá nejhorší případ a hlídá ho testem. ([kapitola 2.3](kapitoly/2-hra/03-mouchy-a-bodovani.md))
+- **Čísla v testech odvozuj z laditelných konstant.** Po první změně rychlosti selhaly právě testy s natvrdo zapsaným časem. ([kapitola 2.4](kapitoly/2-hra/04-ai-a-balicky.md))
+- **Hraj hru po každé kapitole.** Testy ověří pravidla, ale ne tempo. To, že je hra o 40 % rychlejší, než má být, poznal až člověk. ([kapitola 2.4](kapitoly/2-hra/04-ai-a-balicky.md))

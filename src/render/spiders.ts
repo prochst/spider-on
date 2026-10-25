@@ -7,11 +7,14 @@ import type { View } from "./view";
 
 const PLAYER_COLOR = "#9dff6a";
 const ENEMY_COLOR = "#ff4f6d";
+/** Slowed enemies turn icy blue, the colour of the slowdown package. */
+const SLOWED_ENEMY_COLOR = "#5ad1ff";
 const BODY_RADIUS = 0.03;
 const LEG_LENGTH = 0.045;
 
 export function drawSpiders(ctx: CanvasRenderingContext2D, view: View, field: Field): void {
-  for (const enemy of field.enemies) drawSpider(ctx, view, enemy, field.ringCount, ENEMY_COLOR);
+  const enemyColor = field.bonus.slowdownLeft > 0 ? SLOWED_ENEMY_COLOR : ENEMY_COLOR;
+  for (const enemy of field.enemies) drawSpider(ctx, view, enemy, field.ringCount, enemyColor);
   drawSpider(ctx, view, field.player, field.ringCount, PLAYER_COLOR);
 }
 

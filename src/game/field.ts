@@ -1,15 +1,30 @@
-// The playing field of one round: the web size, the player, the enemies and
-// the flies, all at their start positions (spec chapters 3, 5 and 7).
+// The playing field of one round: the web size, the player, the enemies,
+// the flies and the bonus package, all at their start positions (spec
+// chapters 3, 4, 5 and 7).
 
-import { COLLISION_DISTANCE, PLAYER_SPEED, THROTTLE_FACTOR } from "./config";
+import { chooseEnemyTurn } from "./ai";
+import { type BonusState, createBonusState } from "./bonus";
+import { COLLISION_DISTANCE, PLAYER_SPEED, SLOWDOWN_FACTOR, THROTTLE_FACTOR } from "./config";
 import { createFlies, type Fly } from "./flies";
-import { createSpider, requestTurn, type Spider, spiderPosition, stepSpider, type Turn } from "./spider";
+import { createRandom, type Random } from "./random";
+import {
+  createSpider,
+  reachesGate,
+  requestTurn,
+  type Spider,
+  spiderPosition,
+  stepSpider,
+  type Turn,
+} from "./spider";
 
 export type Field = {
   ringCount: number;
+  /** Difficulty level; decides how eagerly enemies chase the player. */
+  level: number;
   player: Spider;
   enemies: Spider[];
   flies: Fly[];
+  bonus: BonusState;
 };
 
 export type EnemySetup = {
@@ -24,9 +39,16 @@ const PLAYER_START_ANGLE = 90 * DEG;
 // closer than a quarter of the web (90°) to the player.
 const ENEMY_START_ANGLES = [270 * DEG, 225 * DEG, 315 * DEG];
 
-export function createField(ringCount: number, enemies: EnemySetup): Field {
+/** Without a bonus state the round has no packages, as before round 6. */
+export function createField(
+  ringCount: number,
+  enemies: EnemySetup,
+  level = 1,
+  bonus: BonusState = createBonusState(false, createRandom(0)),
+): Field {
   return {
     ringCount,
+    level,
     player: createSpider(ringCount - 1, PLAYER_START_ANGLE, -1, PLAYER_SPEED),
     enemies: Array.from({ length: enemies.count }, (_, i) => {
       // Inner rings only: the outer ring belongs to the player at the start.
@@ -35,6 +57,7 @@ export function createField(ringCount: number, enemies: EnemySetup): Field {
       return createSpider(ring, angle, 1, PLAYER_SPEED * enemies.speedFactor);
     }),
     flies: createFlies(ringCount),
+    bonus,
   };
 }
 
@@ -42,9 +65,18 @@ export function steerPlayer(field: Field, turn: Turn, throttle: boolean): boolea
   return requestTurn(field.player, turn, field.ringCount, throttle);
 }
 
-export function stepField(field: Field, dt: number, throttle: boolean): void {
-  stepSpider(field.player, dt, field.ringCount, throttle ? THROTTLE_FACTOR : 1);
-  for (const enemy of field.enemies) stepSpider(enemy, dt, field.ringCount);
+export function stepField(field: Field, dt: number, throttle: boolean, random: Random): void {
+  const { ringCount, player } = field;
+  stepSpider(player, dt, ringCount, throttle ? THROTTLE_FACTOR : 1);
+  const enemySpeed = field.bonus.slowdownLeft > 0 ? SLOWDOWN_FACTOR : 1;
+  for (const enemy of field.enemies) {
+    // Decide on the very step the enemy reaches a gate, so it reacts to where the player is heading right now.
+    if (!enemy.pending && reachesGate(enemy, dt, ringCount, enemySpeed)) {
+      const turn = chooseEnemyTurn(enemy, player, field.level, random);
+      if (turn) requestTurn(enemy, turn, ringCount, false);
+    }
+    stepSpider(enemy, dt, ringCount, enemySpeed);
+  }
 }
 
 /**
