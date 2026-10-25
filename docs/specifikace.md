@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.11. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.12. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -154,7 +154,10 @@ Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do poz
 
 - Vzhled je oddělený od pravidel. Herní logika zná jen pozice, směry a stavy, nic neví o barvách ani tvarech.
 - Šablona definuje paletu, písmo a kreslicí funkce pro: pozadí, pavučinu, přechodová vlákna, mouchu, bonusové balíčky (každý obsah zvlášť), zprávu o získaném bonusu, hráčova pavouka, nepřátelského pavouka, zpomaleného nepřítele, efekt srážky, HUD a dotykové ovládání.
-- Výchozí šablona je **Neon**. Druhá šablona **Čmáranice** (tužka na čtverečkovaném papíře) přijde později jako ukázka přidání šablony.
+- Šablona dostává už spočítané pozice v pixelech (body kruhů, konce vláken, místo a natočení pavouka, fázi kroku nohou) a čísla do HUD. Sama nic nepočítá z pravidel hry, takže nová šablona nemůže pravidla rozbít. Velikosti pavouků, much a balíčků jsou pro všechny šablony stejné, aby vzhled odpovídal srážkám.
+- Šablona určuje i barvy a písmo menu nad herní plochou.
+- Výchozí šablona je **Neon** podle náhledu stylů z fáze 1: tmavé pozadí s fialovým oparem, azurové svítící kruhy, růžová přechodová vlákna, zlaté mouchy jako světlušky, bílo-azurový hráč, růžoví nepřátelé, fialově zpomalení nepřátelé. Srážka je bílý kruh s jiskrami a hráčův pavouk během ní zmizí. Písmo **Chakra Petch** (licence SIL OFL 1.1) je přibalené ve hře, aby fungovala i offline a v mobilních aplikacích. Dotykové ovládání šablona dostane v kapitole o ovládání.
+- Druhá šablona **Čmáranice** (tužka na čtverečkovaném papíře) přijde později jako ukázka přidání šablony.
 - Šablona se vybírá v Nastavení. Volba se pamatuje.
 
 ## 15. Technické požadavky

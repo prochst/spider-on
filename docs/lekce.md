@@ -17,3 +17,6 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **Hlášení, které přesně odpovídá staré verzi, prověř nejdřív na verzi.** Po sloučení může prohlížeč ještě pár minut ukazovat starou stránku z mezipaměti. Poraď obnovení bez mezipaměti (Ctrl+Shift+R), než začneš opravovat. ([kapitola 2.4](kapitoly/2-hra/04-ai-a-balicky.md))
 - **Ovládání ověřuj v ruce, ne na papíře.** „Šipka dolů = dovnitř“ ve specifikaci znělo logicky, ve hře působilo u dolního vlákna obráceně. ([kapitola 2.4](kapitoly/2-hra/04-ai-a-balicky.md))
 - **Tabulku ze specifikace piš v kódu jako tabulku.** Vzorec s dělením a zbytkem pro „pomalý, rychlý, …“ se při první změně pravidel rozpadl. Řádky zapsané stejně jako ve specifikaci se dají porovnat očima. ([kapitola 2.4](kapitoly/2-hra/04-ai-a-balicky.md))
+- **Šabloně vzhledu dávej hotová data, ne stav hry.** Šablona, která dostane jen pixely a role, nemůže rozbít pravidla a další šablona se píše snáz. ([kapitola 2.5](kapitoly/2-hra/05-neon-a-sablony.md))
+- **Barvy ověřuj na snímku ze hry.** Ledově modří zpomalení nepřátelé vypadali v paletě dobře, ve hře splývali s hráčem. ([kapitola 2.5](kapitoly/2-hra/05-neon-a-sablony.md))
+- **Nové řádky do seznamu přidávej na konec.** Vkládání „za nalezený text“ rozházelo pořadí verzí ve specifikaci. ([kapitola 2.5](kapitoly/2-hra/05-neon-a-sablony.md))

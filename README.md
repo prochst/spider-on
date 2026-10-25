@@ -14,3 +14,4 @@ Hra je inspirovaná klasickými bludišťovými arkádami konce 70. let. Nepouž
 
 - Kód: [MIT](LICENSE)
 - Dokumentace v `docs/`: [CC BY 4.0](LICENSE-docs.md)
+- Písmo Chakra Petch v `src/assets/fonts/chakra-petch/`: © 2018 The Chakra Petch Project Authors, [SIL Open Font License 1.1](src/assets/fonts/chakra-petch/OFL.txt)

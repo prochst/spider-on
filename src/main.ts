@@ -14,9 +14,12 @@ import {
 import { planSteps } from "./game/fixedStep";
 import { cancelEvent, confirmEvent } from "./game/screens";
 import { type KeyCommand, listenToKeyboard } from "./input/keyboard";
-import { drawScene } from "./render/scene";
+import { createLegAnimator } from "./render/legs";
+import { drawScene, type Renderer } from "./render/scene";
 import { createView, type View } from "./render/view";
-import { createOverlay } from "./ui/overlay";
+import { neon } from "./themes/neon";
+import { applyMenuTheme, createOverlay } from "./ui/overlay";
+import "./assets/fonts/chakra-petch/chakra-petch.css";
 import "./ui/overlay.css";
 
 function required<T>(value: T | null, what: string): T {
@@ -38,6 +41,12 @@ const seed = debug && params.has("seed") ? Number(params.get("seed")) : Math.flo
 const game = createGame(seed);
 // Lets the browser console and automated checks look at the state while debugging.
 if (debug) Object.assign(window, { spiderOn: game });
+// Neon is the only theme until the settings can choose one (chapter 2.7).
+const renderer: Renderer = { theme: neon, legs: createLegAnimator() };
+applyMenuTheme(uiRoot, renderer.theme);
+// The canvas does not ask for web fonts by itself, so load the HUD weight up
+// front; the Czech letters make the browser fetch the latin-ext part as well.
+void document.fonts.load(`700 16px ${renderer.theme.fontFamily}`, "SKÓRE ŽIVOTY ĚŠČŘŮ");
 const overlay = createOverlay(uiRoot, send);
 
 function send(command: Command): void {
@@ -116,7 +125,7 @@ function frame(now: number): void {
 
   // The crash animation ends on its own, so the menu may need to change after an update.
   overlay.sync(game);
-  drawScene(ctx, view, game, now / 1000);
+  drawScene(ctx, view, game, renderer, now / 1000);
   requestAnimationFrame(frame);
 }
 
