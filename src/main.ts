@@ -1,7 +1,10 @@
 // Placeholder for phase 1: draws the empty neon web so the deploy pipeline has
 // something to show. The game loop, rendering and themes arrive in phase 2.
-import { GATE_SPOKES, RING_COUNT, SPOKE_COUNT } from "./game/config";
+import { GATE_SPOKES, MIN_RING_COUNT, SPOKE_COUNT } from "./game/config";
 import { ringPoint, ringRadius, SPOKE_STEP } from "./game/geometry";
+
+// The game starts on the smallest web.
+const ringCount = MIN_RING_COUNT;
 
 const canvas = document.querySelector<HTMLCanvasElement>("#game");
 if (!canvas) throw new Error("Missing #game canvas");
@@ -28,8 +31,8 @@ function draw(context: CanvasRenderingContext2D, target: HTMLCanvasElement): voi
   for (let spoke = 0; spoke < SPOKE_COUNT; spoke++) {
     const isGate = (GATE_SPOKES as readonly number[]).includes(spoke);
     const angle = spoke * SPOKE_STEP;
-    const from = isGate ? ringRadius(0) : 0.06;
-    const to = isGate ? ringRadius(RING_COUNT - 1) : 1.02;
+    const from = isGate ? ringRadius(0, ringCount) : 0.06;
+    const to = isGate ? ringRadius(ringCount - 1, ringCount) : 1.02;
     context.strokeStyle = isGate ? "#ff6ad5" : "rgba(90, 220, 255, 0.3)";
     context.shadowColor = isGate ? "#ff6ad5" : "transparent";
     context.shadowBlur = isGate ? 10 : 0;
@@ -44,10 +47,10 @@ function draw(context: CanvasRenderingContext2D, target: HTMLCanvasElement): voi
   context.shadowColor = "#4fe3ff";
   context.shadowBlur = 8;
   context.lineWidth = 1.6;
-  for (let ring = 0; ring < RING_COUNT; ring++) {
+  for (let ring = 0; ring < ringCount; ring++) {
     context.beginPath();
     for (let i = 0; i <= 240; i++) {
-      const p = ringPoint(ring, (i / 240) * Math.PI * 2);
+      const p = ringPoint(ring, ringCount, (i / 240) * Math.PI * 2);
       const x = cx + p.x * unit;
       const y = cy + p.y * unit;
       if (i === 0) context.moveTo(x, y);

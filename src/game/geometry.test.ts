@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { RING_COUNT, SPOKE_COUNT } from "./config";
+import { MAX_RING_COUNT, MIN_RING_COUNT, SPOKE_COUNT } from "./config";
 import { normalizeAngle, ringPoint, ringRadius, SPOKE_STEP } from "./geometry";
 
 describe("normalizeAngle", () => {
@@ -11,26 +11,34 @@ describe("normalizeAngle", () => {
 });
 
 describe("ringRadius", () => {
-  it("places the outer ring at 0.92 R as the spec requires", () => {
-    expect(ringRadius(RING_COUNT - 1)).toBeCloseTo(0.92);
+  it("keeps the inner ring at 0.28 R and the outer ring at 0.92 R for every web size", () => {
+    for (let count = MIN_RING_COUNT; count <= MAX_RING_COUNT; count++) {
+      expect(ringRadius(0, count)).toBeCloseTo(0.28);
+      expect(ringRadius(count - 1, count)).toBeCloseTo(0.92);
+    }
+  });
+
+  it("gives a smaller web wider lanes", () => {
+    expect(ringRadius(1, 3)).toBeCloseTo(0.6);
+    expect(ringRadius(1, 5)).toBeCloseTo(0.44);
   });
 });
 
 describe("ringPoint", () => {
   it("lies exactly on the ring radius at every spoke", () => {
     for (let spoke = 0; spoke < SPOKE_COUNT; spoke++) {
-      const p = ringPoint(2, spoke * SPOKE_STEP);
-      expect(Math.hypot(p.x, p.y)).toBeCloseTo(ringRadius(2));
+      const p = ringPoint(2, 5, spoke * SPOKE_STEP);
+      expect(Math.hypot(p.x, p.y)).toBeCloseTo(ringRadius(2, 5));
     }
   });
 
   it("sags toward the centre between spokes", () => {
-    const p = ringPoint(2, SPOKE_STEP / 2);
-    expect(Math.hypot(p.x, p.y)).toBeLessThan(ringRadius(2));
+    const p = ringPoint(2, 5, SPOKE_STEP / 2);
+    expect(Math.hypot(p.x, p.y)).toBeLessThan(ringRadius(2, 5));
   });
 
   it("uses screen orientation: 90° points down", () => {
-    const p = ringPoint(4, Math.PI / 2);
+    const p = ringPoint(4, 5, Math.PI / 2);
     expect(p.x).toBeCloseTo(0);
     expect(p.y).toBeGreaterThan(0);
   });

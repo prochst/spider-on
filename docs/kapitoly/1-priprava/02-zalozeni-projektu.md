@@ -11,7 +11,7 @@ Viz [prompty/1-priprava/02-zalozeni-projektu.md](../../prompty/1-priprava/02-zal
 ## Co agent udělal
 
 - **Nástroje**: Vite 8 (vývojový server a build), TypeScript 7 ve striktním režimu, Vitest 5 pro unit testy. Žádný herní framework, jak bylo rozhodnuto v kapitole 1.1.
-- **První kus logiky**: `src/game/geometry.ts` počítá tvar pavučiny (poloměry kruhů, body na prověšených segmentech) a `src/game/config.ts` drží laditelné konstanty ze specifikace. Pět unit testů hlídá, že vnější kruh leží na 0,92 R, že body na vláknech leží přesně na kruhu a že úhel 90° míří dolů jako na obrazovce.
+- **První kus logiky**: `src/game/geometry.ts` počítá tvar pavučiny (poloměry kruhů, body na prověšených segmentech) a `src/game/config.ts` drží laditelné konstanty ze specifikace. Šest unit testů hlídá, že vnitřní a vnější kruh leží na 0,28 R a 0,92 R pro pavučinu se 3 až 5 kruhy, že menší pavučina má širší pruhy, že body na vláknech leží přesně na kruhu a že úhel 90° míří dolů jako na obrazovce. Původní verze počítala jen s 5 kruhy. Když uživatel ve specifikaci 0.2 zavedl rostoucí pavučinu, agent geometrii přepsal, aby počet kruhů dostávala jako parametr.
 - **Zástupná obrazovka**: `src/main.ts` vykreslí prázdnou neonovou pavučinu s nápisem SPIDER ON. Skutečná hra přijde ve fázi 2, tady jde jen o to, aby nasazení mělo co ukázat.
 - **CI** (`.github/workflows/ci.yml`): u každého pull requestu a pushe do `main` spustí kontrolu typů, testy a build.
 - **Nasazení** (`.github/workflows/deploy.yml`): po každém pushi do `main` hru sestaví a nasadí na GitHub Pages. Verze akcí odpovídají příkladu v dokumentaci GitHubu.
@@ -30,7 +30,7 @@ Viz [prompty/1-priprava/02-zalozeni-projektu.md](../../prompty/1-priprava/02-zal
 ## Metriky
 
 - Soubory: 14 nových (konfigurace, 4 zdrojové soubory včetně testu, 2 workflow, 2 dokumenty).
-- Testy: 5, všechny procházejí.
+- Testy: 6, všechny procházejí.
 - Velikost sestavené hry: 2,2 kB JavaScriptu (1,2 kB po kompresi).
 
 ## Poučení
