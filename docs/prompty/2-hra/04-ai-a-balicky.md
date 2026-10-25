@@ -41,3 +41,7 @@ Po ručním testu verze se šipkami podle směru (napoprvé prohlížeč ukazova
 > * balíčky fungují, doplň, aby se po úspěšném sebrání zobrazila na 3s v centru pavučiny informace o získaném obonusu.
 > * hra je stále dost obtížná už od začátku, změn rychlost nepřátel na interval 0,3 až 0,9 rychlosti pavouka.
 > * za krok obtížnosti 3 přidej krok 4 jeden pomalý, druhý rychlý, pak teprve krok 5 dva rychlí. stejně tak u tří nepřátel budou všichni pomalí, pak jen jeden rychlí, dva rychlí, ...
+
+## 7. Ještě pomalejší nepřátelé
+
+> Sniž ještě rychlost nepřátel na interval 0,2 až 0,8 a rychlost rychlejších nepřátel zvyšuj jen pomalu podle stupně obtížnosti

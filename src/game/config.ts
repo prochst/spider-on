@@ -34,12 +34,13 @@ export const THROTTLE_FACTOR = 1.7;
 export const TURN_ZONE = (30 * Math.PI) / 180;
 /** Time to climb from one ring to the next along a gate spoke. */
 export const CROSSING_TIME = 0.3;
-/** Enemy speeds as multiples of PLAYER_SPEED; every enemy stays within 0.3 to 0.9. */
-export const ENEMY_SLOW_FACTOR = 0.3;
-export const ENEMY_FAST_FACTOR = 0.6;
-/** Above difficulty 9 the fast enemies gain this much per level, up to ENEMY_MAX_FACTOR. */
-export const ENEMY_SPEEDUP_PER_LEVEL = 0.05;
-export const ENEMY_MAX_FACTOR = 0.9;
+/** Enemy speeds as multiples of PLAYER_SPEED; every enemy stays within 0.2 to 0.8. */
+export const ENEMY_SLOW_FACTOR = 0.2;
+/** Fast enemies first appear on difficulty 2 at this speed... */
+export const ENEMY_FAST_FACTOR = 0.4;
+/** ...and gain this much on each further level, up to ENEMY_MAX_FACTOR (on level 22). */
+export const ENEMY_SPEEDUP_PER_LEVEL = 0.02;
+export const ENEMY_MAX_FACTOR = 0.8;
 
 /** Flies are collected when the player is on their ring and closer than this angle (radians). */
 export const FLY_PICKUP_ANGLE = 0.06;
