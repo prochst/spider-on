@@ -2,7 +2,7 @@
 
 ## Cíl
 
-Dát nepřátelům chování, které hráče opravdu ohrožuje, a od 6. kola přidat bonusové balíčky. Všechno náhodné musí jít v testech zopakovat.
+Dát nepřátelům chování, které hráče opravdu ohrožuje, a přidat bonusové balíčky (podle plánu od 6. kola, po ručním testu od 4.). Všechno náhodné musí jít v testech zopakovat.
 
 ## Zadání
 
@@ -20,6 +20,7 @@ Viz [prompty/2-hra/04-ai-a-balicky.md](../../prompty/2-hra/04-ai-a-balicky.md). 
 - **Šipky podle směru na obrazovce.** Po ručním testu sloučené verze uživatel potvrdil, že rychlost je dobrá, a chtěl, aby všechny šipky odpovídaly směru přesunu na obrazovce: po svislém vlákně nahoru a dolů, po vodorovném vlevo a vpravo. Původní „dolů = dovnitř, nahoru = ven“ ze specifikace působilo u dolního vlákna obráceně. Díky funkci `turnForDirection` z předchozího kroku to byla změna mapování kláves na pár řádků. Specifikace má verzi 0.8.
 - **Mírnější obtížnost.** Hra byla podle uživatele i po zpomalení od začátku těžká. Nepřátelé teď lezou 0,3× až 0,9× rychlosti hráče místo 0,75× až 1,3×. Zadání „interval 0,3 až 0,9“ agent vyložil jako rozpětí celé hry: pomalý 0,3×, rychlý 0,6× a od stupně 10 rychlí nepřátelé přidávají 0,05× za stupeň až do 0,9×. Rychlý 0,6× vyšel i z přepočtu starého rozpětí na nové. Tabulka obtížnosti zrychluje nepřátele po jednom: 1 pomalý, 1 rychlý, 2 pomalí, 1 pomalý a 1 rychlý, 2 rychlí, 3 pomalí, 2 pomalí a 1 rychlý, 1 pomalý a 2 rychlí, 3 rychlí. Agent ji v kódu zapsal jako tabulku řádek po řádku, stejně jako ve specifikaci, místo vzorce s dělením a zbytkem, který tam byl dřív. Typ `EnemySetup` je teď seznam rychlostí, jedna pro každého nepřítele. Specifikace má verzi 0.9.
 - **Ještě pomalejší nepřátelé.** Po dalším testu uživatel rozmezí posunul na 0,2× až 0,8× a chtěl, aby rychlí nepřátelé zrychlovali jen pomalu podle stupně. Agent proto zrušil skok „pevná rychlost do stupně 9, pak +0,05× za stupeň“. Rychlý nepřítel má teď 0,4× na stupni 2 a každý další stupeň přidá 0,02×, takže na stupni 9 má 0,54× a strop 0,8× dosáhne na stupni 22. Tabulka v kódu teď říká jen „pomalý“ nebo „rychlý“ a rychlost rychlého počítá funkce `fastEnemyFactor(stupeň)`. Specifikace má verzi 0.10.
+- **Balíčky od 4. kola.** Po ručním testu uživatel balíčky nevrátil na 6. kolo, ale posunul jejich začátek na 4. kolo, kdy se pavučina rozroste na 4 kruhy. Specifikace má verzi 0.11.
 - **Zpráva o získaném bonusu.** Po sebrání balíčku se ve středu pavučiny na 3 s ukáže barvou balíčku „+250 BODŮ“, „ZPOMALENÍ NEPŘÁTEL“ nebo „+1 ŽIVOT“ a posledních půl sekundy pohasíná. Agent domyslel i případ, který zadání neřešilo: balíček se životem při plných pěti životech. Hráč by jinak viděl „+1 ŽIVOT“, i když žádný nedostal, proto se ukáže „ŽIVOTY JSOU PLNÉ“. Odpočet běží v logice (`bonus.notice`), vykreslení jen čte zbývající čas.
 - **Balíčky dočasně od 1. kola.** Aby uživatel nemusel kvůli testu balíčků dohrát pět kol, agent nastavil `BONUS_FIRST_ROUND = 1`. Test počítá s hodnotou z konfigurace, takže po návratu na 6 zůstane platný.
 

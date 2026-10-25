@@ -36,7 +36,7 @@ const PLAYER_START_ANGLE = 90 * DEG;
 // closer than a quarter of the web (90°) to the player.
 const ENEMY_START_ANGLES = [270 * DEG, 225 * DEG, 315 * DEG];
 
-/** Without a bonus state the round has no packages, as before round 6. */
+/** Without a bonus state the round has no packages, as before round 4. */
 export function createField(
   ringCount: number,
   enemies: EnemySetup,

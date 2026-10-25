@@ -1,4 +1,4 @@
-// Bonus packages (spec chapter 4): from round 6 a package now and then takes
+// Bonus packages (spec chapter 4): from round 4 a package now and then takes
 // the place of a fly on the far side of the web. It stays until the player
 // eats it or crawls past it on another ring.
 
@@ -21,7 +21,7 @@ export type BonusNoticeKind = BonusKind | "livesFull";
 export type BonusNotice = { kind: BonusNoticeKind; timeLeft: number };
 
 export type BonusState = {
-  /** Packages appear only from round 6 on. */
+  /** Packages appear only from round 4 on. */
   enabled: boolean;
   /** Seconds until the next package appears. */
   wait: number;
