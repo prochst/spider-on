@@ -67,3 +67,7 @@ Doslovná zadání uživatele z 25. 10. 2026, včetně překlepů. Agent pracova
 > 2. Po srážce obnoví celé herní pole
 > 3.  Kompromisní řešení, změna se zapamatuje jen 15 stupňů před přechodem
 > 4. Ovládání na mobilu nebo tabletu zvolit podobné jako je na malých herních konzolích.  Zobrazení hry je na šířku, vpravo od hrací plochy je virtuální touchpad, kde smět tahu prstu určuje pohyb po přechodovém vlákně. Vlevo pak virtuální tlačítko pro plyn.
+
+## 9. Doplnění k balíčkům (16:10)
+
+> Ještě uprav aby zobrazování balíčků nebylo pravidelně po 8s ale náhodně v rozmezí 5 až 20s
