@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ENEMY_FAST_FACTOR, ENEMY_MAX_FACTOR, ENEMY_SLOW_FACTOR } from "./config";
-import { difficultyForRound, enemiesForDifficulty, ringCountForRound, webGrowsAfter } from "./progression";
+import { difficultyForRound, enemiesForDifficulty, fastEnemyFactor, ringCountForRound, webGrowsAfter } from "./progression";
 
 describe("ringCountForRound", () => {
   it("follows the table in spec chapter 6", () => {
@@ -18,24 +18,35 @@ describe("difficultyForRound", () => {
 
 describe("enemiesForDifficulty", () => {
   const S = ENEMY_SLOW_FACTOR;
-  const F = ENEMY_FAST_FACTOR;
 
   it("follows the enemy table for levels 1 to 9", () => {
     const table = Array.from({ length: 9 }, (_, i) => enemiesForDifficulty(i + 1));
-    expect(table).toEqual([[S], [F], [S, S], [S, F], [F, F], [S, S, S], [S, S, F], [S, F, F], [F, F, F]]);
+    const F = fastEnemyFactor;
+    expect(table).toEqual([
+      [S],
+      [F(2)],
+      [S, S],
+      [S, F(4)],
+      [F(5), F(5)],
+      [S, S, S],
+      [S, S, F(7)],
+      [S, F(8), F(8)],
+      [F(9), F(9), F(9)],
+    ]);
   });
 
-  it("speeds the three fast enemies up above level 9, never over the maximum", () => {
-    expect(enemiesForDifficulty(10)).toEqual([0.65, 0.65, 0.65].map((f) => expect.closeTo(f)));
-    expect(enemiesForDifficulty(15)[0]).toBeCloseTo(ENEMY_MAX_FACTOR);
+  it("speeds fast enemies up slowly from level 2 to the maximum on level 22", () => {
+    expect(fastEnemyFactor(2)).toBeCloseTo(ENEMY_FAST_FACTOR);
+    expect(fastEnemyFactor(9)).toBeCloseTo(0.54);
+    expect(fastEnemyFactor(22)).toBeCloseTo(ENEMY_MAX_FACTOR);
     expect(enemiesForDifficulty(40)).toEqual([ENEMY_MAX_FACTOR, ENEMY_MAX_FACTOR, ENEMY_MAX_FACTOR]);
   });
 
-  it("keeps every enemy between 0.3 and 0.9 times the player's speed", () => {
+  it("keeps every enemy between 0.2 and 0.8 times the player's speed", () => {
     for (let level = 1; level <= 40; level++) {
       for (const factor of enemiesForDifficulty(level)) {
-        expect(factor).toBeGreaterThanOrEqual(0.3);
-        expect(factor).toBeLessThanOrEqual(0.9 + 1e-9);
+        expect(factor).toBeGreaterThanOrEqual(0.2);
+        expect(factor).toBeLessThanOrEqual(0.8 + 1e-9);
       }
     }
   });

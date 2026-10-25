@@ -31,11 +31,12 @@ export function difficultyForRound(round: number): number {
   return round - 5;
 }
 
-const SLOW = ENEMY_SLOW_FACTOR;
-const FAST = ENEMY_FAST_FACTOR;
+const SLOW = "slow";
+const FAST = "fast";
+type EnemyKind = typeof SLOW | typeof FAST;
 // Each new enemy arrives slow, then the enemies turn fast one at a time
 // before the next one joins (spec chapter 6, levels 1 to 9).
-const ENEMY_TABLE: readonly EnemySetup[] = [
+const ENEMY_TABLE: readonly (readonly EnemyKind[])[] = [
   [SLOW],
   [FAST],
   [SLOW, SLOW],
@@ -46,14 +47,19 @@ const ENEMY_TABLE: readonly EnemySetup[] = [
   [SLOW, FAST, FAST],
   [FAST, FAST, FAST],
 ];
+const FIRST_FAST_LEVEL = 2;
 
-/** Speed factor of each enemy for the difficulty level; above the table, three fast ones speeding up. */
+/** Fast enemies speed up a little on every level, so no single round feels like a jump. */
+export function fastEnemyFactor(level: number): number {
+  const factor = ENEMY_FAST_FACTOR + ENEMY_SPEEDUP_PER_LEVEL * (level - FIRST_FAST_LEVEL);
+  return Math.min(factor, ENEMY_MAX_FACTOR);
+}
+
+/** Speed factor of each enemy for the difficulty level; above the table, three fast ones. */
 export function enemiesForDifficulty(level: number): EnemySetup {
-  const row = ENEMY_TABLE[level - 1];
-  if (row) return row;
-  const extraLevels = level - ENEMY_TABLE.length;
-  const factor = Math.min(FAST + ENEMY_SPEEDUP_PER_LEVEL * extraLevels, ENEMY_MAX_FACTOR);
-  return [factor, factor, factor];
+  const row = ENEMY_TABLE[level - 1] ?? [FAST, FAST, FAST];
+  const fast = fastEnemyFactor(level);
+  return row.map((kind) => (kind === FAST ? fast : ENEMY_SLOW_FACTOR));
 }
 
 /** Whether the next round is played on a bigger web, so the player can be warned. */

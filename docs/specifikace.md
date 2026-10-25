@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.9. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.10. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -75,7 +75,7 @@ Hra rozlišuje **číslo kola** (počítá se od 1 a jen roste, používá se pr
 | 7 | 2 pomalí, 1 rychlý |
 | 8 | 1 pomalý, 2 rychlí |
 | 9 | 3 rychlí |
-| 10 a vyšší | 3 rychlí, rychlost +0,05× za každý stupeň nad 9, nejvýš 0,9× |
+| 10 a vyšší | 3 rychlí |
 
 - Kolo končí sebráním poslední mouchy. Hra se zastaví a ukáže obrazovku **Kolo dokončeno** (kapitola 12). Další kolo začne **až na pokyn hráče**, s plnou pavučinou much. Když hráč sebere poslední mouchu ve stejném okamžiku, kdy se srazí, platí sebrání a kolo je dokončené.
 - Při přechodu na větší plochu obrazovka Kolo dokončeno hráče upozorní, že pavučina se rozrůstá.
@@ -83,7 +83,7 @@ Hra rozlišuje **číslo kola** (počítá se od 1 a jen roste, používá se pr
 ## 7. Nepřátelští pavouci
 
 - Lezou **po směru hodinových ručiček**, nikdy nezastaví.
-- Rychlost se zadává jako násobek hráčovy základní rychlosti: **pomalý 0,3×, rychlý 0,6×, nejrychlejší 0,9× (laditelné)**. Všechny rychlosti nepřátel leží v rozmezí 0,3× až 0,9× rychlosti hráče. Nepřátelé plyn nemají.
+- Rychlost se zadává jako násobek hráčovy základní rychlosti: **pomalý 0,2×, rychlý 0,4× na stupni 2 a o 0,02× víc za každý další stupeň, nejvýš 0,8× (laditelné)**. Rychlí nepřátelé tak zrychlují pomalu: na stupni 5 mají 0,46×, na stupni 9 0,54× a strop 0,8× dosáhnou na stupni 22. Všechny rychlosti nepřátel leží v rozmezí 0,2× až 0,8× rychlosti hráče. Nepřátelé plyn nemají.
 - **Chování (AI)**: na každém přechodovém vlákně se nepřítel rozhodne ve chvíli, kdy na vlákno dorazí:
   - s pravděpodobností `p` přeleze o **jeden** kruh směrem ke kruhu, na který míří hráč (cílový kruh hráčova pokynu, jinak jeho aktuální kruh),
   - jinak pokračuje po svém kruhu.
@@ -182,6 +182,7 @@ Další rozhodnutí uživatele:
 
 - Po ručním testování (verze 0.6): základní rychlost pohybu snížena o 40 %, z 0,7 na 0,42 R/s. Nepřátelé, jejichž rychlost je násobkem základní, se zpomalili s ní.
 - Po dalším testování (verze 0.7): rychlost snížena o dalších 20 % na 0,336 R/s. Změna kruhu byla těžko trefitelná, proto se zóna pro zapamatování pokynu rozšířila z 15° na 30° a přibyly šipky vlevo a vpravo pro boční vlákna.
+- Verze 0.10: nepřátelé ještě pomalejší, rozmezí 0,2× až 0,8×. Rychlí nepřátelé zrychlují pomalu s každým stupněm obtížnosti už od stupně 2, ne až od stupně 10.
 - Verze 0.9: hra byla i po zpomalení od začátku těžká. Rychlosti nepřátel se posunuly do rozmezí 0,3× až 0,9× hráčovy rychlosti (dřív 0,75× až 1,3×) a tabulka obtížnosti zrychluje nepřátele po jednom (stupně 4, 7 a 8 jsou nové). Po sebrání balíčku se na 3 s ukáže, co hráč získal.
 - Verze 0.8: všechny šipky ovládají změnu kruhu podle směru na obrazovce, ne „nahoru = ven, dolů = dovnitř“.
 - Dočasně pro ruční test: balíčky se objevují už od 1. kola (`BONUS_FIRST_ROUND = 1`). Pravidlo „od 6. kola“ dál platí a po testu se hodnota vrátí.
