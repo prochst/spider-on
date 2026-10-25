@@ -32,8 +32,8 @@ Specifikaci uživatel prošel v pull requestu a poslal připomínky (zadání 8)
 
 ## Metriky
 
-- Čas: asi 2,5 hodiny včetně pauz uživatele.
-- Zprávy uživatele: 8 (+1 omylem odeslaná nedokončená zpráva).
+- Čas: asi 2,5 hodiny dopoledne (od nápadu po repozitář), odpoledne kontrola specifikace a připomínky.
+- Zadání uživatele: 9 (viz prompty), k tomu krátké organizační zprávy (nastavení GitHubu, dotazy).
 - Výstupy: plánovací dokument, animovaný náhled stylů, specifikace hry.
 
 ## Poučení
