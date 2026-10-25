@@ -28,6 +28,7 @@ Viz [prompty/2-hra/04-ai-a-balicky.md](../../prompty/2-hra/04-ai-a-balicky.md). 
 ## Lidská kontrola
 
 - **Ruční testování sloučené verze.** Uživatel hru po kapitole 2.3 zkoušel a poslal, že je moc rychlá a změna kruhu se špatně trefuje. To unit testy nepoznají: hlídají pravidla, ne pocit ze hry.
+- **Nové pravidlo postupu.** Uživatel určil, že agent po sloučení pull requestu nezačne další kapitolu sám, ale počká na ruční test a pokyn. Pravidlo přibylo do `CLAUDE.md`, aby platilo i pro další vlákna.
 - **Šířka zóny.** Agent nabídl tři možnosti (15°, 30°, 45°) a doporučil 30°. Uživatel zvolil 30°.
 - **Vzhled balíčků.** Agent ho ukazuje v pull requestu na náhledu, uživatel rozhodne, jestli tvary a barvy sedí.
 - **Upřesnění specifikace 0.6**: balíček nebere poslední mouchu a nepřítel se rozhoduje ve chvíli příchodu na vlákno.

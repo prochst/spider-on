@@ -34,6 +34,10 @@ Před každým commitem musí projít `npm run typecheck`, `npm test` a `npm run
 - Malé, čitelné funkce. Komentář vysvětluje proč, ne co.
 - Nepoužívej název, grafiku ani zvuky původní hry Head On.
 
+## Postup práce
+
+- Po sloučení pull requestu nezačínej automaticky další kapitolu. Počkej, až uživatel sloučenou verzi ručně otestuje a dá pokyn k opravě, nebo k pokračování podle plánu.
+
 ## Výuková dokumentace
 
 Každý pull request odpovídá jedné kapitole v `docs/kapitoly/<fáze>/`. Ke každé kapitole:

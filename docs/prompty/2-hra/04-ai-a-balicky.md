@@ -14,3 +14,7 @@ Samostatné zadání pro kapitolu nebylo, agent pokračoval podle odsouhlasenéh
 >
 > * Stále velká rychlost, spomal o dalších 20%
 > * je těžké strefit se do stisknutí klávesy pro změnu kruhu, změna vlevo a vpravo se mi nepovedla vůbec
+
+## 3. Pravidlo pro další postup
+
+> Po sloučení PR nezačínej automaticky další krok, počkej na ruční test a pokyn k opravě nebo k pokračování podle plánu
