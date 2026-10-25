@@ -3,7 +3,7 @@
 
 import {
   ENEMY_FAST_FACTOR,
-  ENEMY_MAX_SPEEDUP,
+  ENEMY_MAX_FACTOR,
   ENEMY_SLOW_FACTOR,
   ENEMY_SPEEDUP_PER_LEVEL,
   MAX_RING_COUNT,
@@ -31,15 +31,29 @@ export function difficultyForRound(round: number): number {
   return round - 5;
 }
 
-/** Levels 1–5 alternate slow and fast with one more enemy every two levels; from 6 on, three fast ones speeding up. */
+const SLOW = ENEMY_SLOW_FACTOR;
+const FAST = ENEMY_FAST_FACTOR;
+// Each new enemy arrives slow, then the enemies turn fast one at a time
+// before the next one joins (spec chapter 6, levels 1 to 9).
+const ENEMY_TABLE: readonly EnemySetup[] = [
+  [SLOW],
+  [FAST],
+  [SLOW, SLOW],
+  [SLOW, FAST],
+  [FAST, FAST],
+  [SLOW, SLOW, SLOW],
+  [SLOW, SLOW, FAST],
+  [SLOW, FAST, FAST],
+  [FAST, FAST, FAST],
+];
+
+/** Speed factor of each enemy for the difficulty level; above the table, three fast ones speeding up. */
 export function enemiesForDifficulty(level: number): EnemySetup {
-  if (level >= 6) {
-    const speedup = Math.min(1 + ENEMY_SPEEDUP_PER_LEVEL * (level - 6), ENEMY_MAX_SPEEDUP);
-    return { count: 3, speedFactor: ENEMY_FAST_FACTOR * speedup };
-  }
-  const count = Math.ceil(level / 2);
-  const fast = level % 2 === 0;
-  return { count, speedFactor: fast ? ENEMY_FAST_FACTOR : ENEMY_SLOW_FACTOR };
+  const row = ENEMY_TABLE[level - 1];
+  if (row) return row;
+  const extraLevels = level - ENEMY_TABLE.length;
+  const factor = Math.min(FAST + ENEMY_SPEEDUP_PER_LEVEL * extraLevels, ENEMY_MAX_FACTOR);
+  return [factor, factor, factor];
 }
 
 /** Whether the next round is played on a bigger web, so the player can be warned. */

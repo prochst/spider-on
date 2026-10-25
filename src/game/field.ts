@@ -27,11 +27,8 @@ export type Field = {
   bonus: BonusState;
 };
 
-export type EnemySetup = {
-  count: number;
-  /** Enemy speed as a multiple of the player's base speed. */
-  speedFactor: number;
-};
+/** Speed of each enemy as a multiple of the player's base speed. */
+export type EnemySetup = readonly number[];
 
 const DEG = Math.PI / 180;
 const PLAYER_START_ANGLE = 90 * DEG;
@@ -50,11 +47,11 @@ export function createField(
     ringCount,
     level,
     player: createSpider(ringCount - 1, PLAYER_START_ANGLE, -1, PLAYER_SPEED),
-    enemies: Array.from({ length: enemies.count }, (_, i) => {
+    enemies: enemies.map((speedFactor, i) => {
       // Inner rings only: the outer ring belongs to the player at the start.
       const ring = i % (ringCount - 1);
       const angle = ENEMY_START_ANGLES[i % ENEMY_START_ANGLES.length] ?? 270 * DEG;
-      return createSpider(ring, angle, 1, PLAYER_SPEED * enemies.speedFactor);
+      return createSpider(ring, angle, 1, PLAYER_SPEED * speedFactor);
     }),
     flies: createFlies(ringCount),
     bonus,

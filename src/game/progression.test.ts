@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ENEMY_FAST_FACTOR, ENEMY_MAX_SPEEDUP, ENEMY_SLOW_FACTOR } from "./config";
+import { ENEMY_FAST_FACTOR, ENEMY_MAX_FACTOR, ENEMY_SLOW_FACTOR } from "./config";
 import { difficultyForRound, enemiesForDifficulty, ringCountForRound, webGrowsAfter } from "./progression";
 
 describe("ringCountForRound", () => {
@@ -17,21 +17,27 @@ describe("difficultyForRound", () => {
 });
 
 describe("enemiesForDifficulty", () => {
-  it("follows the enemy table for levels 1 to 6", () => {
-    expect(enemiesForDifficulty(1)).toEqual({ count: 1, speedFactor: ENEMY_SLOW_FACTOR });
-    expect(enemiesForDifficulty(2)).toEqual({ count: 1, speedFactor: ENEMY_FAST_FACTOR });
-    expect(enemiesForDifficulty(3)).toEqual({ count: 2, speedFactor: ENEMY_SLOW_FACTOR });
-    expect(enemiesForDifficulty(4)).toEqual({ count: 2, speedFactor: ENEMY_FAST_FACTOR });
-    expect(enemiesForDifficulty(5)).toEqual({ count: 3, speedFactor: ENEMY_SLOW_FACTOR });
-    expect(enemiesForDifficulty(6)).toEqual({ count: 3, speedFactor: ENEMY_FAST_FACTOR });
+  const S = ENEMY_SLOW_FACTOR;
+  const F = ENEMY_FAST_FACTOR;
+
+  it("follows the enemy table for levels 1 to 9", () => {
+    const table = Array.from({ length: 9 }, (_, i) => enemiesForDifficulty(i + 1));
+    expect(table).toEqual([[S], [F], [S, S], [S, F], [F, F], [S, S, S], [S, S, F], [S, F, F], [F, F, F]]);
   });
 
-  it("speeds up by 3 % per level above 6 up to 1.3 times", () => {
-    expect(enemiesForDifficulty(7).speedFactor).toBeCloseTo(ENEMY_FAST_FACTOR * 1.03);
-    expect(enemiesForDifficulty(10).speedFactor).toBeCloseTo(ENEMY_FAST_FACTOR * 1.12);
-    expect(enemiesForDifficulty(16).speedFactor).toBeCloseTo(ENEMY_FAST_FACTOR * ENEMY_MAX_SPEEDUP);
-    expect(enemiesForDifficulty(40).speedFactor).toBeCloseTo(ENEMY_FAST_FACTOR * ENEMY_MAX_SPEEDUP);
-    expect(enemiesForDifficulty(40).count).toBe(3);
+  it("speeds the three fast enemies up above level 9, never over the maximum", () => {
+    expect(enemiesForDifficulty(10)).toEqual([0.65, 0.65, 0.65].map((f) => expect.closeTo(f)));
+    expect(enemiesForDifficulty(15)[0]).toBeCloseTo(ENEMY_MAX_FACTOR);
+    expect(enemiesForDifficulty(40)).toEqual([ENEMY_MAX_FACTOR, ENEMY_MAX_FACTOR, ENEMY_MAX_FACTOR]);
+  });
+
+  it("keeps every enemy between 0.3 and 0.9 times the player's speed", () => {
+    for (let level = 1; level <= 40; level++) {
+      for (const factor of enemiesForDifficulty(level)) {
+        expect(factor).toBeGreaterThanOrEqual(0.3);
+        expect(factor).toBeLessThanOrEqual(0.9 + 1e-9);
+      }
+    }
   });
 });
 

@@ -78,7 +78,7 @@ describe("updateBonus", () => {
   const random = createRandom(3);
 
   function stateWithPackage(ring: number, angleDeg: number, kind: "points" | "slowdown" | "life"): BonusState {
-    return { enabled: true, wait: 0, package: { ring, angle: angleDeg * DEG, kind }, slowdownLeft: 0 };
+    return { enabled: true, wait: 0, package: { ring, angle: angleDeg * DEG, kind }, slowdownLeft: 0, notice: null };
   }
 
   /** Steps the player and the bonus together, as the game does, and returns what was eaten. */

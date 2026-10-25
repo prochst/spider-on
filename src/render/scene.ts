@@ -6,7 +6,7 @@ import type { Game } from "../game/game";
 import type { Point } from "../game/geometry";
 import { spiderPosition } from "../game/spider";
 import type { View } from "./view";
-import { drawBonusPackage } from "./bonus";
+import { drawBonusNotice, drawBonusPackage } from "./bonus";
 import { drawFlies } from "./flies";
 import { drawSpiders } from "./spiders";
 import { drawWeb } from "./web";
@@ -31,6 +31,8 @@ export function drawScene(ctx: CanvasRenderingContext2D, view: View, game: Game,
     drawFlies(ctx, view, game.field.flies, game.field.ringCount);
     const pack = game.field.bonus.package;
     if (pack) drawBonusPackage(ctx, view, pack, game.field.ringCount, time);
+    const { notice } = game.field.bonus;
+    if (notice) drawBonusNotice(ctx, view, notice);
     drawSpiders(ctx, view, game.field);
   }
 

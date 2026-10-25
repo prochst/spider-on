@@ -34,12 +34,12 @@ export const THROTTLE_FACTOR = 1.7;
 export const TURN_ZONE = (30 * Math.PI) / 180;
 /** Time to climb from one ring to the next along a gate spoke. */
 export const CROSSING_TIME = 0.3;
-/** Enemy speeds as multiples of PLAYER_SPEED. */
-export const ENEMY_SLOW_FACTOR = 0.75;
-export const ENEMY_FAST_FACTOR = 1.0;
-/** From difficulty 6 on, enemies get 3 % faster per level, up to 1.3 times. */
-export const ENEMY_SPEEDUP_PER_LEVEL = 0.03;
-export const ENEMY_MAX_SPEEDUP = 1.3;
+/** Enemy speeds as multiples of PLAYER_SPEED; every enemy stays within 0.3 to 0.9. */
+export const ENEMY_SLOW_FACTOR = 0.3;
+export const ENEMY_FAST_FACTOR = 0.6;
+/** Above difficulty 9 the fast enemies gain this much per level, up to ENEMY_MAX_FACTOR. */
+export const ENEMY_SPEEDUP_PER_LEVEL = 0.05;
+export const ENEMY_MAX_FACTOR = 0.9;
 
 /** Flies are collected when the player is on their ring and closer than this angle (radians). */
 export const FLY_PICKUP_ANGLE = 0.06;
@@ -71,5 +71,7 @@ export const BONUS_POINTS = 250;
 export const BONUS_CHANCE_POINTS = 0.75;
 export const BONUS_CHANCE_SLOWDOWN = 0.22;
 export const BONUS_CHANCE_LIFE = 0.03;
+/** How long the message about an eaten package stays in the middle of the web. */
+export const BONUS_NOTICE_TIME = 3;
 /** Enemy speed multiplier while the slowdown lasts (one full lap of the player). */
 export const SLOWDOWN_FACTOR = 0.5;
