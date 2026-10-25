@@ -26,3 +26,10 @@ Po ručním testu sloučené verze:
 > Rychlost je už je dobrá.
 > Chci změnit ovládání přechodu na jiný kruh., tak aby stisknutá šipka odpovídala požadovanému směru přesunu:
 > když se chci přesunout po vertikální cestě, tak se používají šipky nahoru a dolů z pohledu herní desky a ne, že dolu je dovnitř kruhu a nahoru je ven z kruhu. Podobně u horizontálního přesunu budou fungovat šipky vlevo a vpravo.
+
+## 5. Balíčky od prvního kola
+
+Po ručním testu verze se šipkami podle směru (napoprvé prohlížeč ukazoval starou verzi z mezipaměti):
+
+> Nyní šipky fungují správně.
+> Pro otestování balíčků je zobraz dočasně hned od prvního kola

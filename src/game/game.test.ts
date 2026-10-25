@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  BONUS_FIRST_ROUND,
   BONUS_POINTS,
   CRASH_DURATION,
   FIXED_STEP,
@@ -207,7 +208,7 @@ describe("bonus packages", () => {
     return game;
   }
 
-  it("appear only from round 6", () => {
+  it("appear only from the configured round", () => {
     const game = startRound();
     const enabled: boolean[] = [];
     for (let round = 1; round <= 7; round++) {
@@ -216,7 +217,7 @@ describe("bonus packages", () => {
       dispatch(game, { type: "nextRound" });
       dispatch(game, { type: "start" });
     }
-    expect(enabled).toEqual([false, false, false, false, false, true, true]);
+    expect(enabled).toEqual(enabled.map((_, i) => i + 1 >= BONUS_FIRST_ROUND));
   });
 
   it("give 250 points", () => {

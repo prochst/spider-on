@@ -177,3 +177,4 @@ Další rozhodnutí uživatele:
 - Po ručním testování (verze 0.6): základní rychlost pohybu snížena o 40 %, z 0,7 na 0,42 R/s. Nepřátelé, jejichž rychlost je násobkem základní, se zpomalili s ní.
 - Po dalším testování (verze 0.7): rychlost snížena o dalších 20 % na 0,336 R/s. Změna kruhu byla těžko trefitelná, proto se zóna pro zapamatování pokynu rozšířila z 15° na 30° a přibyly šipky vlevo a vpravo pro boční vlákna.
 - Verze 0.8: všechny šipky ovládají změnu kruhu podle směru na obrazovce, ne „nahoru = ven, dolů = dovnitř“.
+- Dočasně pro ruční test: balíčky se objevují už od 1. kola (`BONUS_FIRST_ROUND = 1`). Pravidlo „od 6. kola“ dál platí a po testu se hodnota vrátí.
