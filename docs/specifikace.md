@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.3. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.4. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -45,9 +45,9 @@ Hra běží v prohlížeči, na Androidu a na iOS. Výchozí grafický styl je n
   - Základní rychlost: **0,7 R/s (laditelné)**.
   - S plynem: **1,7× základní (laditelné)**.
 - **Změna kruhu**: hráč zadá směr „dovnitř“ nebo „ven“.
-  - Pokyn se zapamatuje, jen když ho hráč zadá v posledních **15° před přechodovým vláknem**. Provede se po dosažení vlákna a pak se smaže. Pokyn zadaný dřív se ignoruje. Pokyn zadaný přímo na vlákně se provede hned.
+  - Pokyn se zapamatuje, jen když ho hráč zadá v posledních **15° před přechodovým vláknem**. Provede se po dosažení vlákna a pak se smaže. Pokyn zadaný dřív se ignoruje. Pavouk mine vlákno za zlomek sekundy, takže „přímo na vlákně“ znamená během přelézání: pokyn ve stejném směru tam přidá další kruh (viz níže). Pokyn zadaný hned po minutí vlákna patří už k dalšímu vláknu a ignoruje se.
   - Opačný pokyn zadaný v téže 15° zóně ten původní nahradí.
-  - Bez plynu lze na jednom přechodu přelézt **až o 2 kruhy**, pokud hráč pokyn během přelézání zopakuje. S plynem jen **o 1 kruh**. (V originále platilo, že pomalejší auto přejede víc pruhů.)
+  - Bez plynu lze na jednom přechodu přelézt **až o 2 kruhy**, pokud hráč pokyn během přelézání zopakuje. S plynem jen **o 1 kruh**, rozhoduje plyn ve chvíli opakovaného pokynu. Couvnout během přelézání nelze. (V originále platilo, že pomalejší auto přejede víc pruhů.)
   - Přelezení o jeden kruh trvá **0,3 s (laditelné)**. Během něj je pavouk na vlákně mezi kruhy a může se srazit.
   - Pokyn, který nejde provést (ven z vnějšího kruhu, dovnitř z kruhu 0), se ignoruje.
 - Na startu kola stojí hráč na vnějším kruhu dole (90°) a rozleze se, až hráč kolo spustí (kapitola 6).

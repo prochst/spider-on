@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { CRASH_DURATION, FIXED_STEP, START_LIVES } from "./config";
-import { crash, createGame, dispatch, type Game, update } from "./game";
+import { crash, createGame, dispatch, type Game, steer, update } from "./game";
 
 function simulate(game: Game, seconds: number): void {
   const steps = Math.round(seconds / FIXED_STEP);
@@ -18,20 +18,43 @@ describe("game", () => {
   it("starts on the title with a fresh session", () => {
     const game = createGame();
     expect(game.screen.name).toBe("title");
-    expect(game.session).toEqual({ round: 1, lives: START_LIVES, score: 0, playTime: 0 });
+    expect(game.session).toEqual({ round: 1, lives: START_LIVES, score: 0 });
   });
 
-  it("counts play time only while the round is running", () => {
+  it("moves the spiders only while the round is running", () => {
     const game = createGame();
     dispatch(game, { type: "play" });
+    const start = game.field.player.angle;
     simulate(game, 1);
-    expect(game.session.playTime).toBe(0);
+    expect(game.field.player.angle).toBe(start);
 
     dispatch(game, { type: "start" });
-    simulate(game, 2);
+    simulate(game, 0.5);
     dispatch(game, { type: "pause" });
-    simulate(game, 5);
-    expect(game.session.playTime).toBeCloseTo(2);
+    const paused = game.field.player.angle;
+    expect(paused).not.toBe(start);
+    simulate(game, 1);
+    expect(game.field.player.angle).toBe(paused);
+  });
+
+  it("steers only while the round is running", () => {
+    const game = createGame();
+    dispatch(game, { type: "play" });
+    expect(steer(game, "in")).toBe(false);
+    dispatch(game, { type: "start" });
+    // The player starts on the bottom gate, so the next gate is a quarter lap
+    // away: about 2.1 s on the outer ring, the turn zone opens after 1.7 s.
+    expect(steer(game, "in")).toBe(false);
+    simulate(game, 1.9);
+    expect(steer(game, "in")).toBe(true);
+  });
+
+  it("puts every spider back to the start after a crash", () => {
+    const game = startRound();
+    simulate(game, 1);
+    crash(game);
+    simulate(game, CRASH_DURATION);
+    expect(game.field).toEqual(createGame().field);
   });
 
   it("reports commands the current screen ignores", () => {
@@ -82,6 +105,6 @@ describe("game", () => {
     crash(game);
     simulate(game, CRASH_DURATION);
     dispatch(game, { type: "play" });
-    expect(game.session).toEqual({ round: 1, lives: START_LIVES, score: 0, playTime: 0 });
+    expect(game.session).toEqual({ round: 1, lives: START_LIVES, score: 0 });
   });
 });

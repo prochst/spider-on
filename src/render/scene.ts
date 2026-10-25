@@ -1,9 +1,10 @@
 // Draws one frame from the game state. Colours are placeholders until the
 // theme system arrives in chapter 2.5.
 
-import { CRASH_DURATION, MIN_RING_COUNT } from "../game/config";
+import { CRASH_DURATION } from "../game/config";
 import type { Game } from "../game/game";
 import type { View } from "./view";
+import { drawSpiders } from "./spiders";
 import { drawWeb } from "./web";
 
 const BACKGROUND = "#07060f";
@@ -19,9 +20,9 @@ export function drawScene(ctx: CanvasRenderingContext2D, view: View, game: Game)
 
   const inGame = WEB_SCREENS.has(game.screen.name);
   ctx.globalAlpha = inGame ? 1 : 0.35;
-  // The web grows with the round in chapter 2.3; until then it stays small.
-  drawWeb(ctx, view, MIN_RING_COUNT);
+  drawWeb(ctx, view, game.field.ringCount);
   ctx.globalAlpha = 1;
+  if (inGame) drawSpiders(ctx, view, game.field);
 
   if (game.screen.name === "crash") drawCrash(ctx, view, 1 - game.screen.timeLeft / CRASH_DURATION);
   if (inGame) drawHud(ctx, view, game);
@@ -59,12 +60,5 @@ function drawHud(ctx: CanvasRenderingContext2D, view: View, game: Game): void {
   // Leaves room in the top right corner for the pause button.
   ctx.textAlign = "right";
   ctx.fillText(`ŽIVOTY ${session.lives}`, view.width - margin * 4, margin);
-
-  // Temporary readout so the loop can be checked by eye: it must stop while paused.
-  ctx.textAlign = "center";
-  ctx.textBaseline = "bottom";
-  ctx.globalAlpha = 0.6;
-  ctx.font = `500 ${Math.round(size * 0.8)}px system-ui, sans-serif`;
-  ctx.fillText(`čas ve hře ${session.playTime.toFixed(1)} s`, view.cx, view.height - margin);
   ctx.restore();
 }
