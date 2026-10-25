@@ -6,7 +6,7 @@ Rozhýbat pavouky: hráč leze proti směru hodinových ručiček, nepřátelé 
 
 ## Zadání
 
-Viz [prompty/2-hra/02-pohyb-pavouku.md](../../prompty/2-hra/02-pohyb-pavouku.md). Nové zadání nebylo, agent pokračoval podle plánu fáze 2 a podle kapitol 5 a 7 specifikace.
+Viz [prompty/2-hra/02-pohyb-pavouku.md](../../prompty/2-hra/02-pohyb-pavouku.md). Nové zadání nebylo (jen potvrzení výkladu specifikace), agent pokračoval podle plánu fáze 2 a podle kapitol 5 a 7 specifikace.
 
 ## Co agent udělal
 
@@ -28,7 +28,7 @@ Viz [prompty/2-hra/02-pohyb-pavouku.md](../../prompty/2-hra/02-pohyb-pavouku.md)
 
 ## Lidská kontrola
 
-- **Výklad specifikace.** Uživatel by měl potvrdit dvě upřesnění v kapitole 5 specifikace (verze 0.4): co znamená „přímo na vlákně“ a kdy se počítá plyn.
+- **Výklad specifikace.** Agent požádal o potvrzení upřesnění v kapitole 5 specifikace (verze 0.4). Uživatel potvrdil, že pokyn zadaný během přelézání přidá další kruh.
 - **Ohmatat si ovládání.** Po sloučení na `https://prochst.github.io/spider-on/` vyzkoušet, jestli 15° zóna a 0,3 s přelézání působí přirozeně. Obě hodnoty jsou laditelné v `src/game/config.ts`.
 
 ## Metriky
