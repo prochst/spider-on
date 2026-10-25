@@ -29,7 +29,7 @@ Hra běží v prohlížeči, na Androidu a na iOS. Výchozí grafický styl je n
 - Bonusové balíčky se objevují **od 6. kola**. Mouchy zůstávají a kolo dál končí sebráním poslední mouchy, balíček je navíc.
 - Na ploše je nejvýš **jeden balíček**. Objeví se místo jedné ještě nesebrané mouchy, náhodně vybrané z much na **protější polovině plochy**, než je hráčův pavouk (úhlově 90° až 270° od pavouka, na libovolném kruhu). Moucha pod balíčkem se tím počítá jako sebraná.
 - Balíček zůstává, dokud ho pavouk **nesebere**, nebo dokud kolem něj **neproleze po jiném kruhu** (pavouk mine úhel balíčku, když je na jiném kruhu). Pak zmizí.
-- Další balíček se objeví **8 s (laditelné)** po zmizení nebo sebrání předchozího.
+- Další balíček se objeví po **náhodné době 5 až 20 s (laditelné)** od zmizení nebo sebrání předchozího. První balíček v kole se objeví stejně náhodně od začátku kola.
 - Obsah balíčku se určí náhodně při jeho objevení a hráč ho pozná podle vzhledu:
 
 | Obsah | Pravděpodobnost (laditelné) | Účinek |
