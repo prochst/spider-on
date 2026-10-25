@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ENEMY_FAST_FACTOR, ENEMY_SLOW_FACTOR, FIXED_STEP, MAX_RING_COUNT, MIN_RING_COUNT, PLAYER_SPEED } from "./config";
-import { createField, stepField } from "./field";
+import { createField, playerHitsEnemy, stepField } from "./field";
 
 function angleBetween(a: number, b: number): number {
   const d = Math.abs(a - b) % (2 * Math.PI);
@@ -51,5 +51,32 @@ describe("stepField", () => {
     stepField(fast, 0.1, true);
     expect(fast.player.angle).toBeLessThan(plain.player.angle);
     expect(fast.enemies[0]?.angle).toBe(plain.enemies[0]?.angle);
+  });
+});
+
+describe("playerHitsEnemy", () => {
+  it("does not report a crash at the start", () => {
+    for (const rings of [3, 4, 5]) expect(playerHitsEnemy(createField(rings, { count: 3, speedFactor: 1 }))).toBe(false);
+  });
+
+  it("reports a head-on meeting on the same ring", () => {
+    const field = createField(3, { count: 1, speedFactor: 1 });
+    const enemy = field.enemies[0]!;
+    enemy.ring = field.player.ring;
+    enemy.angle = field.player.angle - 0.5;
+    let hit = false;
+    for (let i = 0; i < 120 && !hit; i++) {
+      stepField(field, FIXED_STEP, false);
+      hit = playerHitsEnemy(field);
+    }
+    expect(hit).toBe(true);
+  });
+
+  it("ignores enemies on a neighbouring ring", () => {
+    const field = createField(3, { count: 1, speedFactor: 1 });
+    const enemy = field.enemies[0]!;
+    enemy.ring = 1;
+    enemy.angle = field.player.angle;
+    expect(playerHitsEnemy(field)).toBe(false);
   });
 });

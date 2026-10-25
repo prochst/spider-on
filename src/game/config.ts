@@ -37,3 +37,18 @@ export const CROSSING_TIME = 0.3;
 /** Enemy speeds as multiples of PLAYER_SPEED. */
 export const ENEMY_SLOW_FACTOR = 0.75;
 export const ENEMY_FAST_FACTOR = 1.0;
+/** From difficulty 6 on, enemies get 3 % faster per level, up to 1.3 times. */
+export const ENEMY_SPEEDUP_PER_LEVEL = 0.03;
+export const ENEMY_MAX_SPEEDUP = 1.3;
+
+/** Flies are collected when the player is on their ring and closer than this angle (radians). */
+export const FLY_PICKUP_ANGLE = 0.06;
+/** The player crashes when the centres of two spiders are closer than this (in R). */
+export const COLLISION_DISTANCE = 0.075;
+
+export const FLY_POINTS = 10;
+/** Finishing a round gives this times the round number. */
+export const ROUND_BONUS_PER_ROUND = 100;
+/** The first extra life comes at this score, then one every EXTRA_LIFE_EVERY points. */
+export const EXTRA_LIFE_FIRST = 5000;
+export const EXTRA_LIFE_EVERY = 10000;

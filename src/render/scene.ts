@@ -3,7 +3,10 @@
 
 import { CRASH_DURATION } from "../game/config";
 import type { Game } from "../game/game";
+import type { Point } from "../game/geometry";
+import { spiderPosition } from "../game/spider";
 import type { View } from "./view";
+import { drawFlies } from "./flies";
 import { drawSpiders } from "./spiders";
 import { drawWeb } from "./web";
 
@@ -22,14 +25,20 @@ export function drawScene(ctx: CanvasRenderingContext2D, view: View, game: Game)
   ctx.globalAlpha = inGame ? 1 : 0.35;
   drawWeb(ctx, view, game.field.ringCount);
   ctx.globalAlpha = 1;
-  if (inGame) drawSpiders(ctx, view, game.field);
+  if (inGame) {
+    drawFlies(ctx, view, game.field.flies, game.field.ringCount);
+    drawSpiders(ctx, view, game.field);
+  }
 
-  if (game.screen.name === "crash") drawCrash(ctx, view, 1 - game.screen.timeLeft / CRASH_DURATION);
+  if (game.screen.name === "crash") {
+    const at = spiderPosition(game.field.player, game.field.ringCount);
+    drawCrash(ctx, view, at, 1 - game.screen.timeLeft / CRASH_DURATION);
+  }
   if (inGame) drawHud(ctx, view, game);
 }
 
-/** An expanding ring from the centre; the real crash effect comes with the spiders. */
-function drawCrash(ctx: CanvasRenderingContext2D, view: View, progress: number): void {
+/** An expanding ring around the player; the real crash effect comes with the themes. */
+function drawCrash(ctx: CanvasRenderingContext2D, view: View, at: Point, progress: number): void {
   ctx.save();
   ctx.strokeStyle = CRASH_COLOR;
   ctx.shadowColor = CRASH_COLOR;
@@ -37,7 +46,7 @@ function drawCrash(ctx: CanvasRenderingContext2D, view: View, progress: number):
   ctx.globalAlpha = 1 - progress;
   ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.arc(view.cx, view.cy, view.unit * (0.1 + progress), 0, Math.PI * 2);
+  ctx.arc(view.cx + at.x * view.unit, view.cy + at.y * view.unit, view.unit * (0.03 + 0.25 * progress), 0, Math.PI * 2);
   ctx.stroke();
   ctx.restore();
 }
