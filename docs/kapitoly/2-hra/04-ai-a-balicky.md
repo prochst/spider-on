@@ -16,7 +16,7 @@ Viz [prompty/2-hra/04-ai-a-balicky.md](../../prompty/2-hra/04-ai-a-balicky.md). 
 - **Bonusové balíčky** (`src/game/bonus.ts`). Od 6. kola se po náhodné době 5 až 20 s objeví balíček místo náhodné mouchy na protější polovině pavučiny. Zmizí, když ho hráč sní, nebo když kolem něj proleze po jiném kruhu. Obsah se losuje 75 / 22 / 3 %: 250 bodů, zpomalení nepřátel na polovinu do doby, než hráč oběhne celý kruh, nebo život navíc (nejvýš 5). Po srážce balíček i zpomalení zmizí.
 - **Neonový vzhled balíčků** (`src/render/bonus.ts`), jak bylo domluveno na konci fáze 1: každý obsah má vlastní tvar i barvu, aby je hráč rozeznal na první pohled. Body jsou zlatý kosočtverec s jiskrou, zpomalení modré přesýpací hodiny v rámečku, život růžové srdce. Balíčky jemně pulzují, aby se odlišily od much. Zpomalení nepřátelé zmodrají do barvy balíčku se zpomalením.
 - **Zpomalení o 40 % a pak o dalších 20 %.** Na pokyn uživatele klesla základní rychlost z 0,7 na 0,42 a pak na 0,336 R/s. Nepřátelé mají rychlost jako násobek hráčovy, takže zpomalili s ní. Agent změny nejdřív zapsal do specifikace (verze 0.6 a 0.7), pak upravil jednu konstantu v `config.ts`.
-- **Snazší změna kruhu.** Uživatel napsal, že se těžko trefuje do zóny před vláknem a „změna vlevo a vpravo se mi nepovedla vůbec“. Agent to vyložil tak, že u bočních vláken zkoušel šipky vlevo a vpravo, které hra neznala. Přidal proto funkci `turnForDirection`: směr na obrazovce porovná se směrem vlákna, ke kterému pavouk míří. U pravého vlákna je šipka vpravo „ven“, vlevo „dovnitř“. Stejné pravidlo specifikace předepisuje pro tah po touchpadu, takže ho kapitola 2.6 použije znovu. Zónu pro zapamatování pokynu agent rozšířil z 15° na 30°. Spolu se zpomalením má hráč na vnějším kruhu na stisk 1,4 s místo původních 0,34 s. Protože 15° bylo výslovné rozhodnutí uživatele z kapitoly 1.1, agent mu změnu předložil k potvrzení.
+- **Snazší změna kruhu.** Uživatel napsal, že se těžko trefuje do zóny před vláknem a „změna vlevo a vpravo se mi nepovedla vůbec“. Agent to vyložil tak, že u bočních vláken zkoušel šipky vlevo a vpravo, které hra neznala. Přidal proto funkci `turnForDirection`: směr na obrazovce porovná se směrem vlákna, ke kterému pavouk míří. U pravého vlákna je šipka vpravo „ven“, vlevo „dovnitř“. Stejné pravidlo specifikace předepisuje pro tah po touchpadu, takže ho kapitola 2.6 použije znovu. Zónu pro zapamatování pokynu agent rozšířil z 15° na 30°. Spolu se zpomalením má hráč na vnějším kruhu na stisk 1,4 s místo původních 0,34 s. Protože 15° bylo výslovné rozhodnutí uživatele z kapitoly 1.1, agent mu změnu předložil k potvrzení a uživatel ji schválil.
 
 ## Kde se agent spletl
 
@@ -28,7 +28,7 @@ Viz [prompty/2-hra/04-ai-a-balicky.md](../../prompty/2-hra/04-ai-a-balicky.md). 
 ## Lidská kontrola
 
 - **Ruční testování sloučené verze.** Uživatel hru po kapitole 2.3 zkoušel a poslal, že je moc rychlá a změna kruhu se špatně trefuje. To unit testy nepoznají: hlídají pravidla, ne pocit ze hry.
-- **Šířka zóny.** Uživatel rozhoduje, jestli zóna zůstane 30°, nebo se vrátí na 15°.
+- **Šířka zóny.** Agent nabídl tři možnosti (15°, 30°, 45°) a doporučil 30°. Uživatel zvolil 30°.
 - **Vzhled balíčků.** Agent ho ukazuje v pull requestu na náhledu, uživatel rozhodne, jestli tvary a barvy sedí.
 - **Upřesnění specifikace 0.6**: balíček nebere poslední mouchu a nepřítel se rozhoduje ve chvíli příchodu na vlákno.
 
