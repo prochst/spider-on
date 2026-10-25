@@ -51,3 +51,19 @@ Doslovná zadání uživatele z 25. 10. 2026, včetně překlepů. Agent pracova
 
 > Repo je připraveno
 > https://github.com/prochst/spider-on
+
+## 8. Připomínky ke specifikaci (15:45)
+
+> Připomínky ke specifikaci:
+>
+> 1.  Hra začne pouze se 3 soustřednými kruhy jako nejmenší obtížnost  a bude mít první 3 kola podle definice. Pak bude následovat plocha se  4 kruhy a začne se rovnou 3 kolem a bude bude mít kola 3 až 8 podle definice. Pak se přepne na plochu s 5 kruhy začne se rovnou 5 kolem.
+> 2.  Po skončení kola se nové kolo nezačne automaticky ale až na pokyn hráče.
+> 3. V nastavení jsi hráč může zadat jméno,  pod kterým se pak ukazuje jeho skóre v celkové tabulce výsledků. Od 6 kola místo mouchy zobrazovat bonusové balíčky na náhodném místě ale vždy na protější straně plochy než je pavouk. Balíček je k dispozici dokud ho pavouk nesebere nebo ho nemine na jiném kruhu. Balíček může obsahovat  body navíc, zpomalení nepřátel na 1 okruh, mimořádně extra život navíc.
+>
+>
+> Otevřené otázky ke schválení:
+>
+> 1. Bodování 10 za mouchu a bonus 100 × kolo
+> 2. Po srážce obnoví celé herní pole
+> 3.  Kompromisní řešení, změna se zapamatuje jen 15 stupňů před přechodem
+> 4. Ovládání na mobilu nebo tabletu zvolit podobné jako je na malých herních konzolích.  Zobrazení hry je na šířku, vpravo od hrací plochy je virtuální touchpad, kde smět tahu prstu určuje pohyb po přechodovém vlákně. Vlevo pak virtuální tlačítko pro plyn.

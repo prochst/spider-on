@@ -28,14 +28,17 @@ Doslovná zadání jsou v [prompty/1-priprava/01-zadani-a-specifikace.md](../../
 
 Uživatel dělal všechna rozhodnutí, která mění cíl projektu: technologii, rozdělení do fází, grafický styl, název a vytvoření repozitáře. Agent u každého nabídl doporučení s důvodem, ale nerozhodoval za něj.
 
+Specifikaci uživatel prošel v pull requestu a poslal připomínky (zadání 8): postupně rostoucí pavučinu se 3, 4 a 5 kruhy, spouštění kola na pokyn hráče, jméno hráče a tabulku výsledků, bonusové balíčky od 6. kola a dotykové ovládání jako u přenosných konzolí. Zároveň rozhodl všechny 4 otevřené otázky. Agent připomínky zapracoval do verze 0.2. Kde zadání šlo číst víc způsoby, zvolil jeden výklad a v odpovědi ho uživateli pojmenoval. Například „kola 3 až 8 podle definice“ vyložil jako stupně obtížnosti z tabulky, zatímco číslo kola pro bodování dál roste od 1.
+
 ## Metriky
 
 - Čas: asi 2,5 hodiny včetně pauz uživatele.
-- Zprávy uživatele: 7 (+1 omylem odeslaná nedokončená zpráva).
+- Zprávy uživatele: 8 (+1 omylem odeslaná nedokončená zpráva).
 - Výstupy: plánovací dokument, animovaný náhled stylů, specifikace hry.
 
 ## Poučení
 
 - Požádej agenta nejdřív o názor a plán. Rozhodnutí pak děláš ty s podklady v ruce.
 - Faktická tvrzení agenta ověřuj, i když znějí sebejistě.
+- Specifikaci si opravdu přečti. Nejcennější změny hry (rostoucí pavučina, bonusové balíčky, ovládání) přišly až z připomínek člověka ke konkrétnímu textu.
 - U vizuálních rozhodnutí si nech udělat ukázku. Rozhoduje se nad ní mnohem rychleji než nad popisem.
