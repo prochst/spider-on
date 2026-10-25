@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.6. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.7. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -42,11 +42,11 @@ Hra běží v prohlížeči, na Androidu a na iOS. Výchozí grafický styl je n
 
 - Hráčův pavouk leze **proti směru hodinových ručiček** a nemůže zastavit ani couvat.
 - Rychlost je konstantní obvodová rychlost, ne úhlová. Na vnitřním kruhu tedy oběhne kolo rychleji než na vnějším.
-  - Základní rychlost: **0,42 R/s (laditelné)**.
+  - Základní rychlost: **0,336 R/s (laditelné)**.
   - S plynem: **1,7× základní (laditelné)**.
 - **Změna kruhu**: hráč zadá směr „dovnitř“ nebo „ven“.
-  - Pokyn se zapamatuje, jen když ho hráč zadá v posledních **15° před přechodovým vláknem**. Provede se po dosažení vlákna a pak se smaže. Pokyn zadaný dřív se ignoruje. Pavouk mine vlákno za zlomek sekundy, takže „přímo na vlákně“ znamená během přelézání: pokyn ve stejném směru tam přidá další kruh (viz níže). Pokyn zadaný hned po minutí vlákna patří už k dalšímu vláknu a ignoruje se.
-  - Opačný pokyn zadaný v téže 15° zóně ten původní nahradí.
+  - Pokyn se zapamatuje, jen když ho hráč zadá v posledních **30° před přechodovým vláknem (laditelné)**. Provede se po dosažení vlákna a pak se smaže. Pokyn zadaný dřív se ignoruje. Pavouk mine vlákno za zlomek sekundy, takže „přímo na vlákně“ znamená během přelézání: pokyn ve stejném směru tam přidá další kruh (viz níže). Pokyn zadaný hned po minutí vlákna patří už k dalšímu vláknu a ignoruje se.
+  - Opačný pokyn zadaný v téže zóně ten původní nahradí.
   - Bez plynu lze na jednom přechodu přelézt **až o 2 kruhy**, pokud hráč pokyn během přelézání zopakuje. S plynem jen **o 1 kruh**, rozhoduje plyn ve chvíli opakovaného pokynu. Couvnout během přelézání nelze. (V originále platilo, že pomalejší auto přejede víc pruhů.)
   - Přelezení o jeden kruh trvá **0,3 s (laditelné)**. Během něj je pavouk na vlákně mezi kruhy a může se srazit.
   - Pokyn, který nejde provést (ven z vnějšího kruhu, dovnitř z kruhu 0), se ignoruje.
@@ -114,6 +114,7 @@ Hra rozlišuje **číslo kola** (počítá se od 1 a jen roste, používá se pr
 | --- | --- |
 | Dovnitř (ke středu) | Šipka dolů nebo S |
 | Ven (k okraji) | Šipka nahoru nebo W |
+| Po bočním vlákně | Šipka vlevo nebo vpravo (A, D): u pravého vlákna je vpravo „ven“ a vlevo „dovnitř“, u levého obráceně, stejně jako tah po touchpadu |
 | Plyn | Mezerník nebo Shift (držet) |
 | Spustit kolo | Enter nebo mezerník |
 | Pauza | P nebo Esc |
@@ -176,3 +177,4 @@ Otevřené otázky z verze 0.1 rozhodl uživatel 25. 10. 2026:
 Další rozhodnutí uživatele:
 
 - Po ručním testování (verze 0.6): základní rychlost pohybu snížena o 40 %, z 0,7 na 0,42 R/s. Nepřátelé, jejichž rychlost je násobkem základní, se zpomalili s ní.
+- Po dalším testování (verze 0.7): rychlost snížena o dalších 20 % na 0,336 R/s. Změna kruhu byla těžko trefitelná, proto se zóna pro zapamatování pokynu rozšířila z 15° na 30° a přibyly šipky vlevo a vpravo pro boční vlákna.

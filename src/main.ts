@@ -2,7 +2,16 @@
 // the menus and the keyboard.
 
 import { FIXED_STEP } from "./game/config";
-import { type Command, crash, createGame, debugEatAllFlies, dispatch, steer, update } from "./game/game";
+import {
+  type Command,
+  crash,
+  createGame,
+  debugEatAllFlies,
+  dispatch,
+  steer,
+  steerToward,
+  update,
+} from "./game/game";
 import { planSteps } from "./game/fixedStep";
 import { cancelEvent, confirmEvent } from "./game/screens";
 import { type KeyCommand, listenToKeyboard } from "./input/keyboard";
@@ -47,6 +56,10 @@ function onKey(key: KeyCommand): void {
     case "in":
     case "out":
       steer(game, key);
+      return;
+    case "left":
+    case "right":
+      steerToward(game, key === "left" ? -1 : 1, 0);
       return;
     case "debugCrash":
       if (crash(game)) overlay.sync(game);

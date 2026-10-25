@@ -11,12 +11,20 @@ import {
   TURN_ZONE,
 } from "./config";
 import { ringRadius } from "./geometry";
-import { crash, createGame, createSession, dispatch, type Game, steer, update } from "./game";
+import { crash, createGame, createSession, dispatch, type Game, steer, steerToward, update } from "./game";
 
 function simulate(game: Game, seconds: number): void {
   const steps = Math.round(seconds / FIXED_STEP);
   for (let i = 0; i < steps; i++) update(game, FIXED_STEP);
 }
+
+/** Time the player needs to crawl the given angle on the outer ring of the first web. */
+function timeToCrawl(degrees: number): number {
+  return (degrees * (Math.PI / 180) * ringRadius(2, 3)) / PLAYER_SPEED;
+}
+
+/** Long enough to eat the first fly or package 15° ahead of the start, too short to reach the next one. */
+const PAST_FIRST_FLY = timeToCrawl(20);
 
 function startRound(): Game {
   const game = createGame(1);
@@ -40,7 +48,7 @@ describe("game", () => {
     expect(game.field.player.angle).toBe(start);
 
     dispatch(game, { type: "start" });
-    simulate(game, 0.5);
+    simulate(game, PAST_FIRST_FLY);
     dispatch(game, { type: "pause" });
     const paused = game.field.player.angle;
     expect(paused).not.toBe(start);
@@ -54,7 +62,7 @@ describe("game", () => {
     expect(steer(game, "in")).toBe(false);
     dispatch(game, { type: "start" });
     // The player starts on the bottom gate, so the next gate is a quarter lap
-    // away; the turn zone opens 15° before it.
+    // away; the turn zone opens shortly before it.
     expect(steer(game, "in")).toBe(false);
     const angularSpeed = PLAYER_SPEED / ringRadius(2, 3);
     simulate(game, (Math.PI / 2 - TURN_ZONE / 2) / angularSpeed);
@@ -131,14 +139,13 @@ function clearRound(game: Game): void {
   for (const fly of flies) fly.collected = true;
   const last = flies.find((f) => f.ring === player.ring && Math.abs(f.angle - (player.angle - 0.2)) < 0.3)!;
   last.collected = false;
-  simulate(game, 0.5);
+  simulate(game, PAST_FIRST_FLY);
 }
 
 describe("flies and scoring", () => {
   it("scores 10 points per fly", () => {
     const game = startRound();
-    // The first fly on the outer ring is 15° ahead of the start; at 0.76 rad/s it takes about 0.3 s.
-    simulate(game, 0.5);
+    simulate(game, PAST_FIRST_FLY);
     expect(game.session.score).toBe(FLY_POINTS);
     expect(game.session.roundPoints).toBe(FLY_POINTS);
   });
@@ -171,7 +178,7 @@ describe("flies and scoring", () => {
 
   it("brings all flies back after a crash but keeps the score", () => {
     const game = startRound();
-    simulate(game, 0.5);
+    simulate(game, PAST_FIRST_FLY);
     const score = game.session.score;
     crash(game);
     simulate(game, CRASH_DURATION);
@@ -214,24 +221,24 @@ describe("bonus packages", () => {
 
   it("give 250 points", () => {
     const game = roundWithPackage("points");
-    simulate(game, 0.5);
+    simulate(game, PAST_FIRST_FLY);
     expect(game.session.score).toBe(BONUS_POINTS);
   });
 
   it("give an extra life, but never more than five", () => {
     const game = roundWithPackage("life");
-    simulate(game, 0.5);
+    simulate(game, PAST_FIRST_FLY);
     expect(game.session.lives).toBe(START_LIVES + 1);
 
     const full = roundWithPackage("life");
     full.session.lives = MAX_LIVES;
-    simulate(full, 0.5);
+    simulate(full, PAST_FIRST_FLY);
     expect(full.session.lives).toBe(MAX_LIVES);
   });
 
   it("lose the package and the slowdown after a crash", () => {
     const game = roundWithPackage("slowdown");
-    simulate(game, 0.5);
+    simulate(game, PAST_FIRST_FLY);
     expect(game.field.bonus.slowdownLeft).toBeGreaterThan(0);
     crash(game);
     simulate(game, CRASH_DURATION);
@@ -254,5 +261,16 @@ describe("determinism", () => {
     };
     expect(play(5)).toBe(play(5));
     expect(play(5)).not.toBe(play(6));
+  });
+});
+
+describe("steering by screen direction", () => {
+  it("turns at the right gate with the right and left arrows", () => {
+    const game = startRound();
+    // From the bottom the player crawls toward the right gate (0°).
+    simulate(game, timeToCrawl(90) - timeToCrawl(10));
+    expect(steerToward(game, 0, 1)).toBe(false);
+    expect(steerToward(game, -1, 0)).toBe(true);
+    expect(game.field.player.pending).toBe("in");
   });
 });

@@ -11,7 +11,7 @@ import { difficultyForRound, enemiesForDifficulty, ringCountForRound } from "./p
 import { type PlayerEvent, type Screen, type ScreenEvent, TITLE, tickScreen, transition } from "./screens";
 import { createRandom, type Random } from "./random";
 import { addPoints } from "./scoring";
-import type { Turn } from "./spider";
+import { type Turn, turnForDirection } from "./spider";
 
 /** One game from Hrát to Konec hry. */
 export type Session = {
@@ -62,6 +62,16 @@ export function dispatch(game: Game, command: Command): boolean {
 export function steer(game: Game, turn: Turn): boolean {
   if (game.screen.name !== "playing") return false;
   return steerPlayer(game.field, turn, game.throttle);
+}
+
+/**
+ * Steers by a direction on screen (x right, y down), read along the gate
+ * spoke the player heads for. The left and right arrows use it; so will
+ * swipes on the touchpad.
+ */
+export function steerToward(game: Game, dx: number, dy: number): boolean {
+  const turn = turnForDirection(game.field.player, dx, dy);
+  return turn !== null && steer(game, turn);
 }
 
 /** The player's spider hit an enemy: lose a life and play the crash animation. */

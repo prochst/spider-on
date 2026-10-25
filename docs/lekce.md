@@ -12,3 +12,5 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **Ptej se, co se stane mezi dvěma kroky.** U simulace v pevných krocích může rychlý objekt jiný přeskočit. Ať agent spočítá nejhorší případ a hlídá ho testem. ([kapitola 2.3](kapitoly/2-hra/03-mouchy-a-bodovani.md))
 - **Čísla v testech odvozuj z laditelných konstant.** Po první změně rychlosti selhaly právě testy s natvrdo zapsaným časem. ([kapitola 2.4](kapitoly/2-hra/04-ai-a-balicky.md))
 - **Hraj hru po každé kapitole.** Testy ověří pravidla, ale ne tempo. To, že je hra o 40 % rychlejší, než má být, poznal až člověk. ([kapitola 2.4](kapitoly/2-hra/04-ai-a-balicky.md))
+- **Při opravě hledej i sourozence chyby.** Oprava jen toho, co spadlo, nechá stejnou chybu na dalších místech. ([kapitola 2.4](kapitoly/2-hra/04-ai-a-balicky.md))
+- **Řekni, kde je změna vidět.** Uživatel zkoušel web, kam se nesloučený pull request ještě nedostal, a zpětná vazba se týkala staré verze. ([kapitola 2.4](kapitoly/2-hra/04-ai-a-balicky.md))
