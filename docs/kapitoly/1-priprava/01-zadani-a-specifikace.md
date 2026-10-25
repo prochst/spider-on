@@ -6,7 +6,7 @@ Z nápadu „klon staré arkády pro web a mobily“ udělat konkrétní zadán�
 
 ## Zadání
 
-Doslovná zadání jsou v [prompty/1-priprava/01-zadani-a-specifikace.md](../../prompty/1-priprava/01-zadani-a-specifikace.md). Celá kapitola proběhla během jednoho dopoledne (25. 10. 2026, zhruba 08:30 až 11:10) v sedmi zprávách uživatele.
+Doslovná zadání jsou v [prompty/1-priprava/01-zadani-a-specifikace.md](../../prompty/1-priprava/01-zadani-a-specifikace.md). Celá kapitola proběhla 25. 10. 2026, hlavní část během jednoho dopoledne.
 
 ## Co agent udělal
 

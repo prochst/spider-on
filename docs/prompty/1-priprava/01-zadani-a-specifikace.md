@@ -2,7 +2,7 @@
 
 Doslovná zadání uživatele z 25. 10. 2026, včetně překlepů. Agent pracoval v projektu Claude (vlákno s jedním agentem), odpovědi agenta tu nejsou, shrnuje je kapitola.
 
-## 1. Úvodní zadání (08:29)
+## 1. Úvodní zadání
 
 > Najdi informace o staré video hře Head Ono d Sega/Gremlin.
 > https://en.wikipedia.org/wiki/Head_On_(video_game)
@@ -11,14 +11,14 @@ Doslovná zadání uživatele z 25. 10. 2026, včetně překlepů. Agent pracova
 > Zároveň bych chtěl celý proces tvorby pomocí agenta dokumentovat jako výukový materiál k používání AI pro vývoj.
 > Jaký je tvůj názor?
 
-## 2. Rozšíření srovnání a vývoj přes GitHub (10:06)
+## 2. Rozšíření srovnání a vývoj přes GitHub
 
 > Doplň do dokumentu podrobnější srovnání doporučených vývojových stacků. a tabulku pro porovnání pro a proti jednotlivých možností.
 > Pokud to chápu správně, tak se nebude používat, žadné lokální vývojové prostředí (např. VS Code, WSL a Docker) ale bude to probíhat jen v Githubu.
 > Popiš mi to podrobněji a vysvětli použití GitHub Pages přes GitHub Actions
 > Se strukturou výukové dokumentace souhlasím.
 
-## 3. Volba stacku a fáze (10:24)
+## 3. Volba stacku a fáze
 
 > Kloním se k výukově čiští variantě s čistým Canvasem.
 > Celý vývojový a výukový proces bych rozdělil na hlavní fáze:
@@ -29,22 +29,22 @@ Doslovná zadání uživatele z 25. 10. 2026, včetně překlepů. Agent pracova
 > * Android a publikování na Google Play
 > * IOS a publikování na Apple store
 
-## 4. Grafický styl (10:32)
+## 4. Grafický styl
 
 > Ještě se zamysleme nad grafickým stylem.
 > Chci místo aut použít pavouky, herní plocha by nebyla čtvercová ale kulatá, takže by evokovala pavučinu.
 > Jaký grafický styl by byl vhodný?
 
-## 5. Náhled stylů (10:36)
+## 5. Náhled stylů
 
 > Mohl by jsi vygenerovat jednoduchý náhled pro styly 1. a 4. pro představu?
 
-## 6. Volba stylu a název (10:46)
+## 6. Volba stylu a název
 
 > Volím neonový styl, mohl by se do výukt zabudovat i princip změny šablony vzhledu ( jiné barvy a případně vzhled pavouků a sbíraných mušek).
 > Jako název mě napadá jednoduchý "Spider On", máš i jiné návrhy?
 
-## 7. Repozitář (10:58 a 11:06)
+## 7. Repozitář
 
 > Kloním se také k názvu Spider On.
 > Mám tak pojmenovat i repo v Githubu?
@@ -52,7 +52,7 @@ Doslovná zadání uživatele z 25. 10. 2026, včetně překlepů. Agent pracova
 > Repo je připraveno
 > https://github.com/prochst/spider-on
 
-## 8. Připomínky ke specifikaci (15:45)
+## 8. Připomínky ke specifikaci
 
 > Připomínky ke specifikaci:
 >
@@ -68,6 +68,6 @@ Doslovná zadání uživatele z 25. 10. 2026, včetně překlepů. Agent pracova
 > 3.  Kompromisní řešení, změna se zapamatuje jen 15 stupňů před přechodem
 > 4. Ovládání na mobilu nebo tabletu zvolit podobné jako je na malých herních konzolích.  Zobrazení hry je na šířku, vpravo od hrací plochy je virtuální touchpad, kde smět tahu prstu určuje pohyb po přechodovém vlákně. Vlevo pak virtuální tlačítko pro plyn.
 
-## 9. Doplnění k balíčkům (16:10)
+## 9. Doplnění k balíčkům
 
 > Ještě uprav aby zobrazování balíčků nebylo pravidelně po 8s ale náhodně v rozmezí 5 až 20s
