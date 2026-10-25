@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.2. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.3. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -117,6 +117,8 @@ Hra rozlišuje **číslo kola** (počítá se od 1 a jen roste, používá se pr
 | Plyn | Mezerník nebo Shift (držet) |
 | Spustit kolo | Enter nebo mezerník |
 | Pauza | P nebo Esc |
+
+V menu potvrdí Enter nebo mezerník hlavní volbu obrazovky (Hrát, Další kolo, Hrát znovu) a P nebo Esc vrací zpět: z pauzy do hry, z Výsledků a Nastavení na předchozí obrazovku.
 
 **Dotyk (telefon a tablet)**, rozložení jako u přenosných herních konzolí:
 
