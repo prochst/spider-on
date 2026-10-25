@@ -3,6 +3,7 @@
 // the browser for free. The canvas is left for the game itself and the HUD.
 
 import type { Command, Game } from "../game/game";
+import { webGrowsAfter } from "../game/progression";
 import type { ScreenName } from "../game/screens";
 
 type Button = { label: string; command: Command };
@@ -49,14 +50,19 @@ function panelFor(game: Game): Panel | null {
       };
     case "roundComplete":
       return {
-        title: "Kolo dokončeno",
-        lines: [`Kolo ${session.round}`, `Celkové skóre ${session.score}`],
+        title: `Kolo ${session.round} dokončeno`,
+        lines: [
+          `Body za mouchy ${session.roundPoints}`,
+          `Bonus za kolo ${session.roundBonus}`,
+          `Celkové skóre ${session.score}`,
+          ...(webGrowsAfter(session.round) ? ["Pavučina se rozrůstá o další kruh!"] : []),
+        ],
         buttons: [{ label: "Další kolo", command: { type: "nextRound" } }],
       };
     case "gameOver":
       return {
         title: "Konec hry",
-        lines: [`Skóre ${session.score}`],
+        lines: [`Skóre ${session.score}`, `Dosažené kolo ${session.round}`],
         buttons: [
           { label: "Hrát znovu", command: { type: "play" } },
           { label: "Zpět do menu", command: { type: "quit" } },

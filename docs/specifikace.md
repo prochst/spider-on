@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.4. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.5. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -71,7 +71,7 @@ Hra rozlišuje **číslo kola** (počítá se od 1 a jen roste, používá se pr
 | 5 | 3 pomalí |
 | 6 a vyšší | 3 rychlí, rychlost +3 % za každý stupeň nad 6, nejvýš 1,3× |
 
-- Kolo končí sebráním poslední mouchy. Hra se zastaví a ukáže obrazovku **Kolo dokončeno** (kapitola 11). Další kolo začne **až na pokyn hráče**, s plnou pavučinou much.
+- Kolo končí sebráním poslední mouchy. Hra se zastaví a ukáže obrazovku **Kolo dokončeno** (kapitola 12). Další kolo začne **až na pokyn hráče**, s plnou pavučinou much. Když hráč sebere poslední mouchu ve stejném okamžiku, kdy se srazí, platí sebrání a kolo je dokončené.
 - Při přechodu na větší plochu obrazovka Kolo dokončeno hráče upozorní, že pavučina se rozrůstá.
 
 ## 7. Nepřátelští pavouci
@@ -88,7 +88,7 @@ Hra rozlišuje **číslo kola** (počítá se od 1 a jen roste, používá se pr
 ## 8. Srážky a životy
 
 - Ke srážce dojde, když je vzdálenost středů hráče a nepřítele menší než **0,075 R (laditelné)**. Platí to i během přelézání mezi kruhy.
-- Srážka znamená ztrátu jednoho života. Následuje animace srážky (1,1 s), pak se **obnoví celé herní pole**: všechny mouchy kola se vrátí, zmizí bonusový balíček i zpomalení nepřátel a hráč i nepřátelé se vrátí na startovní pozice. Hra pak čeká na pokyn hráče jako na začátku kola.
+- Srážka znamená ztrátu jednoho života. Následuje animace srážky (1,1 s), pak se **obnoví celé herní pole**: všechny mouchy kola se vrátí, zmizí bonusový balíček i zpomalení nepřátel a hráč i nepřátelé se vrátí na startovní pozice. Hra pak čeká na pokyn hráče jako na začátku kola. Body získané před srážkou zůstávají.
 - Hráč začíná se **3 životy**. Život navíc získá při 5 000 bodech, pak každých dalších 10 000 bodů a výjimečně z bonusového balíčku, nejvýš 5 životů.
 - Při ztrátě posledního života hra končí.
 

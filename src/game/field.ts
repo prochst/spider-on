@@ -1,13 +1,15 @@
-// The playing field of one round: the web size, the player and the enemies,
-// all at their start positions (spec chapters 5 and 7).
+// The playing field of one round: the web size, the player, the enemies and
+// the flies, all at their start positions (spec chapters 3, 5 and 7).
 
-import { PLAYER_SPEED, THROTTLE_FACTOR } from "./config";
-import { createSpider, requestTurn, type Spider, stepSpider, type Turn } from "./spider";
+import { COLLISION_DISTANCE, PLAYER_SPEED, THROTTLE_FACTOR } from "./config";
+import { createFlies, type Fly } from "./flies";
+import { createSpider, requestTurn, type Spider, spiderPosition, stepSpider, type Turn } from "./spider";
 
 export type Field = {
   ringCount: number;
   player: Spider;
   enemies: Spider[];
+  flies: Fly[];
 };
 
 export type EnemySetup = {
@@ -32,6 +34,7 @@ export function createField(ringCount: number, enemies: EnemySetup): Field {
       const angle = ENEMY_START_ANGLES[i % ENEMY_START_ANGLES.length] ?? 270 * DEG;
       return createSpider(ring, angle, 1, PLAYER_SPEED * enemies.speedFactor);
     }),
+    flies: createFlies(ringCount),
   };
 }
 
@@ -42,4 +45,18 @@ export function steerPlayer(field: Field, turn: Turn, throttle: boolean): boolea
 export function stepField(field: Field, dt: number, throttle: boolean): void {
   stepSpider(field.player, dt, field.ringCount, throttle ? THROTTLE_FACTOR : 1);
   for (const enemy of field.enemies) stepSpider(enemy, dt, field.ringCount);
+}
+
+/**
+ * Whether the player touches an enemy. Distances between centres work during
+ * a climb too, so a spider on a spoke can be hit. Head-on, the two close in by
+ * at most 0.02 R per step, far less than the collision distance, so they
+ * cannot pass through each other between steps.
+ */
+export function playerHitsEnemy(field: Field): boolean {
+  const p = spiderPosition(field.player, field.ringCount);
+  return field.enemies.some((enemy) => {
+    const e = spiderPosition(enemy, field.ringCount);
+    return Math.hypot(p.x - e.x, p.y - e.y) < COLLISION_DISTANCE;
+  });
 }

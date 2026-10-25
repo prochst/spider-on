@@ -2,7 +2,7 @@
 // the menus and the keyboard.
 
 import { FIXED_STEP } from "./game/config";
-import { type Command, crash, createGame, dispatch, steer, update } from "./game/game";
+import { type Command, crash, createGame, debugEatAllFlies, dispatch, steer, update } from "./game/game";
 import { planSteps } from "./game/fixedStep";
 import { cancelEvent, confirmEvent } from "./game/screens";
 import { type KeyCommand, listenToKeyboard } from "./input/keyboard";
@@ -20,8 +20,8 @@ const canvas = required(document.querySelector<HTMLCanvasElement>("#game"), "#ga
 const uiRoot = required(document.querySelector<HTMLElement>("#ui"), "#ui root");
 const ctx = required(canvas.getContext("2d"), "Canvas 2D support");
 
-// ?debug in the address enables shortcuts for screens the game cannot reach
-// yet: K simulates a crash, C clears the round.
+// ?debug in the address enables shortcuts to reach the later screens
+// quickly: K simulates a crash, C eats all flies and so clears the round.
 const debug = new URLSearchParams(window.location.search).has("debug");
 
 const game = createGame();
@@ -49,7 +49,7 @@ function onKey(key: KeyCommand): void {
       if (crash(game)) overlay.sync(game);
       return;
     case "debugClear":
-      send({ type: "roundCleared" });
+      debugEatAllFlies(game);
       return;
   }
 }

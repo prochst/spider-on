@@ -47,8 +47,8 @@ export type ScreenEvent =
   | { type: "roundCleared" }
   | { type: "nextRound" };
 
-/** Events a player can cause directly. A crash only ever comes from the simulation. */
-export type PlayerEvent = Exclude<ScreenEvent, { type: "crash" }>;
+/** Events a player can cause directly. Crashes and cleared rounds only ever come from the simulation. */
+export type PlayerEvent = Exclude<ScreenEvent, { type: "crash" } | { type: "roundCleared" }>;
 
 export const TITLE: TitleScreen = { name: "title" };
 
