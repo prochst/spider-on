@@ -3,6 +3,7 @@
 // the user chose in phase 1.
 
 import type { Theme } from "../theme";
+import { drawTouchControls } from "./controls";
 import { drawBonusNotice, drawCrash, drawHud, FONT_FAMILY } from "./effects";
 import { drawBonusPackage, drawFly } from "./items";
 import { drawSpider } from "./spider";
@@ -18,6 +19,8 @@ export const neon: Theme = {
     border: "rgba(120, 235, 255, 0.5)",
     accent: "#ff6ad5",
     glow: "#4fe3ff",
+    /** Opaque, for screens that must hide the game completely. */
+    backdrop: "#07060f",
   },
   drawBackground,
   drawWeb,
@@ -27,4 +30,5 @@ export const neon: Theme = {
   drawSpider,
   drawCrash,
   drawHud,
+  drawTouchControls,
 };

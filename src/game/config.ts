@@ -69,6 +69,14 @@ export const BONUS_POINTS = 250;
 export const BONUS_CHANCE_POINTS = 0.75;
 export const BONUS_CHANCE_SLOWDOWN = 0.22;
 export const BONUS_CHANCE_LIFE = 0.03;
+/**
+ * Touch controls (spec chapter 11), in CSS pixels and seconds. They live here
+ * with the other tunable values, although only the input layer reads them.
+ */
+export const SWIPE_MIN_DISTANCE = 24;
+export const TAP_MAX_DISTANCE = 10;
+export const TAP_MAX_TIME = 0.3;
+
 /** How long the message about an eaten package stays in the middle of the web. */
 export const BONUS_NOTICE_TIME = 3;
 /** Enemy speed multiplier while the slowdown lasts (one full lap of the player). */

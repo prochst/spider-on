@@ -14,6 +14,7 @@ import {
 import { planSteps } from "./game/fixedStep";
 import { cancelEvent, confirmEvent } from "./game/screens";
 import { type KeyCommand, listenToKeyboard } from "./input/keyboard";
+import { listenToTouch } from "./input/touch";
 import { createLegAnimator } from "./render/legs";
 import { drawScene, type Renderer } from "./render/scene";
 import { createView, type View } from "./render/view";
@@ -41,8 +42,36 @@ const seed = debug && params.has("seed") ? Number(params.get("seed")) : Math.flo
 const game = createGame(seed);
 // Lets the browser console and automated checks look at the state while debugging.
 if (debug) Object.assign(window, { spiderOn: game });
+// The throttle is held while a key or the touch button holds it.
+const throttle = { keys: false, touch: false };
+const updateThrottle = () => {
+  game.throttle = throttle.keys || throttle.touch;
+};
+
+// Touch controls show on touch-first devices, or from the first touch on any other.
+const coarsePointer = window.matchMedia("(pointer: coarse)");
+let touchControls = coarsePointer.matches;
+const touch = listenToTouch(canvas, {
+  swipe: ({ dx, dy }) => steerToward(game, dx, dy),
+  // A tap starts the round when the game waits for it; anywhere else it does nothing.
+  tap: () => {
+    if (game.screen.name === "ready") send({ type: "start" });
+  },
+  throttle: (held) => {
+    throttle.touch = held;
+    updateThrottle();
+  },
+  firstTouch: () => {
+    touchControls = true;
+    uiRoot.classList.add("touch");
+    resize();
+  },
+});
+
+uiRoot.classList.toggle("touch", touchControls);
+
 // Neon is the only theme until the settings can choose one (chapter 2.7).
-const renderer: Renderer = { theme: neon, legs: createLegAnimator() };
+const renderer: Renderer = { theme: neon, legs: createLegAnimator(), touch };
 applyMenuTheme(uiRoot, renderer.theme);
 // The canvas does not ask for web fonts by itself, so load the HUD weight up
 // front; the Czech letters make the browser fetch the latin-ext part as well.
@@ -85,7 +114,8 @@ listenToKeyboard(
   {
     command: onKey,
     throttle: (held) => {
-      game.throttle = held;
+      throttle.keys = held;
+      updateThrottle();
     },
   },
   debug,
@@ -95,6 +125,11 @@ listenToKeyboard(
 window.addEventListener("blur", () => send({ type: "pause" }));
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) send({ type: "pause" });
+});
+// On a touch device the game runs in landscape; overlay.css shows the hint to turn it.
+const portraitTouch = window.matchMedia("(orientation: portrait) and (pointer: coarse)");
+portraitTouch.addEventListener("change", () => {
+  if (portraitTouch.matches) send({ type: "pause" });
 });
 
 let view: View = createView(1, 1);
@@ -107,7 +142,7 @@ function resize(): void {
   canvas.width = Math.round(width * dpr);
   canvas.height = Math.round(height * dpr);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  view = createView(width, height);
+  view = createView(width, height, touchControls);
 }
 
 window.addEventListener("resize", resize);

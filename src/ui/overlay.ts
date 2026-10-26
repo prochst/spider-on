@@ -8,7 +8,9 @@ import type { ScreenName } from "../game/screens";
 import type { Theme } from "../themes/theme";
 
 type Button = { label: string; command: Command };
-type Panel = { title: string; lines?: string[]; buttons: Button[] };
+/** A line marked for keys or touch shows only with that kind of controls (class "touch" on the root). */
+type Line = string | { text: string; only: "keys" | "touch" };
+type Panel = { title: string; lines?: Line[]; buttons: Button[] };
 
 function panelFor(game: Game): Panel | null {
   const { session } = game;
@@ -37,7 +39,10 @@ function panelFor(game: Game): Panel | null {
     case "ready":
       return {
         title: `Kolo ${session.round}`,
-        lines: ["Enter nebo mezerník spustí kolo"],
+        lines: [
+          { text: "Enter nebo mezerník spustí kolo", only: "keys" },
+          { text: "Klepnutí na pravou polovinu spustí kolo", only: "touch" },
+        ],
         buttons: [{ label: "Spustit kolo", command: { type: "start" } }],
       };
     case "paused":
@@ -94,7 +99,12 @@ export function createOverlay(root: HTMLElement, onCommand: (command: Command) =
     pauseButton.blur();
     onCommand({ type: "pause" });
   });
-  root.append(panel, pauseButton);
+  // Shown by overlay.css only on a touch device held upright.
+  const rotateHint = document.createElement("div");
+  rotateHint.className = "rotate-hint";
+  rotateHint.setAttribute("role", "alert");
+  rotateHint.innerHTML = '<span class="rotate-icon" aria-hidden="true"></span><p>Otoč zařízení na šířku</p>';
+  root.append(panel, pauseButton, rotateHint);
 
   let shown: ScreenName | null = null;
 
@@ -118,7 +128,12 @@ function renderPanel(panel: HTMLElement, content: Panel | null, onCommand: (comm
   panel.append(title);
   for (const line of content.lines ?? []) {
     const p = document.createElement("p");
-    p.textContent = line;
+    if (typeof line === "string") {
+      p.textContent = line;
+    } else {
+      p.textContent = line.text;
+      p.className = `only-${line.only}`;
+    }
     panel.append(p);
   }
   for (const { label, command } of content.buttons) {

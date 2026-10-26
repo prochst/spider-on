@@ -38,3 +38,8 @@ export const CRASH_SPARKS = ["#57e6ff", "#ff3fb4"] as const;
 
 export const HUD = "#c9f6ff";
 export const HUD_GLOW = "#57e6ff";
+
+/** Touch controls: quiet cyan at rest, pink like the gate spokes while a thumb is on them. */
+export const CONTROL = "#78ebff";
+export const CONTROL_ACTIVE = "#ff6ad5";
+export const CONTROL_GLOW = "#4fe3ff";

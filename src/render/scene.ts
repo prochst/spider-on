@@ -7,7 +7,8 @@ import type { Field } from "../game/field";
 import type { Game } from "../game/game";
 import { ringPoint } from "../game/geometry";
 import { type Spider, spiderPosition } from "../game/spider";
-import type { SpiderRole, Theme } from "../themes/theme";
+import type { TouchState } from "../input/touch";
+import type { SpiderRole, Theme, TouchControls } from "../themes/theme";
 import { webLayout, toScreen } from "./layout";
 import type { LegAnimator } from "./legs";
 import type { View } from "./view";
@@ -29,10 +30,13 @@ const NOTICE_LINES: Record<BonusNoticeKind, readonly string[]> = {
 };
 /** The message fades out during its last half second. */
 const NOTICE_FADE_TIME = 0.5;
+/** How long the touchpad shows the arrow of a recognised swipe. */
+const SWIPE_ARROW_TIME = 0.35;
 
 export type Renderer = {
   theme: Theme;
   legs: LegAnimator;
+  touch: TouchState;
 };
 
 /** time is in seconds and only drives animations such as pulsing flies and packages. */
@@ -73,6 +77,22 @@ export function drawScene(ctx: CanvasRenderingContext2D, view: View, game: Game,
 
   const { score, round, lives } = game.session;
   theme.drawHud(ctx, view, { score, round, lives });
+  if (view.controls) theme.drawTouchControls(ctx, touchControls(view.controls, renderer.touch, time));
+}
+
+function touchControls(controls: NonNullable<View["controls"]>, touch: TouchState, time: number): TouchControls {
+  let swipe: TouchControls["swipe"] = null;
+  const age = touch.lastSwipe ? time - touch.lastSwipe.time : Infinity;
+  if (touch.lastSwipe && age >= 0 && age < SWIPE_ARROW_TIME) {
+    const { dx, dy } = touch.lastSwipe.swipe;
+    const length = Math.hypot(dx, dy);
+    swipe = { dx: dx / length, dy: dy / length, opacity: 1 - age / SWIPE_ARROW_TIME };
+  }
+  return {
+    pad: { ...controls.pad, held: touch.padHeld },
+    throttle: { ...controls.throttle, held: touch.throttleHeld },
+    swipe,
+  };
 }
 
 function drawSpider(

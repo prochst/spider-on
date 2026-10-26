@@ -1,6 +1,6 @@
 // Keyboard controls from spec chapter 11. Keys are matched by their physical
 // position (event.code), so W and S sit in the same place on Czech and
-// English layouts. Touch controls arrive in chapter 2.6.
+// English layouts. Touch controls are in touch.ts.
 
 export type KeyCommand = "confirm" | "cancel" | "up" | "down" | "left" | "right" | "debugCrash" | "debugClear";
 
