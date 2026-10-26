@@ -28,3 +28,6 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **Uložená data čti jako cizí vstup.** To, co hra uložila v minulé verzi, nemusí sedět na dnešní kód. ([kapitola 2.7](kapitoly/2-hra/07-zvuk-nastaveni-vysledky.md))
 - **Ať logika hlásí události, ne přehrává zvuky.** Seznam „co se stalo“ udrží logiku čistou a dá se testovat. ([kapitola 2.7](kapitoly/2-hra/07-zvuk-nastaveni-vysledky.md))
 - **Zvuk popisuj slovy a nech agenta přeložit je na parametry.** „Hlubší a méně kovový“ stačilo: kovový zvuk dělá obdélníková vlna, hloubku výška tónu. ([kapitola 2.7](kapitoly/2-hra/07-zvuk-nastaveni-vysledky.md))
+- **E2E testy pořiď před změnami, které mají hlídat.** Rozložení, načítání a dotyk unit testy logiky nevidí. ([kapitola 3.1](kapitoly/3-web/01-e2e-testy.md))
+- **Když E2E test selže, prověř nejdřív test.** Po tahu prstem se „pustil plyn“, ale chyba byla v simulaci dotyku, ne ve hře. ([kapitola 3.1](kapitoly/3-web/01-e2e-testy.md))
+- **Ověř, že test umí selhat.** Schválně rozbij hru a sleduj, jestli test zčervená. ([kapitola 3.1](kapitoly/3-web/01-e2e-testy.md))
