@@ -2,38 +2,66 @@
 // focus, keyboard activation, screen reader support and touch handling from
 // the browser for free. The canvas is left for the game itself and the HUD.
 
+import { PLAYER_NAME_MAX_LENGTH } from "../game/config";
 import type { Command, Game } from "../game/game";
 import { webGrowsAfter } from "../game/progression";
+import { bestScore, type ScoreEntry } from "../game/scores";
 import type { ScreenName } from "../game/screens";
+import { cleanName, type Settings } from "../game/settings";
 import type { Theme } from "../themes/theme";
+
+/** What the menus show besides the game itself; main.ts owns it. */
+export type MenuData = {
+  settings: Settings;
+  scores: readonly ScoreEntry[];
+  /** Place of the game that just ended in the score table, null when it did not make it. */
+  lastRank: number | null;
+  themes: readonly { id: string; name: string }[];
+};
+
+export type OverlayHandlers = {
+  command(command: Command): void;
+  /** The player changed a setting; it applies and is saved right away (spec chapter 12). */
+  settings(change: Partial<Settings>): void;
+};
 
 type Button = { label: string; command: Command };
 /** A line marked for keys or touch shows only with that kind of controls (class "touch" on the root). */
 type Line = string | { text: string; only: "keys" | "touch" };
-type Panel = { title: string; lines?: Line[]; buttons: Button[] };
+type Panel = {
+  title: string;
+  lines?: Line[];
+  /** A form or a table between the lines and the buttons. */
+  body?: HTMLElement;
+  buttons: Button[];
+};
 
-function panelFor(game: Game): Panel | null {
+function panelFor(game: Game, data: MenuData, handlers: OverlayHandlers): Panel | null {
   const { session } = game;
   switch (game.screen.name) {
-    case "title":
+    case "title": {
+      const best = bestScore(data.scores);
       return {
         title: "SPIDER ON",
+        lines: best === null ? [] : [`Nejlepší skóre ${best}`],
         buttons: [
           { label: "Hrát", command: { type: "play" } },
           { label: "Výsledky", command: { type: "openScores" } },
           { label: "Nastavení", command: { type: "openSettings" } },
         ],
       };
+    }
     case "scores":
       return {
         title: "Výsledky",
-        lines: ["Tabulka výsledků přijde v kapitole 2.7."],
+        lines: data.scores.length === 0 ? ["Zatím žádné výsledky. Zahraj si!"] : [],
+        body: data.scores.length === 0 ? undefined : scoreTable(data.scores),
         buttons: [{ label: "Zpět", command: { type: "back" } }],
       };
     case "settings":
       return {
         title: "Nastavení",
-        lines: ["Jméno, vzhled a zvuk přijdou v kapitolách 2.5 a 2.7."],
+        body: settingsForm(data, handlers),
         buttons: [{ label: "Zpět", command: { type: "back" } }],
       };
     case "ready":
@@ -68,7 +96,13 @@ function panelFor(game: Game): Panel | null {
     case "gameOver":
       return {
         title: "Konec hry",
-        lines: [`Skóre ${session.score}`, `Dosažené kolo ${session.round}`],
+        lines: [
+          `Skóre ${session.score}`,
+          `Dosažené kolo ${session.round}`,
+          data.lastRank === null
+            ? "Do tabulky výsledků to tentokrát nestačilo."
+            : `${data.lastRank}. místo v tabulce výsledků`,
+        ],
         buttons: [
           { label: "Hrát znovu", command: { type: "play" } },
           { label: "Zpět do menu", command: { type: "quit" } },
@@ -87,7 +121,7 @@ export type Overlay = {
   sync(game: Game): void;
 };
 
-export function createOverlay(root: HTMLElement, onCommand: (command: Command) => void): Overlay {
+export function createOverlay(root: HTMLElement, menuData: () => MenuData, handlers: OverlayHandlers): Overlay {
   const panel = document.createElement("div");
   panel.className = "panel";
   const pauseButton = document.createElement("button");
@@ -97,7 +131,7 @@ export function createOverlay(root: HTMLElement, onCommand: (command: Command) =
   pauseButton.setAttribute("aria-label", "Pauza");
   pauseButton.addEventListener("click", () => {
     pauseButton.blur();
-    onCommand({ type: "pause" });
+    handlers.command({ type: "pause" });
   });
   // Shown by overlay.css only on a touch device held upright.
   const rotateHint = document.createElement("div");
@@ -113,7 +147,7 @@ export function createOverlay(root: HTMLElement, onCommand: (command: Command) =
       if (game.screen.name === shown) return;
       shown = game.screen.name;
       pauseButton.hidden = !PAUSABLE.has(shown);
-      renderPanel(panel, panelFor(game), onCommand);
+      renderPanel(panel, panelFor(game, menuData(), handlers), handlers.command);
     },
   };
 }
@@ -136,6 +170,7 @@ function renderPanel(panel: HTMLElement, content: Panel | null, onCommand: (comm
     }
     panel.append(p);
   }
+  if (content.body) panel.append(content.body);
   for (const { label, command } of content.buttons) {
     const button = document.createElement("button");
     button.type = "button";
@@ -145,6 +180,79 @@ function renderPanel(panel: HTMLElement, content: Panel | null, onCommand: (comm
   }
   // Focus the first button so the keyboard works without reaching for the mouse.
   panel.querySelector("button")?.focus({ preventScroll: true });
+}
+
+function scoreTable(scores: readonly ScoreEntry[]): HTMLElement {
+  const table = document.createElement("table");
+  table.className = "scores";
+  const head = table.createTHead().insertRow();
+  for (const label of ["#", "Jméno", "Skóre", "Kolo", "Datum"]) {
+    const th = document.createElement("th");
+    th.textContent = label;
+    head.append(th);
+  }
+  const body = table.createTBody();
+  scores.forEach((entry, i) => {
+    const row = body.insertRow();
+    for (const text of [`${i + 1}.`, entry.name, String(entry.score), String(entry.round), czechDate(entry.date)]) {
+      row.insertCell().textContent = text;
+    }
+  });
+  return table;
+}
+
+/** 2026-10-26 → 26. 10. 2026, the way dates are written in Czech. */
+function czechDate(date: string): string {
+  const [year, month, day] = date.split("-").map(Number);
+  return `${day}. ${month}. ${year}`;
+}
+
+function settingsForm(data: MenuData, handlers: OverlayHandlers): HTMLElement {
+  const { settings } = data;
+  const form = document.createElement("form");
+  form.className = "settings";
+
+  const name = document.createElement("input");
+  name.type = "text";
+  name.value = settings.name;
+  name.maxLength = PLAYER_NAME_MAX_LENGTH;
+  name.autocomplete = "off";
+  name.spellcheck = false;
+  let saved = settings.name;
+  // "change" fires when the field loses focus or Enter is pressed: the name is final then, not at every letter.
+  name.addEventListener("change", () => {
+    const cleaned = cleanName(name.value);
+    name.value = cleaned ?? saved;
+    if (cleaned === null) return;
+    saved = cleaned;
+    handlers.settings({ name: cleaned });
+  });
+  // Enter in the field would submit the form and reload the page.
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    name.blur();
+  });
+
+  const theme = document.createElement("select");
+  for (const { id, name: label } of data.themes) theme.add(new Option(label, id, false, id === settings.themeId));
+  theme.addEventListener("change", () => handlers.settings({ themeId: theme.value }));
+
+  const sound = document.createElement("input");
+  sound.type = "checkbox";
+  sound.checked = settings.sound;
+  sound.addEventListener("change", () => handlers.settings({ sound: sound.checked }));
+
+  form.append(field("Jméno", name), field("Vzhled", theme), field("Zvuk", sound));
+  return form;
+}
+
+function field(label: string, control: HTMLElement): HTMLElement {
+  const wrapper = document.createElement("label");
+  wrapper.className = "field";
+  const text = document.createElement("span");
+  text.textContent = label;
+  wrapper.append(text, control);
+  return wrapper;
 }
 
 /** Hands the theme's font and menu colours to the stylesheet as CSS variables. */

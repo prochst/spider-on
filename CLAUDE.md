@@ -25,6 +25,7 @@ Před každým commitem musí projít `npm run typecheck`, `npm test` a `npm run
 - `src/assets/`: přibalené soubory, zatím písmo Chakra Petch (OFL). Hra nic nenačítá z internetu, aby fungovala offline.
 - `src/ui/`: menu a překryvné obrazovky jako HTML nad Canvasem (fokus, klávesnice a přístupnost řeší prohlížeč).
 - `src/input/`, `src/audio/`: vstup (klávesnice, dotyk) a zvuk (Web Audio).
+- `src/storage/`: nastavení a tabulka výsledků v `localStorage`. Když úložiště selže, hra běží dál bez něj.
 - `src/main.ts`: spojuje vše dohromady a řídí herní smyčku s pevným krokem 1/120 s.
 - Žádný herní framework. Nové závislosti jen po dohodě.
 

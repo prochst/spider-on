@@ -81,3 +81,8 @@ export const TAP_MAX_TIME = 0.3;
 export const BONUS_NOTICE_TIME = 3;
 /** Enemy speed multiplier while the slowdown lasts (one full lap of the player). */
 export const SLOWDOWN_FACTOR = 0.5;
+
+/** The score table and the player name (spec chapter 10). */
+export const SCORE_TABLE_SIZE = 10;
+export const PLAYER_NAME_MAX_LENGTH = 16;
+export const DEFAULT_PLAYER_NAME = "Hráč";

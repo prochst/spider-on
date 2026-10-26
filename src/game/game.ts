@@ -33,6 +33,12 @@ export type Session = {
   roundBonus: number;
 };
 
+/**
+ * Moments the sounds react to (spec chapter 13). The logic only lists them;
+ * the browser layer plays them and empties the list.
+ */
+export type GameEvent = "fly" | "bonus" | "climb" | "crash" | "roundClear" | "gameOver";
+
 export type Game = {
   screen: Screen;
   session: Session;
@@ -41,6 +47,8 @@ export type Game = {
   throttle: boolean;
   /** The only source of chance in the game; the same seed replays the same game. */
   random: Random;
+  /** What happened since the browser layer last emptied the list. */
+  events: GameEvent[];
 };
 
 /** Crashes and cleared rounds are not commands: the simulation decides them in update(). */
@@ -58,7 +66,7 @@ function createRoundField(round: number, random: Random): Field {
 
 export function createGame(seed: number): Game {
   const random = createRandom(seed);
-  return { screen: TITLE, session: createSession(), field: createRoundField(1, random), throttle: false, random };
+  return { screen: TITLE, session: createSession(), field: createRoundField(1, random), throttle: false, random, events: [] };
 }
 
 /** Applies a command. Returns false when the current screen ignores it. */
@@ -86,6 +94,7 @@ export function steerToward(game: Game, dx: number, dy: number): boolean {
 export function crash(game: Game): boolean {
   if (game.screen.name !== "playing") return false;
   game.session.lives -= 1;
+  game.events.push("crash");
   return applyEvent(game, { type: "crash", lastLife: game.session.lives <= 0 });
 }
 
@@ -100,6 +109,7 @@ export function update(game: Game, dt: number): void {
   if (game.screen.name === "playing") playStep(game, dt);
   const previous = game.screen;
   game.screen = tickScreen(game.screen, dt);
+  if (previous.name === "crash" && game.screen.name === "gameOver") game.events.push("gameOver");
   // After a crash the whole field starts over, flies included (spec chapter 8).
   if (previous.name === "crash" && game.screen.name === "ready") {
     game.field = createRoundField(game.session.round, game.random);
@@ -109,15 +119,22 @@ export function update(game: Game, dt: number): void {
 function playStep(game: Game, dt: number): void {
   const { field, session } = game;
   const angleBefore = field.player.angle;
+  const crossingBefore = field.player.crossing;
   stepField(field, dt, game.throttle, game.random);
+  // Every climb to the next ring is a new crossing, a continued climb included.
+  if (field.player.crossing && field.player.crossing !== crossingBefore) game.events.push("climb");
 
   const collected = collectFlies(field.flies, field.player);
   if (collected > 0) {
+    game.events.push("fly");
     session.roundPoints += collected * FLY_POINTS;
     addPoints(session, collected * FLY_POINTS);
   }
   const eaten = updateBonus(field.bonus, field.flies, field.player, angleBefore, dt, game.random);
-  if (eaten) applyBonus(game, eaten);
+  if (eaten) {
+    game.events.push("bonus");
+    applyBonus(game, eaten);
+  }
   // The last fly wins over a crash in the same step: the player reached it first.
   if (fliesLeft(field.flies) === 0) {
     finishRound(game);
@@ -139,6 +156,7 @@ function finishRound(game: Game): void {
   const { session } = game;
   session.roundBonus = ROUND_BONUS_PER_ROUND * session.round;
   addPoints(session, session.roundBonus);
+  game.events.push("roundClear");
   applyEvent(game, { type: "roundCleared" });
 }
 

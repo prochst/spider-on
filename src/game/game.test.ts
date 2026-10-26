@@ -292,3 +292,43 @@ describe("steering by screen direction", () => {
     expect(game.field.player.pending).toBe("in");
   });
 });
+
+describe("events for the sounds", () => {
+  it("lists an eaten fly", () => {
+    const game = startRound();
+    simulate(game, PAST_FIRST_FLY);
+    expect(game.events).toEqual(["fly"]);
+  });
+
+  it("lists every climb to the next ring", () => {
+    const game = startRound();
+    const angularSpeed = PLAYER_SPEED / ringRadius(2, 3);
+    simulate(game, (Math.PI / 2 - TURN_ZONE / 2) / angularSpeed);
+    game.events.length = 0;
+    steer(game, "in");
+    while (!game.field.player.crossing) update(game, FIXED_STEP);
+    expect(game.events).toEqual(["climb"]);
+    // Asking once more during the climb goes on to the innermost ring: a second climb.
+    expect(steer(game, "in")).toBe(true);
+    simulate(game, 0.6);
+    expect(game.events.filter((e) => e === "climb")).toHaveLength(2);
+  });
+
+  it("lists a cleared round", () => {
+    const game = startRound();
+    clearRound(game);
+    expect(game.events).toContain("roundClear");
+  });
+
+  it("lists each crash and the end of the game after the last one", () => {
+    const game = startRound();
+    game.session.lives = 2;
+    crash(game);
+    simulate(game, CRASH_DURATION);
+    expect(game.events).toEqual(["crash"]);
+    dispatch(game, { type: "start" });
+    crash(game);
+    simulate(game, CRASH_DURATION);
+    expect(game.events).toEqual(["crash", "crash", "gameOver"]);
+  });
+});

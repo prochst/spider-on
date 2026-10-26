@@ -24,6 +24,13 @@
   text-align: center;
 }
 
+/* A tall menu (the score table on a phone held sideways) scrolls instead of leaving the screen. */
+.panel {
+  max-height: calc(100dvh - 1.5rem);
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
 .panel[hidden],
 .pause-button[hidden] {
   display: none;
@@ -62,6 +69,95 @@
   outline: none;
   background: color-mix(in srgb, var(--menu-accent, #ff6ad5) 18%, transparent);
   box-shadow: 0 0 14px color-mix(in srgb, var(--menu-accent, #ff6ad5) 60%, transparent);
+}
+
+/* Score table (spec chapter 10). */
+.scores {
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.scores th,
+.scores td {
+  padding: 0.15rem 0.6rem;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.scores th:nth-child(2),
+.scores td:nth-child(2) {
+  text-align: left;
+}
+
+.scores th {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+/* A phone held sideways is short: tighter menus keep the whole score table and its button on screen. */
+@media (max-height: 500px) {
+  .panel {
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .panel h1 {
+    font-size: 1.3rem;
+  }
+
+  .scores th,
+  .scores td {
+    padding: 0.05rem 0.6rem;
+  }
+
+  .panel button {
+    padding: 0.45rem 1rem;
+  }
+}
+
+/* Settings form: label on the left, control on the right. */
+.settings {
+  display: grid;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.settings .field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.settings input[type="text"],
+.settings select {
+  box-sizing: border-box;
+  width: 11rem;
+  padding: 0.4rem 0.6rem;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 1px solid var(--menu-border, rgba(120, 235, 255, 0.5));
+  border-radius: 0.4rem;
+}
+
+.settings select option {
+  color: initial;
+}
+
+.settings input[type="checkbox"] {
+  width: 1.4rem;
+  height: 1.4rem;
+  accent-color: var(--menu-accent, #ff6ad5);
+}
+
+.settings input:focus-visible,
+.settings select:focus-visible {
+  outline: 2px solid var(--menu-accent, #ff6ad5);
+  outline-offset: 2px;
 }
 
 .pause-button {
