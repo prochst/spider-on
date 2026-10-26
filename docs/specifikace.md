@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.13. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.14. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -128,7 +128,7 @@ V menu potvrdí Enter nebo mezerník hlavní volbu obrazovky (Hrát, Další kol
 **Dotyk (telefon a tablet)**, rozložení jako u přenosných herních konzolí:
 
 - Hra běží **na šířku**. Na výšku hra ukáže výzvu k otočení zařízení a pozastaví se. Platí to jen pro dotyková zařízení, úzké okno na počítači hru neblokuje.
-- Uprostřed je herní plocha, **vpravo virtuální touchpad**, **vlevo virtuální tlačítko plynu** (plyn platí, dokud je tlačítko držené). Po stranách pavučiny je pro ovládání vyhrazeno místo, na telefonu pavučina vyplní výšku displeje, na tabletu se zmenší, aby se ovládání vešlo.
+- Uprostřed je herní plocha, **vpravo virtuální touchpad**, **vlevo virtuální tlačítko plynu** (plyn platí, dokud je tlačítko držené). Po stranách pavučiny je pro ovládání vyhrazeno místo, na telefonu pavučina vyplní výšku displeje, na tabletu se zmenší, aby se ovládání vešlo. Ovladače jsou svisle uprostřed obrazovky a vodorovně uprostřed mezi okrajem obrazovky a pavučinou. Touchpad je čtverec, o něco větší než kulaté tlačítko plynu, se šipkami do čtyř směrů přechodových vláken (nahoru, dolů, vlevo, vpravo).
 - Dotyková plocha je větší než nakreslené ovládání: **celá pravá polovina obrazovky** funguje jako touchpad a **celá levá polovina** jako plyn. Palec tak nemusí mířit. Oba palce fungují současně.
 - Směr tahu prstem po touchpadu určuje pohyb po přechodovém vlákně. Hra tah porovná se směrem vlákna, ke kterému pavouk míří: tah ve směru od středu po tomto vlákně znamená „ven“, tah ke středu „dovnitř“. U pravého vlákna je tedy tah doprava „ven“, u horního je „ven“ tah nahoru. Tah kolmý na vlákno se ignoruje.
 - Tah se pozná, když prst urazí **aspoň 24 px (laditelné)** od místa, kde začal. Pak se počítá znovu od nového místa, takže dalším tahem bez zvednutí prstu lze během přelézání přidat další kruh (kapitola 5).
@@ -193,3 +193,4 @@ Další rozhodnutí uživatele:
 - Verze 0.9: hra byla i po zpomalení od začátku těžká. Rychlosti nepřátel se posunuly do rozmezí 0,3× až 0,9× hráčovy rychlosti (dřív 0,75× až 1,3×) a tabulka obtížnosti zrychluje nepřátele po jednom (stupně 4, 7 a 8 jsou nové). Po sebrání balíčku se na 3 s ukáže, co hráč získal.
 - Verze 0.10: nepřátelé ještě pomalejší, rozmezí 0,2× až 0,8×. Rychlí nepřátelé zrychlují pomalu s každým stupněm obtížnosti už od stupně 2, ne až od stupně 10.
 - Verze 0.11: po ručním testu balíčků (dočasně od 1. kola) se balíčky objevují od 4. kola místo od 6. Začínají tak spolu s větší pavučinou o 4 kruzích.
+- Verze 0.14: po ručním testu na telefonu jsou dotykové ovladače svisle uprostřed obrazovky a vodorovně uprostřed mezi okrajem a pavučinou. Touchpad je větší čtverec se šipkami do směrů přechodových vláken.

@@ -4,7 +4,7 @@
 // nothing about themes and a new theme cannot break the rules.
 
 import type { BonusKind, BonusNoticeKind } from "../game/bonus";
-import type { Circle, View } from "../render/view";
+import type { Circle, Square, View } from "../render/view";
 
 /** A point in canvas pixels (CSS pixels, before the HiDPI scale). */
 export type Px = { x: number; y: number };
@@ -32,7 +32,7 @@ export type SpiderPose = {
 export type HudInfo = { score: number; round: number; lives: number };
 
 export type TouchControls = {
-  pad: Circle & { held: boolean };
+  pad: Square & { held: boolean };
   throttle: Circle & { held: boolean };
   /** The last recognised swipe as a unit direction, fading out; null when there is none to show. */
   swipe: { dx: number; dy: number; opacity: number } | null;

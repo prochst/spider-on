@@ -1,7 +1,11 @@
 // Maps game units (R, half the side of the square play area) to canvas pixels
 // and places the touch controls beside the web.
 
+import { WEB_EDGE } from "./layout";
+
 export type Circle = { x: number; y: number; r: number };
+/** A square by its centre and half its side. */
+export type Square = { x: number; y: number; half: number };
 
 export type View = {
   /** Canvas size in CSS pixels. */
@@ -13,7 +17,7 @@ export type View = {
   /** Pixels per unit R. */
   unit: number;
   /** Where the touch controls are drawn; null without touch controls. */
-  controls: { pad: Circle; throttle: Circle } | null;
+  controls: { pad: Square; throttle: Circle } | null;
 };
 
 // A thin margin keeps the glow of the outer ring and the HUD inside the screen.
@@ -22,8 +26,10 @@ const PLAY_AREA_FILL = 0.9;
 const CONTROL_SPACE = 0.34;
 /** ...but no more than this in CSS pixels, so a tablet keeps thumb-sized controls and a large web. */
 const MAX_CONTROL_SPACE = 190;
-/** The controls sit a little below the middle, where the thumbs rest. */
-const CONTROL_HEIGHT = 0.6;
+/** Radius of the throttle button, as a share of the side space. */
+const THROTTLE_SIZE = 0.36;
+/** The touchpad is a little bigger than the throttle, like a laptop touchpad next to a button. */
+const PAD_SIZE = 1.25;
 
 export function createView(width: number, height: number, touchControls = false): View {
   const sideSpace = touchControls ? Math.min(height * CONTROL_SPACE, MAX_CONTROL_SPACE) : 0;
@@ -32,11 +38,14 @@ export function createView(width: number, height: number, touchControls = false)
   const view: View = { width, height, cx: width / 2, cy: height / 2, unit, controls: null };
   if (!touchControls) return view;
 
-  const r = sideSpace * 0.36;
-  const y = height * CONTROL_HEIGHT;
+  const r = sideSpace * THROTTLE_SIZE;
+  // Halfway between the screen edge and the web, so on a phone, where the web
+  // fills the height and leaves wide strips, the controls do not hug the edge.
+  const inset = (width / 2 - unit * WEB_EDGE) / 2;
+  const y = height / 2;
   view.controls = {
-    throttle: { x: sideSpace / 2, y, r },
-    pad: { x: width - sideSpace / 2, y, r },
+    throttle: { x: inset, y, r },
+    pad: { x: width - inset, y, half: r * PAD_SIZE },
   };
   return view;
 }
