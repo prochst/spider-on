@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.12. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.13. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -127,10 +127,14 @@ V menu potvrdí Enter nebo mezerník hlavní volbu obrazovky (Hrát, Další kol
 
 **Dotyk (telefon a tablet)**, rozložení jako u přenosných herních konzolí:
 
-- Hra běží **na šířku**. Na výšku hra ukáže výzvu k otočení zařízení a pozastaví se.
-- Uprostřed je herní plocha, **vpravo virtuální touchpad**, **vlevo virtuální tlačítko plynu** (plyn platí, dokud je tlačítko držené).
+- Hra běží **na šířku**. Na výšku hra ukáže výzvu k otočení zařízení a pozastaví se. Platí to jen pro dotyková zařízení, úzké okno na počítači hru neblokuje.
+- Uprostřed je herní plocha, **vpravo virtuální touchpad**, **vlevo virtuální tlačítko plynu** (plyn platí, dokud je tlačítko držené). Po stranách pavučiny je pro ovládání vyhrazeno místo, na telefonu pavučina vyplní výšku displeje, na tabletu se zmenší, aby se ovládání vešlo.
+- Dotyková plocha je větší než nakreslené ovládání: **celá pravá polovina obrazovky** funguje jako touchpad a **celá levá polovina** jako plyn. Palec tak nemusí mířit. Oba palce fungují současně.
 - Směr tahu prstem po touchpadu určuje pohyb po přechodovém vlákně. Hra tah porovná se směrem vlákna, ke kterému pavouk míří: tah ve směru od středu po tomto vlákně znamená „ven“, tah ke středu „dovnitř“. U pravého vlákna je tedy tah doprava „ven“, u horního je „ven“ tah nahoru. Tah kolmý na vlákno se ignoruje.
-- Klepnutí na touchpad spustí kolo, když hra na pokyn čeká.
+- Tah se pozná, když prst urazí **aspoň 24 px (laditelné)** od místa, kde začal. Pak se počítá znovu od nového místa, takže dalším tahem bez zvednutí prstu lze během přelézání přidat další kruh (kapitola 5).
+- Touchpad krátce ukáže šipku ve směru rozpoznaného tahu, aby hráč viděl, že tah zaregistroval.
+- **Klepnutí** (prst se pohne nejvýš o 10 px a zvedne do 0,3 s, laditelné) na touchpad spustí kolo, když hra na pokyn čeká. Jinde klepnutí nic nedělá.
+- Dotykové ovládání se ukáže na zařízeních s dotykovou obrazovkou jako hlavním vstupem, nebo po prvním dotyku. Na počítači s myší se nezobrazuje.
 - Tlačítko pauzy je v rohu HUD.
 
 Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do pozadí.

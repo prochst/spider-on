@@ -4,7 +4,7 @@
 // nothing about themes and a new theme cannot break the rules.
 
 import type { BonusKind, BonusNoticeKind } from "../game/bonus";
-import type { View } from "../render/view";
+import type { Circle, View } from "../render/view";
 
 /** A point in canvas pixels (CSS pixels, before the HiDPI scale). */
 export type Px = { x: number; y: number };
@@ -31,6 +31,13 @@ export type SpiderPose = {
 
 export type HudInfo = { score: number; round: number; lives: number };
 
+export type TouchControls = {
+  pad: Circle & { held: boolean };
+  throttle: Circle & { held: boolean };
+  /** The last recognised swipe as a unit direction, fading out; null when there is none to show. */
+  swipe: { dx: number; dy: number; opacity: number } | null;
+};
+
 export type Theme = {
   /** Stable id, kept in the settings once themes can be chosen (chapter 2.7). */
   id: string;
@@ -39,7 +46,7 @@ export type Theme = {
   /** CSS font family for the canvas texts and the menus. */
   fontFamily: string;
   /** Colours of the menus over the canvas, as CSS values. */
-  menu: { text: string; panel: string; border: string; accent: string; glow: string };
+  menu: { text: string; panel: string; border: string; accent: string; glow: string; backdrop: string };
 
   drawBackground(ctx: CanvasRenderingContext2D, view: View): void;
   drawWeb(ctx: CanvasRenderingContext2D, view: View, web: WebLayout): void;
@@ -58,4 +65,6 @@ export type Theme = {
   /** progress runs from 0 to 1 during the crash animation. */
   drawCrash(ctx: CanvasRenderingContext2D, at: Px, size: number, progress: number): void;
   drawHud(ctx: CanvasRenderingContext2D, view: View, hud: HudInfo): void;
+  /** The touchpad on the right and the throttle button on the left (spec chapter 11). */
+  drawTouchControls(ctx: CanvasRenderingContext2D, controls: TouchControls): void;
 };

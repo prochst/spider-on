@@ -20,3 +20,6 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **Šabloně vzhledu dávej hotová data, ne stav hry.** Šablona, která dostane jen pixely a role, nemůže rozbít pravidla a další šablona se píše snáz. ([kapitola 2.5](kapitoly/2-hra/05-neon-a-sablony.md))
 - **Barvy ověřuj na snímku ze hry.** Ledově modří zpomalení nepřátelé vypadali v paletě dobře, ve hře splývali s hráčem. ([kapitola 2.5](kapitoly/2-hra/05-neon-a-sablony.md))
 - **Nové řádky do seznamu přidávej na konec.** Vkládání „za nalezený text“ rozházelo pořadí verzí ve specifikaci. ([kapitola 2.5](kapitoly/2-hra/05-neon-a-sablony.md))
+- **U dotyku si nech dopsat čísla do specifikace.** „Tah“ a „klepnutí“ znějí jasně, dokud se nemusí převést na pixely a sekundy. ([kapitola 2.6](kapitoly/2-hra/06-dotykove-ovladani.md))
+- **Rozložení zkoušej na víc velikostech obrazovky.** Ovladače, které na telefonu seděly, byly na tabletu obří. Odhalil to až druhý snímek. ([kapitola 2.6](kapitoly/2-hra/06-dotykove-ovladani.md))
+- **Emulace dotyku nestačí.** Ověří, že gesta dojdou do hry, ale jestli se dobře hraje, pozná jen člověk s telefonem v ruce. ([kapitola 2.6](kapitoly/2-hra/06-dotykove-ovladani.md))

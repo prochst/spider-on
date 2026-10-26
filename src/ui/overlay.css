@@ -71,3 +71,60 @@
   width: 2.75rem;
   height: 2.75rem;
 }
+
+/* Lines that apply only to the keyboard or only to touch controls. */
+#ui.touch .only-keys,
+#ui:not(.touch) .only-touch {
+  display: none;
+}
+
+/* Spec chapter 11: on a touch device the game runs in landscape. */
+.rotate-hint {
+  display: none;
+}
+
+@media (orientation: portrait) and (pointer: coarse) {
+  .rotate-hint {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    pointer-events: auto;
+    background: var(--menu-backdrop, #07060f);
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-shadow: 0 0 12px var(--menu-glow, #4fe3ff);
+  }
+
+  /* A phone outline that keeps turning to landscape. */
+  .rotate-icon {
+    width: 3rem;
+    height: 5rem;
+    border: 3px solid var(--menu-accent, #ff6ad5);
+    border-radius: 0.6rem;
+    box-shadow: 0 0 14px var(--menu-accent, #ff6ad5);
+    animation: rotate-device 2s ease-in-out infinite;
+  }
+}
+
+@keyframes rotate-device {
+  0%,
+  20% {
+    transform: rotate(0deg);
+  }
+  60%,
+  100% {
+    transform: rotate(-90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rotate-icon {
+    animation: none;
+    transform: rotate(-90deg);
+  }
+}

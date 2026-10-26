@@ -9,6 +9,8 @@ import { CRASH_RING, CRASH_SPARKS, HUD, HUD_GLOW, PACKAGE } from "./palette";
 export const FONT_FAMILY = '"Chakra Petch", system-ui, sans-serif';
 
 const SCORE_DIGITS = 5;
+/** Room for the HTML pause button in the top right corner (2.75rem plus its 0.75rem margin and a gap). */
+const PAUSE_BUTTON_SPACE = 80;
 const NOTICE_COLORS: Record<BonusNoticeKind, string> = { ...PACKAGE, livesFull: PACKAGE.life };
 const CRASH_SPARK_COUNT = 12;
 
@@ -26,9 +28,8 @@ export function drawHud(ctx: CanvasRenderingContext2D, view: View, hud: HudInfo)
   ctx.fillText(`SKÓRE ${String(hud.score).padStart(SCORE_DIGITS, "0")}`, margin, margin);
   ctx.fillText(`KOLO ${hud.round}`, margin, margin + size * 1.4);
 
-  // Leaves room in the top right corner for the pause button.
   ctx.textAlign = "right";
-  ctx.fillText(`ŽIVOTY ${hud.lives}`, view.width - margin * 4, margin);
+  ctx.fillText(`ŽIVOTY ${hud.lives}`, view.width - PAUSE_BUTTON_SPACE, margin);
   ctx.restore();
 }
 
