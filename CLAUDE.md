@@ -21,7 +21,8 @@ Před každým commitem musí projít `npm run typecheck`, `npm test` a `npm run
 
 - `src/game/`: čistá herní logika. Žádný DOM, Canvas, `window`, `Date.now()` ani `Math.random()`. Čas přichází jako `dt`, náhoda jako předaný generátor. Vše tady má unit testy vedle sebe (`*.test.ts`).
 - `src/render/`: vykreslování do Canvasu. Čte stav hry, nikdy ho nemění.
-- `src/themes/`: šablony vzhledu. Každá šablona implementuje společné rozhraní, logika o šablonách neví.
+- `src/themes/`: šablony vzhledu. Každá šablona implementuje rozhraní `Theme` z `src/themes/theme.ts` a dostává hotové pozice v pixelech. Logika o šablonách neví.
+- `src/assets/`: přibalené soubory, zatím písmo Chakra Petch (OFL). Hra nic nenačítá z internetu, aby fungovala offline.
 - `src/ui/`: menu a překryvné obrazovky jako HTML nad Canvasem (fokus, klávesnice a přístupnost řeší prohlížeč).
 - `src/input/`, `src/audio/`: vstup (klávesnice, dotyk) a zvuk (Web Audio).
 - `src/main.ts`: spojuje vše dohromady a řídí herní smyčku s pevným krokem 1/120 s.

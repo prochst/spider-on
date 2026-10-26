@@ -1,79 +1,95 @@
-// Draws one frame from the game state. Colours are placeholders until the
-// theme system arrives in chapter 2.5.
+// Draws one frame from the game state through the current theme. This file
+// decides what is on screen and where; the theme decides how it looks.
 
-import { CRASH_DURATION } from "../game/config";
+import type { BonusNoticeKind } from "../game/bonus";
+import { BONUS_POINTS, CRASH_DURATION } from "../game/config";
+import type { Field } from "../game/field";
 import type { Game } from "../game/game";
-import type { Point } from "../game/geometry";
-import { spiderPosition } from "../game/spider";
+import { ringPoint } from "../game/geometry";
+import { type Spider, spiderPosition } from "../game/spider";
+import type { SpiderRole, Theme } from "../themes/theme";
+import { webLayout, toScreen } from "./layout";
+import type { LegAnimator } from "./legs";
 import type { View } from "./view";
-import { drawBonusNotice, drawBonusPackage } from "./bonus";
-import { drawFlies } from "./flies";
-import { drawSpiders } from "./spiders";
-import { drawWeb } from "./web";
 
-const BACKGROUND = "#07060f";
-const HUD_COLOR = "#c9f6ff";
-const CRASH_COLOR = "#ff4f6d";
+/** Sizes in units of R, the same for every theme so the look matches the collisions. */
+const FLY_SIZE = 0.012;
+const PACKAGE_SIZE = 0.034;
+const SPIDER_SIZE = 0.048;
 
 // Screens where the web is visible; on the others the menu covers a dimmed web.
 const WEB_SCREENS = new Set(["ready", "playing", "crash", "paused", "roundComplete", "gameOver"]);
 
-/** time is in seconds and only drives animations such as the pulsing packages. */
-export function drawScene(ctx: CanvasRenderingContext2D, view: View, game: Game, time: number): void {
-  ctx.fillStyle = BACKGROUND;
-  ctx.fillRect(0, 0, view.width, view.height);
+// Each line fits inside the innermost ring.
+const NOTICE_LINES: Record<BonusNoticeKind, readonly string[]> = {
+  points: [`+${BONUS_POINTS} BODŮ`],
+  slowdown: ["ZPOMALENÍ", "NEPŘÁTEL"],
+  life: ["+1 ŽIVOT"],
+  livesFull: ["ŽIVOTY", "JSOU PLNÉ"],
+};
+/** The message fades out during its last half second. */
+const NOTICE_FADE_TIME = 0.5;
+
+export type Renderer = {
+  theme: Theme;
+  legs: LegAnimator;
+};
+
+/** time is in seconds and only drives animations such as pulsing flies and packages. */
+export function drawScene(ctx: CanvasRenderingContext2D, view: View, game: Game, renderer: Renderer, time: number): void {
+  const { theme } = renderer;
+  const { field } = game;
+  theme.drawBackground(ctx, view);
 
   const inGame = WEB_SCREENS.has(game.screen.name);
   ctx.globalAlpha = inGame ? 1 : 0.35;
-  drawWeb(ctx, view, game.field.ringCount);
+  theme.drawWeb(ctx, view, webLayout(view, field.ringCount));
   ctx.globalAlpha = 1;
-  if (inGame) {
-    drawFlies(ctx, view, game.field.flies, game.field.ringCount);
-    const pack = game.field.bonus.package;
-    if (pack) drawBonusPackage(ctx, view, pack, game.field.ringCount, time);
-    const { notice } = game.field.bonus;
-    if (notice) drawBonusNotice(ctx, view, notice);
-    drawSpiders(ctx, view, game.field);
+  if (!inGame) return;
+
+  field.flies.forEach((fly, index) => {
+    if (fly.collected) return;
+    const at = toScreen(view, ringPoint(fly.ring, field.ringCount, fly.angle));
+    theme.drawFly(ctx, at, FLY_SIZE * view.unit, index, time);
+  });
+  const { package: pack, notice } = field.bonus;
+  if (pack) {
+    const at = toScreen(view, ringPoint(pack.ring, field.ringCount, pack.angle));
+    theme.drawBonusPackage(ctx, at, PACKAGE_SIZE * view.unit, pack.kind, time);
+  }
+  if (notice) {
+    const opacity = Math.min(1, notice.timeLeft / NOTICE_FADE_TIME);
+    theme.drawBonusNotice(ctx, view, NOTICE_LINES[notice.kind], notice.kind, opacity);
   }
 
+  const enemyRole: SpiderRole = field.bonus.slowdownLeft > 0 ? "slowedEnemy" : "enemy";
+  for (const enemy of field.enemies) drawSpider(ctx, view, field, enemy, enemyRole, renderer);
   if (game.screen.name === "crash") {
-    const at = spiderPosition(game.field.player, game.field.ringCount);
-    drawCrash(ctx, view, at, 1 - game.screen.timeLeft / CRASH_DURATION);
+    const at = toScreen(view, spiderPosition(field.player, field.ringCount));
+    theme.drawCrash(ctx, at, SPIDER_SIZE * view.unit, 1 - game.screen.timeLeft / CRASH_DURATION);
+  } else {
+    drawSpider(ctx, view, field, field.player, "player", renderer);
   }
-  if (inGame) drawHud(ctx, view, game);
+
+  const { score, round, lives } = game.session;
+  theme.drawHud(ctx, view, { score, round, lives });
 }
 
-/** An expanding ring around the player; the real crash effect comes with the themes. */
-function drawCrash(ctx: CanvasRenderingContext2D, view: View, at: Point, progress: number): void {
-  ctx.save();
-  ctx.strokeStyle = CRASH_COLOR;
-  ctx.shadowColor = CRASH_COLOR;
-  ctx.shadowBlur = 16;
-  ctx.globalAlpha = 1 - progress;
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.arc(view.cx + at.x * view.unit, view.cy + at.y * view.unit, view.unit * (0.03 + 0.25 * progress), 0, Math.PI * 2);
-  ctx.stroke();
-  ctx.restore();
+function drawSpider(
+  ctx: CanvasRenderingContext2D,
+  view: View,
+  field: Field,
+  spider: Spider,
+  role: SpiderRole,
+  { theme, legs }: Renderer,
+): void {
+  const at = toScreen(view, spiderPosition(spider, field.ringCount));
+  const size = SPIDER_SIZE * view.unit;
+  theme.drawSpider(ctx, { at, heading: heading(spider), size, legPhase: legs.phase(spider, at, size), role });
 }
 
-function drawHud(ctx: CanvasRenderingContext2D, view: View, game: Game): void {
-  const { session } = game;
-  const size = Math.max(12, Math.round(view.unit * 0.06));
-  const margin = size;
-  ctx.save();
-  ctx.fillStyle = HUD_COLOR;
-  ctx.shadowColor = "#4fe3ff";
-  ctx.shadowBlur = 8;
-  ctx.font = `600 ${size}px system-ui, sans-serif`;
-  ctx.textBaseline = "top";
-
-  ctx.textAlign = "left";
-  ctx.fillText(`SKÓRE ${session.score}`, margin, margin);
-  ctx.fillText(`KOLO ${session.round}`, margin, margin + size * 1.4);
-
-  // Leaves room in the top right corner for the pause button.
-  ctx.textAlign = "right";
-  ctx.fillText(`ŽIVOTY ${session.lives}`, view.width - margin * 4, margin);
-  ctx.restore();
+/** Tangent to the ring in the direction of travel; during a climb, along the spoke. */
+function heading(spider: Spider): number {
+  if (spider.crossing) return spider.angle + (spider.crossing.to > spider.crossing.from ? 0 : Math.PI);
+  return spider.angle + (spider.direction * Math.PI) / 2;
 }

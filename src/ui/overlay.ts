@@ -5,6 +5,7 @@
 import type { Command, Game } from "../game/game";
 import { webGrowsAfter } from "../game/progression";
 import type { ScreenName } from "../game/screens";
+import type { Theme } from "../themes/theme";
 
 type Button = { label: string; command: Command };
 type Panel = { title: string; lines?: string[]; buttons: Button[] };
@@ -129,4 +130,10 @@ function renderPanel(panel: HTMLElement, content: Panel | null, onCommand: (comm
   }
   // Focus the first button so the keyboard works without reaching for the mouse.
   panel.querySelector("button")?.focus({ preventScroll: true });
+}
+
+/** Hands the theme's font and menu colours to the stylesheet as CSS variables. */
+export function applyMenuTheme(root: HTMLElement, theme: Theme): void {
+  root.style.setProperty("--menu-font", theme.fontFamily);
+  for (const [name, value] of Object.entries(theme.menu)) root.style.setProperty(`--menu-${name}`, value);
 }
