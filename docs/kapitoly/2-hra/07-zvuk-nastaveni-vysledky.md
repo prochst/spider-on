@@ -19,6 +19,8 @@ Viz [prompty/2-hra/07-zvuk-nastaveni-vysledky.md](../../prompty/2-hra/07-zvuk-na
 - **Obrazovky.** Nastavení je HTML formulář (pole se jménem, výběr vzhledu, přepínač zvuku), takže psaní, fokus a čtečky obrazovky řeší prohlížeč. Výběr vzhledu má zatím jen Neon, Čmáranice se do seznamu jen přidá. Výsledky jsou tabulka s pořadím, jménem, skóre, kolem a datem ve formátu „26. 10. 2026“.
 - **Ověření v prohlížeči** skriptem: jméno se ořízne, prázdné se vrátí na předchozí, nastavení přežije obnovení stránky, po třech srážkách se hra zapíše na 1. místo, úvod ukáže nejlepší skóre. Počet vytvořených oscilátorů ukázal, že zvuky hrají (moucha 1, srážka 1, konec hry 4) a že po vypnutí zvuku nehraje nic.
 
+- **Úprava po ručním testu.** Uživatel potvrdil, že zvuky zní ve správnou chvíli, ale zvuk mouchy mu zněl příliš vysoko a „kovově“. Kovový nádech dělala obdélníková vlna (square), která má hodně vyšších harmonických. Agent ji vyměnil za trojúhelníkovou (triangle), která zní měkce, a tón snížil o oktávu (z 1320–1760 Hz na 660–880 Hz). Trojúhelníková vlna je při stejné hlasitosti tišší, proto agent hlasitost mírně zvedl. Protože zvuky jsou data, byla to změna jednoho řádku.
+
 ## Kde se agent spletl
 
 - **Tabulka se na telefon nevešla.** Deset řádků s nadpisem a tlačítkem bylo na telefonu na šířku (390 px) o 40 px vyšší než obrazovka a tlačítko Zpět bylo uříznuté. Agent přidal posouvání panelu jako pojistku a pro nízké obrazovky zmenšil okraje, nadpis a řádky. Teď se vejde celá.
@@ -36,7 +38,7 @@ Viz [prompty/2-hra/07-zvuk-nastaveni-vysledky.md](../../prompty/2-hra/07-zvuk-na
 - Nové soubory: 6 v `src/` (tabulka, nastavení, 2 testy, úložiště, zvuk), změněno 6.
 - Testy: 148 (19 nových), všechny procházejí.
 - Velikost sestavené hry: 30,6 kB JavaScriptu (11,9 kB po kompresi).
-- Iterace: jedna úprava vzhledu po snímcích (tabulka na telefonu, šířka výběru).
+- Iterace: jedna úprava vzhledu po snímcích (tabulka na telefonu, šířka výběru) a jedna úprava zvuku mouchy po ručním testu.
 
 ## Poučení
 
