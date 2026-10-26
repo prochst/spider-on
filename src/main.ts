@@ -1,6 +1,7 @@
 // Wires the pure game logic to the browser: the fixed-step loop, the canvas,
 // the menus and the keyboard.
 
+import { createSound } from "./audio/sound";
 import { FIXED_STEP } from "./game/config";
 import {
   type Command,
@@ -11,6 +12,8 @@ import {
   steerToward,
   update,
 } from "./game/game";
+import { addScore } from "./game/scores";
+import type { Settings } from "./game/settings";
 import { planSteps } from "./game/fixedStep";
 import { cancelEvent, confirmEvent } from "./game/screens";
 import { type KeyCommand, listenToKeyboard } from "./input/keyboard";
@@ -18,8 +21,10 @@ import { listenToTouch } from "./input/touch";
 import { createLegAnimator } from "./render/legs";
 import { drawScene, type Renderer } from "./render/scene";
 import { createView, type View } from "./render/view";
+import { loadScores, loadSettings, saveScores, saveSettings, today } from "./storage/storage";
 import { neon } from "./themes/neon";
-import { applyMenuTheme, createOverlay } from "./ui/overlay";
+import type { Theme } from "./themes/theme";
+import { applyMenuTheme, createOverlay, type MenuData } from "./ui/overlay";
 import "./assets/fonts/chakra-petch/chakra-petch.css";
 import "./ui/overlay.css";
 
@@ -70,13 +75,57 @@ const touch = listenToTouch(canvas, {
 
 uiRoot.classList.toggle("touch", touchControls);
 
-// Neon is the only theme until the settings can choose one (chapter 2.7).
-const renderer: Renderer = { theme: neon, legs: createLegAnimator(), touch };
-applyMenuTheme(uiRoot, renderer.theme);
-// The canvas does not ask for web fonts by itself, so load the HUD weight up
-// front; the Czech letters make the browser fetch the latin-ext part as well.
-void document.fonts.load(`700 16px ${renderer.theme.fontFamily}`, "SKÓRE ŽIVOTY ĚŠČŘŮ");
-const overlay = createOverlay(uiRoot, send);
+// Čmáranice joins this list later (spec chapter 14).
+const THEMES: readonly Theme[] = [neon];
+const themeById = (id: string) => THEMES.find((theme) => theme.id === id) ?? neon;
+
+const menu: MenuData = {
+  settings: loadSettings(THEMES.map((theme) => theme.id)),
+  scores: loadScores(),
+  lastRank: null,
+  themes: THEMES.map(({ id, name }) => ({ id, name })),
+};
+const sound = createSound(menu.settings.sound);
+// Browsers allow audio only after a gesture; capture sees it before any handler can stop it.
+for (const type of ["pointerdown", "keydown"]) window.addEventListener(type, () => sound.unlock(), { capture: true });
+
+const renderer: Renderer = { theme: themeById(menu.settings.themeId), legs: createLegAnimator(), touch };
+useTheme(renderer.theme);
+
+function useTheme(theme: Theme): void {
+  renderer.theme = theme;
+  applyMenuTheme(uiRoot, theme);
+  // The canvas does not ask for web fonts by itself, so load the HUD weight up
+  // front; the Czech letters make the browser fetch the latin-ext part as well.
+  void document.fonts.load(`700 16px ${theme.fontFamily}`, "SKÓRE ŽIVOTY ĚŠČŘŮ");
+}
+
+function changeSettings(change: Partial<Settings>): void {
+  menu.settings = { ...menu.settings, ...change };
+  saveSettings(menu.settings);
+  sound.enabled = menu.settings.sound;
+  if (change.themeId) useTheme(themeById(change.themeId));
+}
+
+const overlay = createOverlay(uiRoot, () => menu, { command: send, settings: changeSettings });
+
+/** Plays the sounds of the last steps and records a finished game in the score table. */
+function handleEvents(): void {
+  // Several flies in one frame still make one sound.
+  for (const event of new Set(game.events)) {
+    sound.play(event);
+    if (event === "gameOver") recordGame();
+  }
+  game.events.length = 0;
+}
+
+function recordGame(): void {
+  const { score, round } = game.session;
+  const { table, rank } = addScore(menu.scores, { name: menu.settings.name, score, round, date: today() });
+  menu.scores = table;
+  menu.lastRank = rank;
+  if (rank !== null) saveScores(table);
+}
 
 function send(command: Command): void {
   if (dispatch(game, command)) overlay.sync(game);
@@ -157,6 +206,8 @@ function frame(now: number): void {
   const plan = planSteps(remainder, frameTime);
   remainder = plan.remainder;
   for (let i = 0; i < plan.steps; i++) update(game, FIXED_STEP);
+  // The debug crash and other commands also add events, so they are handled once per frame.
+  handleEvents();
 
   // The crash animation ends on its own, so the menu may need to change after an update.
   overlay.sync(game);

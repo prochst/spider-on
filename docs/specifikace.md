@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.14. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.15. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -108,8 +108,10 @@ Hra rozlišuje **číslo kola** (počítá se od 1 a jen roste, používá se pr
 
 ## 10. Hráč a tabulka výsledků
 
-- V **Nastavení** si hráč zadá jméno (1 až 16 znaků). Výchozí jméno je „Hráč“.
+- V **Nastavení** si hráč zadá jméno (1 až 16 znaků). Výchozí jméno je „Hráč“. Mezery na začátku a na konci se odříznou. Prázdné jméno se neuloží a platí předchozí.
 - **Tabulka výsledků** ukazuje 10 nejlepších her: pořadí, jméno, skóre, dosažené kolo a datum.
+- Hra se do tabulky zapíše na konci hry pod jménem, které je v tu chvíli v Nastavení. Zapíše se, jen když má skóre větší než 0 a vejde se mezi 10 nejlepších. Při stejném skóre je výš starší výsledek, nový ho musí překonat.
+- Hra, kterou hráč ukončí volbou Zpět do menu, se do tabulky nezapisuje.
 - Ve verzi 1 se tabulka ukládá v zařízení (v prohlížeči `localStorage`). Když uložení selže, hra funguje dál bez něj. Společná online tabulka pro všechny hráče je mimo rozsah verze 1.
 
 ## 11. Ovládání
@@ -141,18 +143,20 @@ Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do poz
 
 ## 12. Obrazovky
 
-1. **Úvod**: název hry, tlačítka Hrát, Výsledky a Nastavení, nejlepší skóre.
-2. **Nastavení**: jméno hráče, šablona vzhledu, zvuk zapnutý/vypnutý.
+1. **Úvod**: název hry, tlačítka Hrát, Výsledky a Nastavení, nejlepší skóre (když tabulka není prázdná).
+2. **Nastavení**: jméno hráče, šablona vzhledu, zvuk zapnutý/vypnutý. Každá změna platí a uloží se hned, tlačítko Zpět jen zavře obrazovku.
 3. **Výsledky**: tabulka 10 nejlepších her (kapitola 10).
 4. **Hra**: pavučina a HUD se skóre, číslem kola a životy.
 5. **Kolo dokončeno**: skóre za kolo, bonus, celkové skóre, informace o další ploše, tlačítko Další kolo.
 6. **Pauza**: Pokračovat, Nastavení, Zpět do menu.
-7. **Konec hry**: skóre, umístění v tabulce výsledků, Hrát znovu, Zpět do menu.
+7. **Konec hry**: skóre, dosažené kolo, umístění v tabulce výsledků (nebo informace, že se do ní hra nevešla), Hrát znovu, Zpět do menu.
 
 ## 13. Zvuk
 
 - Krátké syntetizované zvuky přes Web Audio API, bez zvukových souborů: sebrání mouchy, sebrání balíčku, přelezení kruhu, srážka, dokončení kola, konec hry.
-- Zvuk se spustí až po první interakci hráče (požadavek prohlížečů). Volba zvuku se pamatuje.
+- Zvuk přelezení kruhu zazní, když pavouk na přechodovém vlákně začne lézt na další kruh (i při pokračování o další kruh).
+- Zvuk mouchy je tichý a krátký, protože zní nejčastěji.
+- Zvuk se spustí až po první interakci hráče (požadavek prohlížečů). Výchozí stav je zapnuto. Volba zvuku se pamatuje.
 
 ## 14. Šablony vzhledu
 

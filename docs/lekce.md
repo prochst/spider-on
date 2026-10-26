@@ -24,3 +24,6 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **Rozložení zkoušej na víc velikostech obrazovky.** Ovladače, které na telefonu seděly, byly na tabletu obří. Odhalil to až druhý snímek. ([kapitola 2.6](kapitoly/2-hra/06-dotykove-ovladani.md))
 - **Emulace dotyku nestačí.** Ověří, že gesta dojdou do hry, ale jestli se dobře hraje, pozná jen člověk s telefonem v ruce. ([kapitola 2.6](kapitoly/2-hra/06-dotykove-ovladani.md))
 - **Polohu prvků odvozuj od sousedů, ne od okraje obrazovky.** Ovladače uprostřed pevného pruhu u okraje seděly na tabletu, na telefonu se lepily k okraji. Uprostřed mezi okrajem a pavučinou sedí všude. ([kapitola 2.6](kapitoly/2-hra/06-dotykove-ovladani.md))
+- **Okrajové případy rozhodni ve specifikaci.** Stejné skóre, nulové skóre, hra ukončená přes menu: specifikace o nich mlčela. Agent je rozhodl a zapsal, takže je člověk vidí a může změnit. ([kapitola 2.7](kapitoly/2-hra/07-zvuk-nastaveni-vysledky.md))
+- **Uložená data čti jako cizí vstup.** To, co hra uložila v minulé verzi, nemusí sedět na dnešní kód. ([kapitola 2.7](kapitoly/2-hra/07-zvuk-nastaveni-vysledky.md))
+- **Ať logika hlásí události, ne přehrává zvuky.** Seznam „co se stalo“ udrží logiku čistou a dá se testovat. ([kapitola 2.7](kapitoly/2-hra/07-zvuk-nastaveni-vysledky.md))
