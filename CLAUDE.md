@@ -12,10 +12,11 @@ Arkádová hra v prohlížeči (později Android a iOS přes Capacitor): pavouk 
 - `npm ci`: instalace závislostí
 - `npm run dev`: vývojový server
 - `npm test`: unit testy (Vitest)
+- `npm run e2e`: E2E testy v prohlížeči (Playwright), samy sestaví hru a spustí `vite preview`
 - `npm run typecheck`: kontrola typů
 - `npm run build`: produkční build do `dist/`
 
-Před každým commitem musí projít `npm run typecheck`, `npm test` a `npm run build`.
+Před každým commitem musí projít `npm run typecheck`, `npm test` a `npm run build`. Při změně chování v prohlížeči (vstup, menu, rozložení, úložiště) spusť i `npm run e2e`.
 
 ## Architektura
 
@@ -26,6 +27,7 @@ Před každým commitem musí projít `npm run typecheck`, `npm test` a `npm run
 - `src/ui/`: menu a překryvné obrazovky jako HTML nad Canvasem (fokus, klávesnice a přístupnost řeší prohlížeč).
 - `src/input/`, `src/audio/`: vstup (klávesnice, dotyk) a zvuk (Web Audio).
 - `src/storage/`: nastavení a tabulka výsledků v `localStorage`. Když úložiště selže, hra běží dál bez něj.
+- `e2e/`: E2E testy (Playwright) proti produkčnímu buildu, projekty `desktop` (1280×800) a `phone` (844×390 s dotykem). Stav hry čtou přes `?debug` a `window.spiderOn`, dotyk posílají přes CDP (`e2e/touch.ts`).
 - `src/main.ts`: spojuje vše dohromady a řídí herní smyčku s pevným krokem 1/120 s.
 - Žádný herní framework. Nové závislosti jen po dohodě.
 
