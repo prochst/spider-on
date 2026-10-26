@@ -23,3 +23,4 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **U dotyku si nech dopsat čísla do specifikace.** „Tah“ a „klepnutí“ znějí jasně, dokud se nemusí převést na pixely a sekundy. ([kapitola 2.6](kapitoly/2-hra/06-dotykove-ovladani.md))
 - **Rozložení zkoušej na víc velikostech obrazovky.** Ovladače, které na telefonu seděly, byly na tabletu obří. Odhalil to až druhý snímek. ([kapitola 2.6](kapitoly/2-hra/06-dotykove-ovladani.md))
 - **Emulace dotyku nestačí.** Ověří, že gesta dojdou do hry, ale jestli se dobře hraje, pozná jen člověk s telefonem v ruce. ([kapitola 2.6](kapitoly/2-hra/06-dotykove-ovladani.md))
+- **Polohu prvků odvozuj od sousedů, ne od okraje obrazovky.** Ovladače uprostřed pevného pruhu u okraje seděly na tabletu, na telefonu se lepily k okraji. Uprostřed mezi okrajem a pavučinou sedí všude. ([kapitola 2.6](kapitoly/2-hra/06-dotykove-ovladani.md))

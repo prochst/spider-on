@@ -11,6 +11,8 @@ const POINTS_PER_RING = 240;
 /** Plain spokes run from near the centre to just past the outer ring. */
 const SPOKE_INNER = 0.06;
 const SPOKE_OUTER = 1.02;
+/** How far from the centre the web reaches, in units of R: the tips of the plain spokes. */
+export const WEB_EDGE = SPOKE_OUTER;
 
 export function toScreen(view: View, p: Point): Px {
   return { x: view.cx + p.x * view.unit, y: view.cy + p.y * view.unit };

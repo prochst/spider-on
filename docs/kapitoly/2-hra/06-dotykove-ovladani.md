@@ -21,6 +21,8 @@ Viz [prompty/2-hra/06-dotykove-ovladani.md](../../prompty/2-hra/06-dotykove-ovla
 - **Na výšku** CSS ukáže neprůhlednou výzvu „Otoč zařízení na šířku“ s otáčejícím se telefonem a hra se pozastaví. Uživatelům s omezeným pohybem se telefon neotáčí.
 - **Testy:** 4 pro gesta, 2 pro rozložení (bez dotyku žádné ovladače, s dotykem se ovladače nepřekrývají s pavučinou na telefonu i tabletu). Celé ovládání agent ověřil v prohlížeči s emulací dotyku: klepnutí spustí kolo, tah doleva u pravého vlákna zapamatuje „dovnitř“, plyn zrychlí, otočení na výšku hru pozastaví.
 
+- **Úprava po ručním testu.** Na telefonu ovladače seděly u okraje a níž, kde agent čekal palce, a kulatý touchpad nevypadal jako touchpad. Uživatel chtěl ovladače svisle uprostřed, vodorovně uprostřed mezi okrajem a pavučinou, a touchpad jako větší čtverec se šipkami. Agent to nejdřív zapsal do specifikace (verze 0.14). Pozice se teď počítá od okraje pavučiny: na telefonu, kde pavučina vyplní výšku a po stranách zůstanou široké pruhy, se ovladače posunuly blíž ke středu. Okraj pavučiny (konce vedlejších vláken) je jedna konstanta v `layout.ts`, kterou používá kreslení pavučiny, rozložení i test. Šipky na touchpadu ukazují jen čtyři směry přechodových vláken, protože jiný tah hra nepoužije.
+
 ## Kde se agent spletl
 
 - **Uživatel testoval nesloučenou verzi.** „Test proběhl OK“ přišel, když pull request kapitoly 2.5 ještě nebyl sloučený, takže na webu žádný neon být nemohl. Agent na to upozornil a s kapitolou 2.6 počkal na sloučení, aby se dvě kapitoly nesmíchaly v jednom pull requestu. Stejná situace jako v kapitole 2.4: říkat, kde je změna vidět, je potřeba opakovaně.
@@ -33,12 +35,13 @@ Viz [prompty/2-hra/06-dotykove-ovladani.md](../../prompty/2-hra/06-dotykove-ovla
 
 - **Hraní na skutečném telefonu.** Emulace v prohlížeči ověří, že gesta dojdou do hry, ale ne, jestli se palcem dobře míří, jestli 24 px není moc nebo málo a jestli ovladače nejsou příliš nízko. Prahy jsou laditelné a uživatel je posoudí po sloučení.
 - **Rozložení na tabletu.** Agent volil omezení na 190 px od oka podle snímku. Uživatel ho může změnit.
+- **Ruční test na telefonu** přinesl změnu, kterou emulace odhalit nemohla: kam ovladače patří a jak má touchpad vypadat, aby ho hráč poznal. Agent umístil ovladače tam, kde „by měly být palce“, ale bez telefonu v ruce to byl jen odhad.
 
 ## Metriky
 
 - Nové soubory: 5 v `src/` (gesta, dotyk, kresba ovladačů, 2 testy), změněno 12 souborů.
-- Testy: 128 (6 nových), všechny procházejí.
-- Iterace: tři opravy po snímcích z emulace (HUD, výzva na výšku, tablet).
+- Testy: 129 (7 nových, z toho 1 po ručním testu), všechny procházejí.
+- Iterace: tři opravy po snímcích z emulace (HUD, výzva na výšku, tablet) a jedna úprava po ručním testu na telefonu (poloha a tvar ovladačů).
 
 ## Poučení
 
