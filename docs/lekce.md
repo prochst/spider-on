@@ -27,3 +27,4 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **Okrajové případy rozhodni ve specifikaci.** Stejné skóre, nulové skóre, hra ukončená přes menu: specifikace o nich mlčela. Agent je rozhodl a zapsal, takže je člověk vidí a může změnit. ([kapitola 2.7](kapitoly/2-hra/07-zvuk-nastaveni-vysledky.md))
 - **Uložená data čti jako cizí vstup.** To, co hra uložila v minulé verzi, nemusí sedět na dnešní kód. ([kapitola 2.7](kapitoly/2-hra/07-zvuk-nastaveni-vysledky.md))
 - **Ať logika hlásí události, ne přehrává zvuky.** Seznam „co se stalo“ udrží logiku čistou a dá se testovat. ([kapitola 2.7](kapitoly/2-hra/07-zvuk-nastaveni-vysledky.md))
+- **Zvuk popisuj slovy a nech agenta přeložit je na parametry.** „Hlubší a méně kovový“ stačilo: kovový zvuk dělá obdélníková vlna, hloubku výška tónu. ([kapitola 2.7](kapitoly/2-hra/07-zvuk-nastaveni-vysledky.md))

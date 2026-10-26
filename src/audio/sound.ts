@@ -17,9 +17,10 @@ type Tone = {
   volume: number;
 };
 
-// The fly is the most frequent sound, so it is the quietest and shortest.
+// The fly is the most frequent sound, so it is the quietest and shortest. A
+// triangle wave an octave lower keeps it soft; the square wave sounded metallic.
 const SOUNDS: Record<GameEvent, readonly Tone[]> = {
-  fly: [{ wave: "square", from: 1320, to: 1760, at: 0, length: 0.05, volume: 0.05 }],
+  fly: [{ wave: "triangle", from: 660, to: 880, at: 0, length: 0.06, volume: 0.1 }],
   bonus: [660, 880, 1320].map((from, i) => ({ wave: "triangle", from, at: i * 0.07, length: 0.12, volume: 0.2 })),
   climb: [{ wave: "sine", from: 260, to: 520, at: 0, length: 0.09, volume: 0.15 }],
   crash: [
