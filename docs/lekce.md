@@ -33,3 +33,5 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **Ověř, že test umí selhat.** Schválně rozbij hru a sleduj, jestli test zčervená. ([kapitola 3.1](kapitoly/3-web/01-e2e-testy.md))
 - **Čísla v zadání porovnej se specifikací.** „Kolo 6, tři pomalí“ neplatilo, tři pomalí jsou až v kole 7. Agent se zeptal dřív, než to naprogramoval. ([kapitola 2.8](kapitoly/2-hra/08-uroven-obtiznosti.md))
 - **Nový ovládací prvek vyzkoušej klávesnicí.** Šipky pro řízení pavouka zablokovaly výběr v rozbalovacím seznamu. ([kapitola 2.8](kapitoly/2-hra/08-uroven-obtiznosti.md))
+- **Test, který čeká na krátký okamžik, se musí dívat často.** `expect.poll` prodlužuje pauzy mezi pohledy a rychlého pavouka propásl. Tři zelené běhy po sobě nestabilitu neodhalily. ([kapitola 2.8](kapitoly/2-hra/08-uroven-obtiznosti.md))
+- **Na snímcích kontroluj i otevřené stavy.** Zavřený seznam vypadal neonově, rozbalený byl bílý. Prvky, které kreslí prohlížeč, šablonu samy neposlouchají. ([kapitola 2.8](kapitoly/2-hra/08-uroven-obtiznosti.md))

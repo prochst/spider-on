@@ -150,9 +150,50 @@
   border-radius: 0.4rem;
 }
 
-.settings select option,
-.difficulty select option {
-  color: initial;
+/*
+ * The open list of a drop-down follows the theme too. Browsers that support
+ * customizable selects (appearance: base-select) let the whole list be
+ * styled; the others take at least the colours of the options.
+ */
+#ui select option {
+  color: var(--menu-text, #c9f6ff);
+  background: var(--menu-backdrop, #07060f);
+}
+
+@supports (appearance: base-select) {
+  #ui select,
+  #ui select::picker(select) {
+    appearance: base-select;
+  }
+
+  #ui select::picker-icon {
+    color: var(--menu-accent, #ff6ad5);
+  }
+
+  #ui select::picker(select) {
+    margin-top: 0.25rem;
+    padding: 0.25rem;
+    color: var(--menu-text, #c9f6ff);
+    background: var(--menu-backdrop, #07060f);
+    border: 1px solid var(--menu-border, rgba(120, 235, 255, 0.5));
+    border-radius: 0.4rem;
+    box-shadow: 0 0 18px color-mix(in srgb, var(--menu-glow, #4fe3ff) 35%, transparent);
+  }
+
+  #ui select option {
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.3rem;
+  }
+
+  #ui select option:hover,
+  #ui select option:focus-visible {
+    outline: none;
+    background: color-mix(in srgb, var(--menu-accent, #ff6ad5) 18%, transparent);
+  }
+
+  #ui select option:checked {
+    color: var(--menu-accent, #ff6ad5);
+  }
 }
 
 .settings input[type="checkbox"] {

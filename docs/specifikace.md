@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.16. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.17. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -174,7 +174,7 @@ Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do poz
 - Vzhled je oddělený od pravidel. Herní logika zná jen pozice, směry a stavy, nic neví o barvách ani tvarech.
 - Šablona definuje paletu, písmo a kreslicí funkce pro: pozadí, pavučinu, přechodová vlákna, mouchu, bonusové balíčky (každý obsah zvlášť), zprávu o získaném bonusu, hráčova pavouka, nepřátelského pavouka, zpomaleného nepřítele, efekt srážky, HUD a dotykové ovládání.
 - Šablona dostává už spočítané pozice v pixelech (body kruhů, konce vláken, místo a natočení pavouka, fázi kroku nohou) a čísla do HUD. Sama nic nepočítá z pravidel hry, takže nová šablona nemůže pravidla rozbít. Velikosti pavouků, much a balíčků jsou pro všechny šablony stejné, aby vzhled odpovídal srážkám.
-- Šablona určuje i barvy a písmo menu nad herní plochou.
+- Šablona určuje i barvy a písmo menu nad herní plochou, včetně rozbalených seznamů (úroveň obtížnosti, vzhled).
 - Výchozí šablona je **Neon** podle náhledu stylů z fáze 1: tmavé pozadí s fialovým oparem, azurové svítící kruhy, růžová přechodová vlákna, zlaté mouchy jako světlušky, bílo-azurový hráč, růžoví nepřátelé, fialově zpomalení nepřátelé. Srážka je bílý kruh s jiskrami a hráčův pavouk během ní zmizí. Písmo **Chakra Petch** (licence SIL OFL 1.1) je přibalené ve hře, aby fungovala i offline a v mobilních aplikacích. Dotykové ovládání šablona dostane v kapitole o ovládání.
 - Druhá šablona **Čmáranice** (tužka na čtverečkovaném papíře) přijde později jako ukázka přidání šablony.
 - Šablona se vybírá v Nastavení. Volba se pamatuje.
@@ -210,3 +210,4 @@ Další rozhodnutí uživatele:
 - Verze 0.11: po ručním testu balíčků (dočasně od 1. kola) se balíčky objevují od 4. kola místo od 6. Začínají tak spolu s větší pavučinou o 4 kruzích.
 - Verze 0.14: po ručním testu na telefonu jsou dotykové ovladače svisle uprostřed obrazovky a vodorovně uprostřed mezi okrajem a pavučinou. Touchpad je větší čtverec se šipkami do směrů přechodových vláken.
 - Verze 0.16: po ručním testu přibyla v úvodním menu volba Úroveň obtížnosti. Lehká začíná 1. kolem, střední 7. kolem (4 kruhy, 3 pomalí nepřátelé), těžká 14. kolem (5 kruhů, 3 rychlí nepřátelé). Úroveň se zapisuje do tabulky výsledků.
+- Verze 0.17: po ručním testu se rozbalený seznam úrovní (a výběr vzhledu) kreslí v barvách šablony, ne bíle podle prohlížeče.

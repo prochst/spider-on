@@ -60,13 +60,19 @@ export function listenToKeyboard(handlers: KeyboardHandlers, debug: boolean): vo
 
 function commandFor(event: KeyboardEvent, debug: boolean): KeyCommand | null {
   // Letters typed into a text field (the player name) are not shortcuts, and
-  // a drop-down list needs the arrows and Enter for choosing its value.
-  if (event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement) {
-    return event.code === "Escape" ? "cancel" : null;
+  // a drop-down list needs the arrows and Enter for choosing its value. In an
+  // open styled list (appearance: base-select) the keys go to the option itself.
+  if (event.target instanceof HTMLInputElement || isInDropDown(event.target)) {
+    // Escape in an open list only closes the list, not the whole menu.
+    return event.code === "Escape" && !(event.target instanceof HTMLOptionElement) ? "cancel" : null;
   }
   const command = COMMAND_KEYS[event.code] ?? (debug ? DEBUG_KEYS[event.code] : undefined) ?? null;
   // A focused menu button already reacts to Enter and space by itself;
   // handling the key here as well would fire the action twice.
   if (command === "confirm" && event.target instanceof HTMLButtonElement) return null;
   return command;
+}
+
+function isInDropDown(target: EventTarget | null): boolean {
+  return target instanceof Element && target.closest("select") !== null;
 }
