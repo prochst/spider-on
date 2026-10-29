@@ -7,7 +7,7 @@ import type { Command, Game } from "../game/game";
 import { webGrowsAfter } from "../game/progression";
 import { bestScore, type ScoreEntry } from "../game/scores";
 import type { ScreenName } from "../game/screens";
-import { cleanName, type Settings } from "../game/settings";
+import { cleanName, DIFFICULTIES, type Difficulty, type Settings } from "../game/settings";
 import type { Theme } from "../themes/theme";
 
 /** What the menus show besides the game itself; main.ts owns it. */
@@ -44,6 +44,7 @@ function panelFor(game: Game, data: MenuData, handlers: OverlayHandlers): Panel 
       return {
         title: "SPIDER ON",
         lines: best === null ? [] : [`Nejlepší skóre ${best}`],
+        body: difficultyChoice(data, handlers),
         buttons: [
           { label: "Hrát", command: { type: "play" } },
           { label: "Výsledky", command: { type: "openScores" } },
@@ -186,7 +187,7 @@ function scoreTable(scores: readonly ScoreEntry[]): HTMLElement {
   const table = document.createElement("table");
   table.className = "scores";
   const head = table.createTHead().insertRow();
-  for (const label of ["#", "Jméno", "Skóre", "Kolo", "Datum"]) {
+  for (const label of ["#", "Jméno", "Skóre", "Úroveň", "Kolo", "Datum"]) {
     const th = document.createElement("th");
     th.textContent = label;
     head.append(th);
@@ -194,7 +195,15 @@ function scoreTable(scores: readonly ScoreEntry[]): HTMLElement {
   const body = table.createTBody();
   scores.forEach((entry, i) => {
     const row = body.insertRow();
-    for (const text of [`${i + 1}.`, entry.name, String(entry.score), String(entry.round), czechDate(entry.date)]) {
+    const cells = [
+      `${i + 1}.`,
+      entry.name,
+      String(entry.score),
+      DIFFICULTY_LABELS[entry.difficulty],
+      String(entry.round),
+      czechDate(entry.date),
+    ];
+    for (const text of cells) {
       row.insertCell().textContent = text;
     }
   });
@@ -205,6 +214,23 @@ function scoreTable(scores: readonly ScoreEntry[]): HTMLElement {
 function czechDate(date: string): string {
   const [year, month, day] = date.split("-").map(Number);
   return `${day}. ${month}. ${year}`;
+}
+
+const DIFFICULTY_LABELS: Record<Difficulty, string> = { easy: "Lehká", medium: "Střední", hard: "Těžká" };
+
+/** The difficulty setting on the title screen (spec chapters 6 and 12); it is saved like the other settings. */
+function difficultyChoice(data: MenuData, handlers: OverlayHandlers): HTMLElement {
+  const select = document.createElement("select");
+  for (const id of DIFFICULTIES) {
+    select.add(new Option(DIFFICULTY_LABELS[id], id, false, id === data.settings.difficulty));
+  }
+  select.addEventListener("change", () => {
+    const difficulty = DIFFICULTIES.find((id) => id === select.value);
+    if (difficulty) handlers.settings({ difficulty });
+  });
+  const wrapper = field("Úroveň obtížnosti", select);
+  wrapper.classList.add("difficulty");
+  return wrapper;
 }
 
 function settingsForm(data: MenuData, handlers: OverlayHandlers): HTMLElement {

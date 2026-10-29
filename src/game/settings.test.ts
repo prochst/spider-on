@@ -20,12 +20,12 @@ describe("parseSettings", () => {
   const themes = ["neon"];
 
   it("reads back saved settings", () => {
-    const saved = { name: "Standa", themeId: "neon", sound: false };
+    const saved = { name: "Standa", themeId: "neon", sound: false, difficulty: "hard" };
     expect(parseSettings(saved, themes)).toEqual(saved);
   });
 
   it("falls back to the defaults for missing or broken values", () => {
     expect(parseSettings(null, themes)).toEqual(DEFAULT_SETTINGS);
-    expect(parseSettings({ name: " ", themeId: "unknown", sound: "yes" }, themes)).toEqual(DEFAULT_SETTINGS);
+    expect(parseSettings({ name: " ", themeId: "unknown", sound: "yes", difficulty: "nightmare" }, themes)).toEqual(DEFAULT_SETTINGS);
   });
 });

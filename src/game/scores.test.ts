@@ -2,7 +2,13 @@ import { describe, expect, it } from "vitest";
 import { SCORE_TABLE_SIZE } from "./config";
 import { addScore, bestScore, parseScores, type ScoreEntry } from "./scores";
 
-const game = (score: number, name = "Hráč"): ScoreEntry => ({ name, score, round: 2, date: "2026-10-26" });
+const game = (score: number, name = "Hráč"): ScoreEntry => ({
+  name,
+  score,
+  difficulty: "easy",
+  round: 2,
+  date: "2026-10-26",
+});
 
 /** A full table with scores 1000, 900, …, 100. */
 const fullTable = () => Array.from({ length: SCORE_TABLE_SIZE }, (_, i) => game(1000 - i * 100));
@@ -56,6 +62,15 @@ describe("parseScores", () => {
   it("drops broken rows and sorts what is left", () => {
     const data = [game(100), { name: "", score: 50, round: 1, date: "2026-10-26" }, "nonsense", game(400)];
     expect(parseScores(data).map((e) => e.score)).toEqual([400, 100]);
+  });
+
+  it("reads rows saved before difficulty settings as easy games", () => {
+    const { difficulty: _, ...old } = game(300);
+    expect(parseScores([old])).toEqual([game(300)]);
+  });
+
+  it("drops rows with an unknown difficulty", () => {
+    expect(parseScores([{ ...game(300), difficulty: "nightmare" }, game(100)])).toEqual([game(100)]);
   });
 
   it("returns an empty table for anything that is not a list", () => {

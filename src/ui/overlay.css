@@ -85,8 +85,11 @@
   white-space: nowrap;
 }
 
+/* Name and difficulty are words; numbers stay aligned to the right. */
 .scores th:nth-child(2),
-.scores td:nth-child(2) {
+.scores td:nth-child(2),
+.scores th:nth-child(4),
+.scores td:nth-child(4) {
   text-align: left;
 }
 
@@ -118,22 +121,25 @@
   }
 }
 
-/* Settings form: label on the left, control on the right. */
+/* Settings form and the difficulty on the title screen: label on the left, control on the right. */
 .settings {
   display: grid;
   gap: 0.6rem;
   width: 100%;
 }
 
-.settings .field {
+.settings .field,
+.difficulty {
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
 }
 
 .settings input[type="text"],
-.settings select {
+.settings select,
+.difficulty select {
   box-sizing: border-box;
   width: 11rem;
   padding: 0.4rem 0.6rem;
@@ -144,7 +150,8 @@
   border-radius: 0.4rem;
 }
 
-.settings select option {
+.settings select option,
+.difficulty select option {
   color: initial;
 }
 
@@ -155,7 +162,8 @@
 }
 
 .settings input:focus-visible,
-.settings select:focus-visible {
+.settings select:focus-visible,
+.difficulty select:focus-visible {
   outline: 2px solid var(--menu-accent, #ff6ad5);
   outline-offset: 2px;
 }

@@ -85,6 +85,7 @@ const menu: MenuData = {
   lastRank: null,
   themes: THEMES.map(({ id, name }) => ({ id, name })),
 };
+game.difficulty = menu.settings.difficulty;
 const sound = createSound(menu.settings.sound);
 // Browsers allow audio only after a gesture; capture sees it before any handler can stop it.
 for (const type of ["pointerdown", "keydown"]) window.addEventListener(type, () => sound.unlock(), { capture: true });
@@ -104,6 +105,7 @@ function changeSettings(change: Partial<Settings>): void {
   menu.settings = { ...menu.settings, ...change };
   saveSettings(menu.settings);
   sound.enabled = menu.settings.sound;
+  game.difficulty = menu.settings.difficulty;
   if (change.themeId) useTheme(themeById(change.themeId));
 }
 
@@ -120,8 +122,9 @@ function handleEvents(): void {
 }
 
 function recordGame(): void {
-  const { score, round } = game.session;
-  const { table, rank } = addScore(menu.scores, { name: menu.settings.name, score, round, date: today() });
+  const { score, difficulty, round } = game.session;
+  const entry = { name: menu.settings.name, score, difficulty, round, date: today() };
+  const { table, rank } = addScore(menu.scores, entry);
   menu.scores = table;
   menu.lastRank = rank;
   if (rank !== null) saveScores(table);

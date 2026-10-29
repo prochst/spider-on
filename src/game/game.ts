@@ -12,6 +12,7 @@ import {
   MAX_LIVES,
   ROUND_BONUS_PER_ROUND,
   START_LIVES,
+  START_ROUND,
 } from "./config";
 import { createField, type Field, playerHitsEnemy, steerPlayer, stepField } from "./field";
 import { collectFlies, fliesLeft } from "./flies";
@@ -19,11 +20,14 @@ import { difficultyForRound, enemiesForDifficulty, ringCountForRound } from "./p
 import { type PlayerEvent, type Screen, type ScreenEvent, TITLE, tickScreen, transition } from "./screens";
 import { createRandom, type Random } from "./random";
 import { addPoints } from "./scoring";
+import type { Difficulty } from "./settings";
 import { type Turn, turnForDirection } from "./spider";
 
 /** One game from Hrát to Konec hry. */
 export type Session = {
-  /** Round number, counts from 1 and only grows (spec chapter 6). */
+  /** The difficulty setting this game was started with. */
+  difficulty: Difficulty;
+  /** Round number, starts from the round of the difficulty setting and only grows (spec chapter 6). */
   round: number;
   lives: number;
   score: number;
@@ -45,6 +49,8 @@ export type Game = {
   field: Field;
   /** Whether the player holds the throttle; the input layer keeps it current. */
   throttle: boolean;
+  /** The difficulty setting; the next Hrát starts from its round. The settings keep it current. */
+  difficulty: Difficulty;
   /** The only source of chance in the game; the same seed replays the same game. */
   random: Random;
   /** What happened since the browser layer last emptied the list. */
@@ -54,8 +60,8 @@ export type Game = {
 /** Crashes and cleared rounds are not commands: the simulation decides them in update(). */
 export type Command = PlayerEvent;
 
-export function createSession(): Session {
-  return { round: 1, lives: START_LIVES, score: 0, roundPoints: 0, roundBonus: 0 };
+export function createSession(difficulty: Difficulty = "easy"): Session {
+  return { difficulty, round: START_ROUND[difficulty], lives: START_LIVES, score: 0, roundPoints: 0, roundBonus: 0 };
 }
 
 function createRoundField(round: number, random: Random): Field {
@@ -66,7 +72,15 @@ function createRoundField(round: number, random: Random): Field {
 
 export function createGame(seed: number): Game {
   const random = createRandom(seed);
-  return { screen: TITLE, session: createSession(), field: createRoundField(1, random), throttle: false, random, events: [] };
+  return {
+    screen: TITLE,
+    session: createSession(),
+    field: createRoundField(1, random),
+    throttle: false,
+    difficulty: "easy",
+    random,
+    events: [],
+  };
 }
 
 /** Applies a command. Returns false when the current screen ignores it. */
@@ -163,7 +177,7 @@ function finishRound(game: Game): void {
 function applyEvent(game: Game, event: ScreenEvent): boolean {
   const next = transition(game.screen, event);
   if (next === game.screen) return false;
-  if (event.type === "play") game.session = createSession();
+  if (event.type === "play") game.session = createSession(game.difficulty);
   if (event.type === "nextRound") game.session.round += 1;
   if (event.type === "play" || event.type === "nextRound") {
     game.session.roundPoints = 0;
