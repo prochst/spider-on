@@ -35,3 +35,6 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **Nový ovládací prvek vyzkoušej klávesnicí.** Šipky pro řízení pavouka zablokovaly výběr v rozbalovacím seznamu. ([kapitola 2.8](kapitoly/2-hra/08-uroven-obtiznosti.md))
 - **Test, který čeká na krátký okamžik, se musí dívat často.** `expect.poll` prodlužuje pauzy mezi pohledy a rychlého pavouka propásl. Tři zelené běhy po sobě nestabilitu neodhalily. ([kapitola 2.8](kapitoly/2-hra/08-uroven-obtiznosti.md))
 - **Na snímcích kontroluj i otevřené stavy.** Zavřený seznam vypadal neonově, rozbalený byl bílý. Prvky, které kreslí prohlížeč, šablonu samy neposlouchají. ([kapitola 2.8](kapitoly/2-hra/08-uroven-obtiznosti.md))
+- **Responzivitu kontroluj na přehledu snímků.** Drobné menu na velkém monitoru bylo vidět až vedle snímku z notebooku. ([kapitola 3.2](kapitoly/3-web/02-responzivita.md))
+- **Hodnoty prostředí veď přes proměnné, které jde v testu přepsat.** Výřez iPhonu se tak dá otestovat v prohlížeči bez výřezu. ([kapitola 3.2](kapitoly/3-web/02-responzivita.md))
+- **Když rozbíjíš kód, aby test selhal, zkontroluj, že selhal test, ne sestavení.** ([kapitola 3.2](kapitoly/3-web/02-responzivita.md))

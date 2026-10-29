@@ -9,6 +9,7 @@ import { bestScore, type ScoreEntry } from "../game/scores";
 import type { ScreenName } from "../game/screens";
 import { cleanName, DIFFICULTIES, type Difficulty, type Settings } from "../game/settings";
 import type { Theme } from "../themes/theme";
+import { createFullscreenButton, fullscreenSupported } from "./fullscreen";
 
 /** What the menus show besides the game itself; main.ts owns it. */
 export type MenuData = {
@@ -126,7 +127,7 @@ export function createOverlay(root: HTMLElement, menuData: () => MenuData, handl
   const panel = document.createElement("div");
   panel.className = "panel";
   const pauseButton = document.createElement("button");
-  pauseButton.className = "pause-button";
+  pauseButton.className = "corner-button";
   pauseButton.type = "button";
   pauseButton.textContent = "II";
   pauseButton.setAttribute("aria-label", "Pauza");
@@ -139,7 +140,14 @@ export function createOverlay(root: HTMLElement, menuData: () => MenuData, handl
   rotateHint.className = "rotate-hint";
   rotateHint.setAttribute("role", "alert");
   rotateHint.innerHTML = '<span class="rotate-icon" aria-hidden="true"></span><p>Otoč zařízení na šířku</p>';
-  root.append(panel, pauseButton, rotateHint);
+  // In the same corner as pause, for the screens where the game does not run.
+  const fullscreenButton = createFullscreenButton();
+  fullscreenButton.addEventListener("click", () => {
+    // Enter would otherwise press this button again instead of the menu's main choice.
+    fullscreenButton.blur();
+    panel.querySelector("button")?.focus({ preventScroll: true });
+  });
+  root.append(panel, pauseButton, fullscreenButton, rotateHint);
 
   let shown: ScreenName | null = null;
 
@@ -148,6 +156,7 @@ export function createOverlay(root: HTMLElement, menuData: () => MenuData, handl
       if (game.screen.name === shown) return;
       shown = game.screen.name;
       pauseButton.hidden = !PAUSABLE.has(shown);
+      fullscreenButton.hidden = !pauseButton.hidden || !fullscreenSupported();
       renderPanel(panel, panelFor(game, menuData(), handlers), handlers.command);
     },
   };
