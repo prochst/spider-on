@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.15. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.16. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -77,6 +77,17 @@ Hra rozlišuje **číslo kola** (počítá se od 1 a jen roste, používá se pr
 | 9 | 3 rychlí |
 | 10 a vyšší | 3 rychlí |
 
+**Úroveň obtížnosti** si hráč vybere v úvodním menu. Určuje, kterým kolem hra začíná. Dál hra pokračuje stejně jako na lehké úrovni, jen od pozdějšího kola:
+
+| Úroveň | Začíná kolem | Plocha a nepřátelé na startu |
+| --- | --- | --- |
+| Lehká | 1 | 3 kruhy, 1 pomalý |
+| Střední | 7 | 4 kruhy, 3 pomalí |
+| Těžká | 14 | 5 kruhů, 3 rychlí |
+
+- Výchozí úroveň je lehká. Volba se pamatuje a platí i pro Hrát znovu.
+- Číslo kola se počítá od začátečního kola, takže bonus za kolo, bonusové balíčky (od 4. kola) a upozornění na větší pavučinu se řídí skutečným číslem kola. Těžší úroveň tak dává víc bodů za kolo.
+
 - Kolo končí sebráním poslední mouchy. Hra se zastaví a ukáže obrazovku **Kolo dokončeno** (kapitola 12). Další kolo začne **až na pokyn hráče**, s plnou pavučinou much. Když hráč sebere poslední mouchu ve stejném okamžiku, kdy se srazí, platí sebrání a kolo je dokončené.
 - Při přechodu na větší plochu obrazovka Kolo dokončeno hráče upozorní, že pavučina se rozrůstá.
 
@@ -109,7 +120,7 @@ Hra rozlišuje **číslo kola** (počítá se od 1 a jen roste, používá se pr
 ## 10. Hráč a tabulka výsledků
 
 - V **Nastavení** si hráč zadá jméno (1 až 16 znaků). Výchozí jméno je „Hráč“. Mezery na začátku a na konci se odříznou. Prázdné jméno se neuloží a platí předchozí.
-- **Tabulka výsledků** ukazuje 10 nejlepších her: pořadí, jméno, skóre, dosažené kolo a datum.
+- **Tabulka výsledků** ukazuje 10 nejlepších her: pořadí, jméno, skóre, úroveň obtížnosti, dosažené kolo a datum. Všechny úrovně jsou v jedné tabulce. Výsledky uložené dřív, než hra úrovně měla, se ukážou jako lehká úroveň, protože tehdy hra vždy začínala 1. kolem.
 - Hra se do tabulky zapíše na konci hry pod jménem, které je v tu chvíli v Nastavení. Zapíše se, jen když má skóre větší než 0 a vejde se mezi 10 nejlepších. Při stejném skóre je výš starší výsledek, nový ho musí překonat.
 - Hra, kterou hráč ukončí volbou Zpět do menu, se do tabulky nezapisuje.
 - Ve verzi 1 se tabulka ukládá v zařízení (v prohlížeči `localStorage`). Když uložení selže, hra funguje dál bez něj. Společná online tabulka pro všechny hráče je mimo rozsah verze 1.
@@ -143,7 +154,7 @@ Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do poz
 
 ## 12. Obrazovky
 
-1. **Úvod**: název hry, tlačítka Hrát, Výsledky a Nastavení, nejlepší skóre (když tabulka není prázdná).
+1. **Úvod**: název hry, nejlepší skóre (když tabulka není prázdná), volba Úroveň obtížnosti (lehká, střední, těžká, kapitola 6) a tlačítka Hrát, Výsledky a Nastavení.
 2. **Nastavení**: jméno hráče, šablona vzhledu, zvuk zapnutý/vypnutý. Každá změna platí a uloží se hned, tlačítko Zpět jen zavře obrazovku.
 3. **Výsledky**: tabulka 10 nejlepších her (kapitola 10).
 4. **Hra**: pavučina a HUD se skóre, číslem kola a životy.
@@ -198,3 +209,4 @@ Další rozhodnutí uživatele:
 - Verze 0.10: nepřátelé ještě pomalejší, rozmezí 0,2× až 0,8×. Rychlí nepřátelé zrychlují pomalu s každým stupněm obtížnosti už od stupně 2, ne až od stupně 10.
 - Verze 0.11: po ručním testu balíčků (dočasně od 1. kola) se balíčky objevují od 4. kola místo od 6. Začínají tak spolu s větší pavučinou o 4 kruzích.
 - Verze 0.14: po ručním testu na telefonu jsou dotykové ovladače svisle uprostřed obrazovky a vodorovně uprostřed mezi okrajem a pavučinou. Touchpad je větší čtverec se šipkami do směrů přechodových vláken.
+- Verze 0.16: po ručním testu přibyla v úvodním menu volba Úroveň obtížnosti. Lehká začíná 1. kolem, střední 7. kolem (4 kruhy, 3 pomalí nepřátelé), těžká 14. kolem (5 kruhů, 3 rychlí nepřátelé). Úroveň se zapisuje do tabulky výsledků.

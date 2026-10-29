@@ -2,10 +2,13 @@
 // out: the browser layer adds the date and keeps the table in localStorage.
 
 import { PLAYER_NAME_MAX_LENGTH, SCORE_TABLE_SIZE } from "./config";
+import { type Difficulty, isDifficulty } from "./settings";
 
 export type ScoreEntry = {
   name: string;
   score: number;
+  /** The difficulty setting the game was played on. */
+  difficulty: Difficulty;
   round: number;
   /** Day the game ended, as YYYY-MM-DD in the player's time zone. */
   date: string;
@@ -33,10 +36,14 @@ export function bestScore(table: readonly ScoreEntry[]): number | null {
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 
-function isEntry(value: unknown): value is ScoreEntry {
+/** A saved row as it is read back: tables from before version 0.16 have no difficulty. */
+type SavedEntry = Omit<ScoreEntry, "difficulty"> & { difficulty?: Difficulty };
+
+function isEntry(value: unknown): value is SavedEntry {
   if (typeof value !== "object" || value === null) return false;
-  const { name, score, round, date } = value as Record<string, unknown>;
+  const { name, score, difficulty, round, date } = value as Record<string, unknown>;
   return (
+    (difficulty === undefined || isDifficulty(difficulty)) &&
     typeof name === "string" &&
     name.length > 0 &&
     Array.from(name).length <= PLAYER_NAME_MAX_LENGTH &&
@@ -55,7 +62,10 @@ function isEntry(value: unknown): value is ScoreEntry {
  */
 export function parseScores(data: unknown): ScoreEntry[] {
   if (!Array.isArray(data)) return [];
-  const entries = data.filter(isEntry).map(({ name, score, round, date }) => ({ name, score, round, date }));
+  // Before difficulty settings existed every game started on round 1, as easy does now.
+  const entries = data
+    .filter(isEntry)
+    .map(({ name, score, difficulty = "easy", round, date }) => ({ name, score, difficulty, round, date }));
   // Re-adding the rows one by one restores the order and the size limit.
   return entries.reduce<ScoreEntry[]>((table, entry) => addScore(table, entry).table, []);
 }

@@ -44,13 +44,21 @@ test("the throttle and a swipe work at the same time", async ({ page }) => {
   await touch.tap(PAD);
   await expectScreen(page, "playing");
 
-  const thumb = await touch.down(THROTTLE);
-  expect(await readGame(page, (game) => game.throttle)).toBe(true);
-
   // The spider starts at the bottom on the outer ring and crawls towards the
   // right gate spoke. A turn is remembered only in the last 30° before the
   // gate, so wait for it, then swipe left: towards the centre along that spoke.
-  await expect.poll(() => readGame(page, (game) => game.field.player.angle), { timeout: 10_000 }).toBeLessThan(0.4);
+  // expect.poll waits longer and longer between looks (up to a second) and
+  // can miss the zone, so the page checks on every frame instead.
+  await page.waitForFunction(
+    () => {
+      const angle = window.spiderOn?.field.player.angle ?? Math.PI;
+      return angle > 0.1 && angle < 0.45;
+    },
+    undefined,
+    { polling: "raf", timeout: 15_000 },
+  );
+  const thumb = await touch.down(THROTTLE);
+  expect(await readGame(page, (game) => game.throttle)).toBe(true);
   await touch.swipe(PAD, { x: PAD.x - 60, y: PAD.y });
   await expect
     .poll(() => readGame(page, ({ field: { player } }) => player.pending !== null || player.crossing !== null))

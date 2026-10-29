@@ -59,8 +59,11 @@ export function listenToKeyboard(handlers: KeyboardHandlers, debug: boolean): vo
 }
 
 function commandFor(event: KeyboardEvent, debug: boolean): KeyCommand | null {
-  // Letters typed into a text field (the player name) are not shortcuts.
-  if (event.target instanceof HTMLInputElement) return event.code === "Escape" ? "cancel" : null;
+  // Letters typed into a text field (the player name) are not shortcuts, and
+  // a drop-down list needs the arrows and Enter for choosing its value.
+  if (event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement) {
+    return event.code === "Escape" ? "cancel" : null;
+  }
   const command = COMMAND_KEYS[event.code] ?? (debug ? DEBUG_KEYS[event.code] : undefined) ?? null;
   // A focused menu button already reacts to Enter and space by itself;
   // handling the key here as well would fire the action twice.

@@ -9,11 +9,14 @@ import {
   MAX_LIVES,
   ROUND_BONUS_PER_ROUND,
   PLAYER_SPEED,
+  ENEMY_SLOW_FACTOR,
   START_LIVES,
   TURN_ZONE,
 } from "./config";
 import { ringRadius } from "./geometry";
-import { crash, createGame, createSession, dispatch, type Game, steer, steerToward, update } from "./game";
+import { crash, createGame, createSession, debugEatAllFlies, dispatch, type Game, steer, steerToward, update } from "./game";
+import { fastEnemyFactor } from "./progression";
+import type { Difficulty } from "./settings";
 
 function simulate(game: Game, seconds: number): void {
   const steps = Math.round(seconds / FIXED_STEP);
@@ -330,5 +333,58 @@ describe("events for the sounds", () => {
     crash(game);
     simulate(game, CRASH_DURATION);
     expect(game.events).toEqual(["crash", "crash", "gameOver"]);
+  });
+});
+
+describe("difficulty setting", () => {
+  /** What a game shows right after Hrát on the given difficulty setting. */
+  function firstRound(difficulty: Difficulty) {
+    const game = createGame(1);
+    game.difficulty = difficulty;
+    dispatch(game, { type: "play" });
+    const { session, field } = game;
+    return { round: session.round, rings: field.ringCount, enemies: field.enemies.map((enemy) => enemy.speed / PLAYER_SPEED) };
+  }
+
+  // The table from spec chapter 6, row by row.
+  const S = ENEMY_SLOW_FACTOR;
+  const F = fastEnemyFactor(9);
+  it.each([
+    ["easy", 1, 3, [S]],
+    ["medium", 7, 4, [S, S, S]],
+    ["hard", 14, 5, [F, F, F]],
+  ] as const)("%s starts on round %i with %i rings", (difficulty, round, rings, enemies) => {
+    const start = firstRound(difficulty);
+    expect(start.round).toBe(round);
+    expect(start.rings).toBe(rings);
+    expect(start.enemies).toHaveLength(enemies.length);
+    start.enemies.forEach((factor, i) => expect(factor).toBeCloseTo(enemies[i] ?? 0));
+  });
+
+  it("keeps the setting for Hrát znovu and records it in the session", () => {
+    const game = createGame(1);
+    game.difficulty = "medium";
+    dispatch(game, { type: "play" });
+    expect(game.session.difficulty).toBe("medium");
+    dispatch(game, { type: "start" });
+    for (let life = 0; life < START_LIVES; life++) {
+      if (game.screen.name === "ready") dispatch(game, { type: "start" });
+      crash(game);
+      simulate(game, CRASH_DURATION + FIXED_STEP);
+    }
+    expect(game.screen.name).toBe("gameOver");
+    dispatch(game, { type: "play" });
+    expect(game.session.round).toBe(7);
+  });
+
+  it("gives the round bonus of the real round number", () => {
+    const game = createGame(1);
+    game.difficulty = "hard";
+    dispatch(game, { type: "play" });
+    dispatch(game, { type: "start" });
+    debugEatAllFlies(game);
+    update(game, FIXED_STEP);
+    expect(game.screen.name).toBe("roundComplete");
+    expect(game.session.roundBonus).toBe(14 * ROUND_BONUS_PER_ROUND);
   });
 });

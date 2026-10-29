@@ -86,3 +86,9 @@ export const SLOWDOWN_FACTOR = 0.5;
 export const SCORE_TABLE_SIZE = 10;
 export const PLAYER_NAME_MAX_LENGTH = 16;
 export const DEFAULT_PLAYER_NAME = "Hráč";
+
+/**
+ * The round a game starts with on each difficulty setting (spec chapter 6).
+ * Medium starts on 4 rings with 3 slow enemies, hard on 5 rings with 3 fast ones.
+ */
+export const START_ROUND = { easy: 1, medium: 7, hard: 14 } as const;

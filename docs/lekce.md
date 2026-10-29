@@ -31,3 +31,5 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **E2E testy pořiď před změnami, které mají hlídat.** Rozložení, načítání a dotyk unit testy logiky nevidí. ([kapitola 3.1](kapitoly/3-web/01-e2e-testy.md))
 - **Když E2E test selže, prověř nejdřív test.** Po tahu prstem se „pustil plyn“, ale chyba byla v simulaci dotyku, ne ve hře. ([kapitola 3.1](kapitoly/3-web/01-e2e-testy.md))
 - **Ověř, že test umí selhat.** Schválně rozbij hru a sleduj, jestli test zčervená. ([kapitola 3.1](kapitoly/3-web/01-e2e-testy.md))
+- **Čísla v zadání porovnej se specifikací.** „Kolo 6, tři pomalí“ neplatilo, tři pomalí jsou až v kole 7. Agent se zeptal dřív, než to naprogramoval. ([kapitola 2.8](kapitoly/2-hra/08-uroven-obtiznosti.md))
+- **Nový ovládací prvek vyzkoušej klávesnicí.** Šipky pro řízení pavouka zablokovaly výběr v rozbalovacím seznamu. ([kapitola 2.8](kapitoly/2-hra/08-uroven-obtiznosti.md))
