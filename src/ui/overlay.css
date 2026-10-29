@@ -1,9 +1,39 @@
+/*
+ * Sizes on the screen (spec chapter 15). The menus are measured in rem, so
+ * one root size scales them all: readable on a phone, not tiny on a large
+ * monitor. The safe area is the part of the screen that a notch, rounded
+ * corners or the home bar leave free; the game reads it from these variables
+ * (main.ts), so a test can set them on a screen without a notch.
+ */
+:root {
+  font-size: clamp(16px, 2.2vmin, 32px);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --corner-gap: 0.75rem;
+  --corner-button: 2.75rem;
+}
+
+/* Never shown: main.ts measures the safe area and the room for the corner button from it. */
+.layout-probe {
+  position: fixed;
+  inset: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  padding-right: calc(var(--corner-button) + 2 * var(--corner-gap));
+  box-sizing: border-box;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 #ui {
   position: fixed;
   inset: 0;
   display: grid;
   place-items: center;
   pointer-events: none;
+  /* Menus stay clear of a notch and the home bar. */
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  box-sizing: border-box;
   /* The theme sets these variables (applyMenuTheme); the values here are only a fallback. */
   font-family: var(--menu-font, system-ui, sans-serif);
   color: var(--menu-text, #c9f6ff);
@@ -26,13 +56,13 @@
 
 /* A tall menu (the score table on a phone held sideways) scrolls instead of leaving the screen. */
 .panel {
-  max-height: calc(100dvh - 1.5rem);
+  max-height: calc(100dvh - 1.5rem - var(--safe-top) - var(--safe-bottom));
   overflow-y: auto;
   box-sizing: border-box;
 }
 
 .panel[hidden],
-.pause-button[hidden] {
+.corner-button[hidden] {
   display: none;
 }
 
@@ -209,12 +239,28 @@
   outline-offset: 2px;
 }
 
-.pause-button {
+/* Pause during the game, full screen in the menus: the two never show at the same time. */
+.corner-button {
   position: fixed;
-  top: max(0.75rem, env(safe-area-inset-top));
-  right: max(0.75rem, env(safe-area-inset-right));
-  width: 2.75rem;
-  height: 2.75rem;
+  top: calc(var(--safe-top) + var(--corner-gap));
+  right: calc(var(--safe-right) + var(--corner-gap));
+  width: var(--corner-button);
+  height: var(--corner-button);
+}
+
+.fullscreen-button {
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+
+.fullscreen-button svg {
+  width: 60%;
+  height: 60%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
 }
 
 /* Lines that apply only to the keyboard or only to touch controls. */

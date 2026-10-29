@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.17. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.18. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -162,6 +162,8 @@ Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do poz
 6. **Pauza**: Pokračovat, Nastavení, Zpět do menu.
 7. **Konec hry**: skóre, dosažené kolo, umístění v tabulce výsledků (nebo informace, že se do ní hra nevešla), Hrát znovu, Zpět do menu.
 
+**Celá obrazovka**: v pravém horním rohu je na obrazovkách menu tlačítko pro celou obrazovku. Od výzvy ke spuštění kola po konec kola je na stejném místě tlačítko pauzy, takže se nikdy nepřekrývají. Druhé stisknutí, nebo Esc, celou obrazovku ukončí. Na dotykovém zařízení hra v celé obrazovce zkusí zamknout orientaci na šířku. Prohlížeče, které celou obrazovku pro stránky nepovolují (Safari na iPhonu), tlačítko neukážou.
+
 ## 13. Zvuk
 
 - Krátké syntetizované zvuky přes Web Audio API, bez zvukových souborů: sebrání mouchy, sebrání balíčku, přelezení kruhu, srážka, dokončení kola, konec hry.
@@ -186,6 +188,8 @@ Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do poz
 - Herní logika je deterministická: náhoda se předává jako generátor se semínkem, aby šly testy opakovat.
 - Logika (`src/game/`) nesmí používat DOM, Canvas ani časovače prohlížeče. Pokrývají ji unit testy.
 - Ostré vykreslení na HiDPI displejích.
+- Hra se přizpůsobí každé velikosti okna od telefonu na šířku (640 × 360) po velký monitor (2560 × 1440). Menu roste s výškou obrazovky, aby nebylo na velkém monitoru drobné a na telefonu nepřeteklo.
+- Pavučina, HUD, ovladače, tlačítka i menu zůstávají v bezpečné oblasti displeje (safe area), mimo výřez pro kameru, zaoblené rohy a lištu domovské obrazovky.
 - Hra musí plynule běžet na běžném mobilním telefonu (cíl 60 snímků za sekundu).
 
 ## 16. Mimo rozsah verze 1
@@ -211,3 +215,4 @@ Další rozhodnutí uživatele:
 - Verze 0.14: po ručním testu na telefonu jsou dotykové ovladače svisle uprostřed obrazovky a vodorovně uprostřed mezi okrajem a pavučinou. Touchpad je větší čtverec se šipkami do směrů přechodových vláken.
 - Verze 0.16: po ručním testu přibyla v úvodním menu volba Úroveň obtížnosti. Lehká začíná 1. kolem, střední 7. kolem (4 kruhy, 3 pomalí nepřátelé), těžká 14. kolem (5 kruhů, 3 rychlí nepřátelé). Úroveň se zapisuje do tabulky výsledků.
 - Verze 0.17: po ručním testu se rozbalený seznam úrovní (a výběr vzhledu) kreslí v barvách šablony, ne bíle podle prohlížeče.
+- Verze 0.18 (kapitola 3.2): tlačítko pro celou obrazovku v rohu menu, menu se zvětšuje s obrazovkou, hra respektuje bezpečnou oblast displeje.

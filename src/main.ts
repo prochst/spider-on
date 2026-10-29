@@ -20,7 +20,7 @@ import { type KeyCommand, listenToKeyboard } from "./input/keyboard";
 import { listenToTouch } from "./input/touch";
 import { createLegAnimator } from "./render/legs";
 import { drawScene, type Renderer } from "./render/scene";
-import { createView, type View } from "./render/view";
+import { createView, type ScreenFrame, type View } from "./render/view";
 import { loadScores, loadSettings, saveScores, saveSettings, today } from "./storage/storage";
 import { neon } from "./themes/neon";
 import type { Theme } from "./themes/theme";
@@ -46,7 +46,11 @@ const params = new URLSearchParams(window.location.search);
 const seed = debug && params.has("seed") ? Number(params.get("seed")) : Math.floor(Math.random() * 2 ** 32);
 const game = createGame(seed);
 // Lets the browser console and automated checks look at the state while debugging.
-if (debug) Object.assign(window, { spiderOn: game });
+if (debug) {
+  Object.assign(window, { spiderOn: game });
+  // The layout changes with every resize, so automated checks read the current one.
+  Object.defineProperty(window, "spiderOnView", { get: () => view });
+}
 // The throttle is held while a key or the touch button holds it.
 const throttle = { keys: false, touch: false };
 const updateThrottle = () => {
@@ -186,6 +190,21 @@ portraitTouch.addEventListener("change", () => {
 
 let view: View = createView(1, 1);
 
+// The safe area exists only in CSS (env()), so an invisible element styled
+// from it tells the canvas where the notch and the corner button are.
+const layoutProbe = document.createElement("div");
+layoutProbe.className = "layout-probe";
+document.body.append(layoutProbe);
+
+function readScreenFrame(): ScreenFrame {
+  const box = layoutProbe.getBoundingClientRect();
+  const style = getComputedStyle(layoutProbe);
+  return {
+    safe: { top: box.top, left: box.left, right: window.innerWidth - box.right, bottom: window.innerHeight - box.bottom },
+    cornerButton: parseFloat(style.paddingRight) || 0,
+  };
+}
+
 function resize(): void {
   // Sharp lines on HiDPI screens; above 2× the extra pixels cost more than they show.
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -194,7 +213,7 @@ function resize(): void {
   canvas.width = Math.round(width * dpr);
   canvas.height = Math.round(height * dpr);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  view = createView(width, height, touchControls);
+  view = createView(width, height, touchControls, readScreenFrame());
 }
 
 window.addEventListener("resize", resize);
