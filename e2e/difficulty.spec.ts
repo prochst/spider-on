@@ -29,11 +29,26 @@ test("medium starts on round 7 with 4 rings and hard on round 14 with 5", async 
   expect(await readGame(page, (game) => game.field.ringCount)).toBe(5);
 });
 
-test("the arrow keys change the choice without steering the game", async ({ page }) => {
+test("the keyboard picks a level without steering or starting the game", async ({ page }) => {
   await difficulty(page).focus();
+  // With the styled list the first arrow opens it, the next one moves in it.
   await page.keyboard.press("ArrowDown");
+  await expect(page.getByRole("option", { name: "Střední" })).toBeVisible();
+  await page.keyboard.press("ArrowDown");
+  // Enter picks the option; it must not also start the game from the title.
+  await page.keyboard.press("Enter");
   await expect(difficulty(page)).toHaveValue("medium");
   await expectScreen(page, "title");
+});
+
+test("the open list has the theme's colours", async ({ page }) => {
+  await difficulty(page).click();
+  const option = page.getByRole("option", { name: "Těžká" });
+  await expect(option).toBeVisible();
+  // The theme's opaque backdrop, not the browser's white list.
+  expect(await option.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(7, 6, 15)");
+  await option.click();
+  await expect(difficulty(page)).toHaveValue("hard");
 });
 
 test("the choice is kept after a reload and shown in the score table", async ({ page }) => {

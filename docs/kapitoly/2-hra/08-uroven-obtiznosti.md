@@ -18,11 +18,18 @@ Viz [prompty/2-hra/08-uroven-obtiznosti.md](../../prompty/2-hra/08-uroven-obtizn
 - **Volba v menu je rozbalovací seznam** se stejným vzhledem jako ve formuláři Nastavení. Fokus zůstává na tlačítku Hrát, takže Enter pořád hned spustí hru.
 - **Testy.** Unit testy opisují tabulku ze specifikace (úroveň, kolo, počet kruhů, rychlosti nepřátel), ověřují Hrát znovu a bonus za kolo 14. Nový E2E soubor `e2e/difficulty.spec.ts` vybere úroveň v prohlížeči, ověří kolo a pavučinu, uložení po obnovení stránky a sloupec v tabulce výsledků.
 
+- **Úprava po ručním testu.** Uživatel poslal snímek: zavřený seznam měl neonový vzhled, ale rozbalený seznam kreslil prohlížeč bíle, jak je zvyklý. Seznam položek byl dlouho jediná část formuláře, kterou šlo stylovat jen málo. Nové prohlížeče (Chrome a Edge od verze 135) umí přepnout seznam na `appearance: base-select` a pak se dá stylovat celý. Agent seznam napojil na barvy šablony přes stejné proměnné CSS jako zbytek menu (`--menu-backdrop`, `--menu-accent` a další), takže budoucí šablona Čmáranice nemusí nic přidávat. Prohlížeče bez této možnosti dostanou aspoň barvy položek. Úprava platí i pro výběr vzhledu v Nastavení.
+
 ## Kde se agent spletl
 
 - **Šipky v rozbalovacím seznamu nefungovaly.** Klávesnice hry bere šipky jako řízení pavouka a zastaví jejich výchozí chování. Výjimku měla jen textová pole. Seznam úrovní by tak šipkami nešel přepnout. Stejná chyba byla od kapitoly 2.7 i u výběru vzhledu v Nastavení, jen si jí nikdo nevšiml, protože seznam má zatím jedinou položku. Agent ji našel při psaní volby, ne testem. Oprava platí pro oba seznamy, E2E test hlídá šipky ve volbě úrovně.
 - **Úroveň zarovnaná doprava.** V tabulce výsledků jsou čísla zarovnaná doprava a nový textový sloupec to zdědil. Bylo to vidět až na snímku z telefonu.
 - **Testovací data se nevešla do pravidel.** Pro snímek plné tabulky agent použil jméno se 17 znaky. Hra ho při načtení správně zahodila (jméno má nejvýš 16), takže tabulka byla prázdná. Kontrola vstupu z kapitoly 2.7 tak zafungovala i proti agentovi.
+
+- **Nestabilní test z kapitoly 3.1.** Při kontrolním běhu E2E testů jednou selhal test „plyn a tah současně“, který s touto kapitolou nesouvisí. Snímek ukázal, že pavouk objel celé kolo: test čekal, až bude pavouk 30° před vláknem, a stav četl pomocí `expect.poll`. Ten se ale dívá čím dál řidčeji, nakonec jednou za sekundu, a pavouk s drženým plynem okno občas proletěl mezi dvěma pohledy. V kapitole 3.1 test prošel třikrát po sobě, ale to nestačilo. Teď stránka kontroluje stav každý snímek (`waitForFunction` s `polling: "raf"`) a plyn se drží až od chvíle, kdy je pavouk v zóně. Deset běhů po sobě na čtyřech vláknech prošlo bez chyby.
+- **Zápis do dokumentace se ztratil.** Odstavec o nestabilním testu měl být už v prvním pull requestu kapitoly. Příkaz, který ho zapisoval, byl ale spojený s pokusem o vynucený push, který prostředí zamítlo. Nespustil se tedy celý, včetně zápisu. Oprava testu prošla, její popis ne. Agent si toho všiml až při úpravě kapitoly po ručním testu.
+- **Bílý rozbalený seznam.** Agent kontroloval snímky zavřeného menu, rozbalený seznam nevyfotil. Headless prohlížeč navíc nativní rozbalený seznam do snímku vůbec nezachytí, takže by chybu neodhalil ani tak. Všiml si jí až člověk.
+- **Klávesy v rozbaleném seznamu.** Po přepnutí na stylovaný seznam dostávají klávesy jednotlivé položky, ne samotný seznam. Výjimka pro rozbalovací seznamy z první verze kapitoly proto přestala platit: Enter vybral položku a zároveň spustil hru, šipky seznamem nepohnuly. Agent to zjistil skriptem, ještě před pull requestem. Klávesnice teď nechává na pokoji vše uvnitř seznamu a Escape v otevřeném seznamu zavře jen seznam, ne celé menu. Nové E2E testy hlídají klávesy i barvy.
 
 ## Lidská kontrola
 
@@ -33,8 +40,8 @@ Viz [prompty/2-hra/08-uroven-obtiznosti.md](../../prompty/2-hra/08-uroven-obtizn
 
 - Čas: asi 15 minut od zadání po pull request, včetně otázky na rozpor.
 - Změněno 13 souborů (kód, testy, specifikace, dokumentace), k tomu nový E2E soubor a dva výukové soubory.
-- Testy: 155 unit testů (7 nových), 23 E2E testů (4 nové), všechny procházejí.
-- Iterace: jedna oprava vzhledu po snímku.
+- Testy: 155 unit testů (7 nových), 24 E2E testů (5 nových), všechny procházejí.
+- Iterace: jedna oprava vzhledu po snímku, oprava nestabilního E2E testu z kapitoly 3.1 a druhý pull request s úpravou rozbaleného seznamu po ručním testu.
 
 ## Poučení
 
