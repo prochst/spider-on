@@ -24,6 +24,7 @@ import { createView, type ScreenFrame, type View } from "./render/view";
 import { loadScores, loadSettings, saveScores, saveSettings, today } from "./storage/storage";
 import { neon } from "./themes/neon";
 import type { Theme } from "./themes/theme";
+import { registerServiceWorker } from "./pwa/serviceWorker";
 import { applyMenuTheme, createOverlay, type MenuData } from "./ui/overlay";
 import "./assets/fonts/chakra-petch/chakra-petch.css";
 import "./ui/overlay.css";
@@ -88,6 +89,7 @@ const menu: MenuData = {
   scores: loadScores(),
   lastRank: null,
   themes: THEMES.map(({ id, name }) => ({ id, name })),
+  update: null,
 };
 game.difficulty = menu.settings.difficulty;
 const sound = createSound(menu.settings.sound);
@@ -114,6 +116,11 @@ function changeSettings(change: Partial<Settings>): void {
 }
 
 const overlay = createOverlay(uiRoot, () => menu, { command: send, settings: changeSettings });
+registerServiceWorker((apply) => {
+  menu.update = apply;
+  // Only the title screen offers it; any other menu is left alone, so a name being typed is not lost.
+  if (game.screen.name === "title") overlay.refresh(game);
+});
 
 /** Plays the sounds of the last steps and records a finished game in the score table. */
 function handleEvents(): void {

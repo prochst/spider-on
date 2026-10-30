@@ -1,13 +1,13 @@
 {
   "name": "spider-on",
-  "version": "0.1.0",
+  "version": "0.3.3",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "npm run typecheck && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p src/worker",
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test"

@@ -18,6 +18,8 @@ export type MenuData = {
   /** Place of the game that just ended in the score table, null when it did not make it. */
   lastRank: number | null;
   themes: readonly { id: string; name: string }[];
+  /** Switches to a new version that is ready; null while there is none (spec chapter 15). */
+  update: (() => void) | null;
 };
 
 export type OverlayHandlers = {
@@ -35,6 +37,10 @@ type Panel = {
   /** A form or a table between the lines and the buttons. */
   body?: HTMLElement;
   buttons: Button[];
+  /** A small line under the buttons. */
+  footer?: string;
+  /** Offers a new version under the footer. */
+  update?: () => void;
 };
 
 function panelFor(game: Game, data: MenuData, handlers: OverlayHandlers): Panel | null {
@@ -46,6 +52,8 @@ function panelFor(game: Game, data: MenuData, handlers: OverlayHandlers): Panel 
         title: "SPIDER ON",
         lines: best === null ? [] : [`Nejlepší skóre ${best}`],
         body: difficultyChoice(data, handlers),
+        footer: `verze ${__APP_VERSION__}`,
+        update: data.update ?? undefined,
         buttons: [
           { label: "Hrát", command: { type: "play" } },
           { label: "Výsledky", command: { type: "openScores" } },
@@ -121,6 +129,8 @@ const PAUSABLE: ReadonlySet<ScreenName> = new Set(["ready", "playing", "crash"])
 export type Overlay = {
   /** Rebuilds the menu when the screen has changed since the last call. */
   sync(game: Game): void;
+  /** Rebuilds the menu of the current screen, after the menu data changed. */
+  refresh(game: Game): void;
 };
 
 export function createOverlay(root: HTMLElement, menuData: () => MenuData, handlers: OverlayHandlers): Overlay {
@@ -151,14 +161,18 @@ export function createOverlay(root: HTMLElement, menuData: () => MenuData, handl
 
   let shown: ScreenName | null = null;
 
+  const show = (game: Game) => {
+    shown = game.screen.name;
+    pauseButton.hidden = !PAUSABLE.has(shown);
+    fullscreenButton.hidden = !pauseButton.hidden || !fullscreenSupported();
+    renderPanel(panel, panelFor(game, menuData(), handlers), handlers.command);
+  };
+
   return {
     sync(game) {
-      if (game.screen.name === shown) return;
-      shown = game.screen.name;
-      pauseButton.hidden = !PAUSABLE.has(shown);
-      fullscreenButton.hidden = !pauseButton.hidden || !fullscreenSupported();
-      renderPanel(panel, panelFor(game, menuData(), handlers), handlers.command);
+      if (game.screen.name !== shown) show(game);
     },
+    refresh: show,
   };
 }
 
@@ -188,8 +202,33 @@ function renderPanel(panel: HTMLElement, content: Panel | null, onCommand: (comm
     button.addEventListener("click", () => onCommand(command));
     panel.append(button);
   }
+  if (content.footer) {
+    const footer = document.createElement("p");
+    footer.className = "footer";
+    footer.textContent = content.footer;
+    panel.append(footer);
+  }
+  if (content.update) panel.append(updateOffer(content.update));
   // Focus the first button so the keyboard works without reaching for the mouse.
   panel.querySelector("button")?.focus({ preventScroll: true });
+}
+
+/** Spec chapter 15: only on the title screen, so it never interrupts a game. */
+function updateOffer(apply: () => void): HTMLElement {
+  const offer = document.createElement("div");
+  offer.className = "update";
+  offer.setAttribute("role", "status");
+  const text = document.createElement("span");
+  text.textContent = "Je dostupná nová verze.";
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = "Aktualizovat";
+  button.addEventListener("click", () => {
+    button.disabled = true;
+    apply();
+  });
+  offer.append(text, button);
+  return offer;
 }
 
 function scoreTable(scores: readonly ScoreEntry[]): HTMLElement {
