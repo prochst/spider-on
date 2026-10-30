@@ -23,7 +23,7 @@ export default defineConfig({
     {
       // A phone held sideways, the size the touch controls were tuned on in chapter 2.6.
       name: "phone",
-      testMatch: /(start|touch|layout)\.spec/,
+      testMatch: /(start|touch|layout|pwa)\.spec/,
       use: { ...devices["Desktop Chrome"], viewport: { width: 844, height: 390 }, hasTouch: true, isMobile: true },
     },
   ],

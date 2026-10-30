@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.18. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.19. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -154,7 +154,7 @@ Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do poz
 
 ## 12. Obrazovky
 
-1. **Úvod**: název hry, nejlepší skóre (když tabulka není prázdná), volba Úroveň obtížnosti (lehká, střední, těžká, kapitola 6) a tlačítka Hrát, Výsledky a Nastavení.
+1. **Úvod**: název hry, nejlepší skóre (když tabulka není prázdná), volba Úroveň obtížnosti (lehká, střední, těžká, kapitola 6), tlačítka Hrát, Výsledky a Nastavení a drobně číslo verze (kapitola 15).
 2. **Nastavení**: jméno hráče, šablona vzhledu, zvuk zapnutý/vypnutý. Každá změna platí a uloží se hned, tlačítko Zpět jen zavře obrazovku.
 3. **Výsledky**: tabulka 10 nejlepších her (kapitola 10).
 4. **Hra**: pavučina a HUD se skóre, číslem kola a životy.
@@ -192,6 +192,14 @@ Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do poz
 - Pavučina, HUD, ovladače, tlačítka i menu zůstávají v bezpečné oblasti displeje (safe area), mimo výřez pro kameru, zaoblené rohy a lištu domovské obrazovky.
 - Hra musí plynule běžet na běžném mobilním telefonu (cíl 60 snímků za sekundu).
 
+**Instalace a offline (PWA)**
+
+- Webovou verzi lze nainstalovat na plochu telefonu i počítače jako aplikaci (progresivní webová aplikace). Nainstalovaná hra se spouští bez lišty prohlížeče, na šířku a s vlastní ikonou.
+- Ikona je vlastní: neonová pavučina s pavoukem na tmavém pozadí, bez prvků původní hry.
+- Po prvním načtení hra funguje i bez internetu. Všechny soubory hry (kód, písmo, ikony) si uloží do zařízení.
+- **Číslo verze** je drobně na úvodní obrazovce, například „verze 0.3.3 · a1b2c3d“. První část je verze aplikace (fáze a kapitola výukového materiálu), druhá krátký otisk commitu, ze kterého hra vznikla. Podle něj se pozná, kterou verzi hráč právě zkouší.
+- **Nová verze**: když hra zjistí, že na webu je novější verze, ukáže na úvodní obrazovce pod číslem verze zprávu „Je dostupná nová verze“ s tlačítkem Aktualizovat. Jinde se zpráva neukazuje, aby nerušila hru ani psaní jména v Nastavení. Aktualizace stránku znovu načte. Když hráč nic neudělá, nová verze se použije při příštím spuštění hry.
+
 ## 16. Mimo rozsah verze 1
 
 - Hra dvou hráčů, online tabulka výsledků, editor pavučin, nákupy v aplikaci, reklamy.
@@ -216,3 +224,4 @@ Další rozhodnutí uživatele:
 - Verze 0.16: po ručním testu přibyla v úvodním menu volba Úroveň obtížnosti. Lehká začíná 1. kolem, střední 7. kolem (4 kruhy, 3 pomalí nepřátelé), těžká 14. kolem (5 kruhů, 3 rychlí nepřátelé). Úroveň se zapisuje do tabulky výsledků.
 - Verze 0.17: po ručním testu se rozbalený seznam úrovní (a výběr vzhledu) kreslí v barvách šablony, ne bíle podle prohlížeče.
 - Verze 0.18 (kapitola 3.2): tlačítko pro celou obrazovku v rohu menu, menu se zvětšuje s obrazovkou, hra respektuje bezpečnou oblast displeje.
+- Verze 0.19 (kapitola 3.3): instalace na plochu, hra offline, číslo verze na úvodní obrazovce a nabídka nové verze.

@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#07060f" />
     <title>Spider On</title>
+    <!-- Installable as an app (spec chapter 15); the paths are relative, so the base /spider-on/ applies. -->
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <!-- iOS reads these instead of the manifest's display mode. -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <style>
       html, body { margin: 0; height: 100%; background: #07060f; overflow: hidden; }
       canvas { display: block; width: 100%; height: 100%; touch-action: none; }

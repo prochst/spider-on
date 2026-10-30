@@ -263,6 +263,27 @@
   stroke-linecap: round;
 }
 
+/* The build that is running, so a tester can say which one they tried (spec chapter 15). */
+.panel .footer {
+  font-size: 0.7rem;
+  opacity: 0.5;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A new version is ready (spec chapter 15): a quiet line under the version number. */
+.panel .update {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.panel .update button {
+  width: auto;
+  padding: 0.3rem 0.8rem;
+}
+
 /* Lines that apply only to the keyboard or only to touch controls. */
 #ui.touch .only-keys,
 #ui:not(.touch) .only-touch {

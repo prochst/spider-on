@@ -38,3 +38,6 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **Responzivitu kontroluj na přehledu snímků.** Drobné menu na velkém monitoru bylo vidět až vedle snímku z notebooku. ([kapitola 3.2](kapitoly/3-web/02-responzivita.md))
 - **Hodnoty prostředí veď přes proměnné, které jde v testu přepsat.** Výřez iPhonu se tak dá otestovat v prohlížeči bez výřezu. ([kapitola 3.2](kapitoly/3-web/02-responzivita.md))
 - **Když rozbíjíš kód, aby test selhal, zkontroluj, že selhal test, ne sestavení.** ([kapitola 3.2](kapitoly/3-web/02-responzivita.md))
+- **Seznam souborů pro offline nech na buildu.** Soubory s otiskem obsahu v názvu se ručně vypsat nedají a ruční seznam by se po první změně rozešel se skutečností. ([kapitola 3.3](kapitoly/3-web/03-pwa.md))
+- **Když offline něco chybí, vypiš mezipaměť a neúspěšné požadavky.** Soubory v mezipaměti byly, jen nesedily kvůli hlavičce `Vary: Origin`. ([kapitola 3.3](kapitoly/3-web/03-pwa.md))
+- **Co nejde otestovat v jednom běhu, ověř opakovatelným skriptem.** Test s podvrženými daty, který nic neověří, je horší než žádný. ([kapitola 3.3](kapitoly/3-web/03-pwa.md))
