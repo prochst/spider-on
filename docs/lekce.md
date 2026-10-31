@@ -41,3 +41,5 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **Seznam souborů pro offline nech na buildu.** Soubory s otiskem obsahu v názvu se ručně vypsat nedají a ruční seznam by se po první změně rozešel se skutečností. ([kapitola 3.3](kapitoly/3-web/03-pwa.md))
 - **Když offline něco chybí, vypiš mezipaměť a neúspěšné požadavky.** Soubory v mezipaměti byly, jen nesedily kvůli hlavičce `Vary: Origin`. ([kapitola 3.3](kapitoly/3-web/03-pwa.md))
 - **Co nejde otestovat v jednom běhu, ověř opakovatelným skriptem.** Test s podvrženými daty, který nic neověří, je horší než žádný. ([kapitola 3.3](kapitoly/3-web/03-pwa.md))
+- **Nasazení ať čeká na všechny testy.** E2E testy běžely vedle nasazení a na jejich výsledek nikdo nečekal. Rozbitý build by se dostal k hráčům. ([kapitola 3.4](kapitoly/3-web/04-vydani.md))
+- **Jedno číslo z auditu neber vážně.** Lighthouse dal mobilnímu výkonu 91 a po třech opakováních bez jediné změny 100. Než začneš optimalizovat, zopakuj měření a podívej se, kam čas opravdu jde. ([kapitola 3.4](kapitoly/3-web/04-vydani.md))

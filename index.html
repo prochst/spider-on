@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#07060f" />
     <title>Spider On</title>
+    <meta name="description" content="Neonová arkáda v prohlížeči: pavouk leze po pavučině, sbírá mouchy a vyhýbá se nepřátelům. Hraje se i offline." />
+    <!-- The preview that chat apps and social networks show for a shared link; they need absolute addresses. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Spider On" />
+    <meta property="og:locale" content="cs_CZ" />
+    <meta property="og:url" content="https://prochst.github.io/spider-on/" />
+    <meta property="og:title" content="Spider On" />
+    <meta property="og:description" content="Neonová arkáda v prohlížeči: pavouk leze po pavučině, sbírá mouchy a vyhýbá se nepřátelům." />
+    <meta property="og:image" content="https://prochst.github.io/spider-on/share.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Neonová pavučina se dvěma pavouky a mouchami" />
+    <meta name="twitter:card" content="summary_large_image" />
     <!-- Installable as an app (spec chapter 15); the paths are relative, so the base /spider-on/ applies. -->
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
@@ -19,7 +32,8 @@
   </head>
   <body>
     <canvas id="game" aria-label="Spider On"></canvas>
-    <div id="ui"></div>
+    <!-- The menus are the part a screen reader can use, so they are the main landmark. -->
+    <main id="ui"></main>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
