@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.19. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.20. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -200,6 +200,12 @@ Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do poz
 - **Číslo verze** je drobně na úvodní obrazovce, například „verze 0.3.3 · a1b2c3d“. První část je verze aplikace (fáze a kapitola výukového materiálu), druhá krátký otisk commitu, ze kterého hra vznikla. Podle něj se pozná, kterou verzi hráč právě zkouší.
 - **Nová verze**: když hra zjistí, že na webu je novější verze, ukáže na úvodní obrazovce pod číslem verze zprávu „Je dostupná nová verze“ s tlačítkem Aktualizovat. Jinde se zpráva neukazuje, aby nerušila hru ani psaní jména v Nastavení. Aktualizace stránku znovu načte. Když hráč nic neudělá, nová verze se použije při příštím spuštění hry.
 
+**Vydání webové verze**
+
+- Webová verze běží na adrese https://prochst.github.io/spider-on/.
+- Nová verze se zveřejní jen tehdy, když na ní projdou všechny automatické testy včetně testů v prohlížeči. Jinak na webu zůstane předchozí verze.
+- Odkaz na hru sdílený v chatu nebo na sociální síti ukáže náhled: název, krátký popis a obrázek ze hry (1200 × 630 px).
+
 ## 16. Mimo rozsah verze 1
 
 - Hra dvou hráčů, online tabulka výsledků, editor pavučin, nákupy v aplikaci, reklamy.
@@ -225,3 +231,4 @@ Další rozhodnutí uživatele:
 - Verze 0.17: po ručním testu se rozbalený seznam úrovní (a výběr vzhledu) kreslí v barvách šablony, ne bíle podle prohlížeče.
 - Verze 0.18 (kapitola 3.2): tlačítko pro celou obrazovku v rohu menu, menu se zvětšuje s obrazovkou, hra respektuje bezpečnou oblast displeje.
 - Verze 0.19 (kapitola 3.3): instalace na plochu, hra offline, číslo verze na úvodní obrazovce a nabídka nové verze.
+- Verze 0.20 (kapitola 3.4): webová verze se zveřejní jen po zelených testech a sdílený odkaz ukáže náhled hry.

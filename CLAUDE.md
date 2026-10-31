@@ -16,6 +16,7 @@ Arkádová hra v prohlížeči (později Android a iOS přes Capacitor): pavouk 
 - `npm run typecheck`: kontrola typů
 - `npm run build`: produkční build do `dist/`
 - `node scripts/icons.mjs`: vykreslí PNG ikony z `public/icons/icon.svg` (po změně ikony)
+- `node scripts/share-image.mjs`: vykreslí obrázek pro náhled odkazu `public/share.png` ze skutečné hry (po viditelné změně hry)
 - `node scripts/check-update.mjs`: ověří nabídku nové verze se dvěma buildy (přepíše `dist/`)
 
 Před každým commitem musí projít `npm run typecheck`, `npm test` a `npm run build`. Při změně chování v prohlížeči (vstup, menu, rozložení, úložiště) spusť i `npm run e2e`.
@@ -29,7 +30,7 @@ Před každým commitem musí projít `npm run typecheck`, `npm test` a `npm run
 - `src/ui/`: menu a překryvné obrazovky jako HTML nad Canvasem (fokus, klávesnice a přístupnost řeší prohlížeč).
 - `src/input/`, `src/audio/`: vstup (klávesnice, dotyk) a zvuk (Web Audio).
 - `src/pwa/`: registrace service workeru a nabídka nové verze. `src/worker/sw.ts`: samotný service worker, s vlastním `tsconfig.json` (typy WebWorker). Seznam souborů mu při buildu doplní plugin ve `vite.config.ts`.
-- `public/`: manifest a ikony, kopírují se do buildu beze změny. Nový soubor sem přidej i do `PUBLIC_FILES` ve `vite.config.ts`, jinak nebude offline.
+- `public/`: manifest, ikony a obrázek pro náhled odkazu (`share.png`), kopírují se do buildu beze změny. Nový soubor, který hra potřebuje, sem přidej i do `PUBLIC_FILES` ve `vite.config.ts`, jinak nebude offline.
 - `src/storage/`: nastavení a tabulka výsledků v `localStorage`. Když úložiště selže, hra běží dál bez něj.
 - `e2e/`: E2E testy (Playwright) proti produkčnímu buildu, projekty `desktop` (1280×800) a `phone` (844×390 s dotykem). Stav hry čtou přes `?debug` a `window.spiderOn` (rozložení přes `window.spiderOnView`), dotyk posílají přes CDP (`e2e/touch.ts`).
 - `src/main.ts`: spojuje vše dohromady a řídí herní smyčku s pevným krokem 1/120 s.

@@ -5,6 +5,7 @@ import pkg from "./package.json" with { type: "json" };
 /**
  * Files from public/ are copied as they are and never pass through the
  * bundle, so the service worker learns about them from this list.
+ * share.png is left out on purpose: only link previews fetch it, never the game.
  */
 const PUBLIC_FILES = [
   "manifest.webmanifest",
