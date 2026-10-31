@@ -43,7 +43,7 @@ Viz [prompty/3-web/04-vydani.md](../../prompty/3-web/04-vydani.md). Obsah dal pl
 
 - **První nasazení po sloučení.** V záložce Actions má workflow „Deploy to GitHub Pages“ teď tři úlohy: `checks` (s vnořenými `check` a `e2e`), `build` a `deploy`. Nasazení začne až po zelených testech.
 - **Náhled odkazu.** Poslat si odkaz na hru do chatu (Messenger, WhatsApp, Slack) a podívat se, jestli ukáže obrázek a popis. Služby si náhled pamatují, takže starší sdílení se nemusí změnit hned.
-- **Nabídka nové verze.** Toto je první sloučení od kapitoly 3.3. Nainstalovaná hra by po něm měla na úvodní obrazovce nabídnout „Je dostupná nová verze“ a po klepnutí ukázat verzi 0.3.4.
+- **Nabídka nové verze.** Toto je první sloučení od kapitoly 3.3. Nainstalovaná hra by po něm měla na úvodní obrazovce nabídnout „Je dostupná nová verze“ a po klepnutí ukázat verzi 0.3.4. Uživatel to 31. 10. 2026 ověřil na nainstalované hře: „Dostupná nová verze funguje.“ Skript `scripts/check-update.mjs` z kapitoly 3.3 nabídku ověřoval jen se dvěma buildy na místním serveru. Teprve tohle bylo první ověření na skutečném nasazení a nainstalované hře.
 - **Audit na živé adrese.** V Chromu na počítači: Nástroje pro vývojáře → Lighthouse → Analyze page load.
 
 ## Metriky
