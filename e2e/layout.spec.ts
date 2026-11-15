@@ -71,8 +71,9 @@ test("the game keeps clear of a notch and the home bar", async ({ page }) => {
   await page.setViewportSize({ width: size.width - 1, height: size.height });
   await page.setViewportSize(size);
 
+  // The resize event reaches the game a moment after setViewportSize returns, so wait for the new layout.
+  await expect.poll(async () => (await readView(page)).hud.left).toBe(47);
   const view = await readView(page);
-  expect(view.hud.left).toBe(47);
   expect(view.hud.right).toBeLessThanOrEqual(size.width - 47);
   expect(view.cy + view.unit).toBeLessThanOrEqual(size.height - 21);
   if (view.controls) {

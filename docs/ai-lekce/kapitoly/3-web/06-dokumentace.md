@@ -30,6 +30,8 @@ Viz [prompty/3-web/06-dokumentace.md](../../prompty/3-web/06-dokumentace.md).
 - **Popis testů z názvů souborů.** První verze tabulky E2E testů vznikla odhadem podle názvů souborů. U `storage.spec.ts` uváděla test poškozeného úložiště, který neexistuje (poškozená data testují unit testy `parseSettings` a `parseScores`). Agent tabulku opravil, až když si vypsal skutečné názvy testů. Dokumentace, která popisuje kód, se musí psát z kódu, ne z dojmu.
 - **Zaokrouhlená fyzika.** O pevném kroku agent nejdřív napsal, že na 144 Hz displeji běží „střídavě nula a jeden krok“. Při 1/144 s na snímek a kroku 1/120 s je to většinou jeden krok a občas žádný. Drobnost, ale přesně takové nepřesnosti čtenáře zmatou, když si to přepočítá.
 
+- **Nestabilní E2E test, který se změnou nesouvisel.** Pull request nemění kód, a přesto v CI spadl test „the game keeps clear of a notch and the home bar“ na telefonu. Agent ho nepovažoval za náhodu: spustil ho 15× a selhal dvakrát. Test četl rozložení hned po `setViewportSize`, ale událost `resize` se ke hře dostane o chvilku později, takže občas přečetl staré rozložení. Teď na nové rozložení počká (`expect.poll`) a 30 opakování prošlo.
+
 ## Lidská kontrola
 
 - Projít `docs/dev-docs/README.md` a rozhodnout, jestli úroveň podrobnosti sedí. Popis funkcí je podrobný, s kódem se bude muset udržovat.
@@ -41,7 +43,7 @@ Viz [prompty/3-web/06-dokumentace.md](../../prompty/3-web/06-dokumentace.md).
 - Čas: asi hodina od zadání po pull request.
 - Přesunuté soubory: 33 (úvod, lekce, 15 kapitol, 15 zadání a postup nasazení).
 - Nové soubory: 7 v `docs/dev-docs/`, kapitola a zadání.
-- Kód beze změny, testy beze změny.
+- Kód hry beze změny, jeden E2E test opravený (čekání na nové rozložení).
 
 ## Poučení
 
