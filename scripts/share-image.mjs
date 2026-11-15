@@ -17,7 +17,7 @@ const server = await preview({ preview: { port: PORT, strictPort: true }, logLev
 const browser = await chromium.launch();
 try {
   const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
-  await page.goto(`http://localhost:${PORT}/spider-on/?debug&seed=${SEED}`);
+  await page.goto(`http://localhost:${PORT}/?debug&seed=${SEED}`);
   await page.evaluate(() => document.fonts.ready);
   await page.getByRole("button", { name: "Hrát" }).click();
   await page.keyboard.press("Enter");

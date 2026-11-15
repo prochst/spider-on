@@ -5,7 +5,7 @@
 import { expect, test } from "@playwright/test";
 import { openGame } from "./helpers";
 
-const SITE = "https://prochst.github.io/spider-on/";
+const SITE = "https://spider-on.prochst.dev/";
 
 test("describes the game for search engines and link previews", async ({ page, request }) => {
   await openGame(page);

@@ -1,0 +1,42 @@
+name: Release build
+
+# The game is uploaded by hand to its own host (docs/nasazeni.md). This
+# workflow prepares the files: after every check passes, it builds the game
+# and keeps dist/ as a downloadable artifact, ready to go to the host over FTP.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: release
+  cancel-in-progress: true
+
+jobs:
+  # The same checks as on a pull request, E2E tests included. A red test
+  # means no build to download, so players never get one that failed them.
+  checks:
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
+  build:
+    needs: checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-artifact@v7
+        with:
+          name: spider-on-web-${{ github.sha }}
+          path: dist
+          # .htaccess is a hidden file, and upload-artifact leaves those out by default.
+          include-hidden-files: true
+          retention-days: 90

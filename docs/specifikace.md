@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.20. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.21. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -202,8 +202,8 @@ Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do poz
 
 **Vydání webové verze**
 
-- Webová verze běží na adrese https://prochst.github.io/spider-on/.
-- Nová verze se zveřejní jen tehdy, když na ní projdou všechny automatické testy včetně testů v prohlížeči. Jinak na webu zůstane předchozí verze.
+- Webová verze běží na adrese https://spider-on.prochst.dev/, v kořeni vlastní subdomény na běžném webhostingu (Apache). Hra jde jen přes HTTPS, adresa s http:// přesměruje na https://.
+- Na hosting se nahrává ručně přes FTP podle postupu v `docs/nasazeni.md`. Build k nahrání vznikne automaticky jen tehdy, když na něm projdou všechny automatické testy včetně testů v prohlížeči. Bez zelených testů není co nahrát a na webu zůstane předchozí verze.
 - Odkaz na hru sdílený v chatu nebo na sociální síti ukáže náhled: název, krátký popis a obrázek ze hry (1200 × 630 px).
 
 ## 16. Mimo rozsah verze 1
@@ -232,3 +232,4 @@ Další rozhodnutí uživatele:
 - Verze 0.18 (kapitola 3.2): tlačítko pro celou obrazovku v rohu menu, menu se zvětšuje s obrazovkou, hra respektuje bezpečnou oblast displeje.
 - Verze 0.19 (kapitola 3.3): instalace na plochu, hra offline, číslo verze na úvodní obrazovce a nabídka nové verze.
 - Verze 0.20 (kapitola 3.4): webová verze se zveřejní jen po zelených testech a sdílený odkaz ukáže náhled hry.
+- Verze 0.21 (kapitola 3.5): webová verze se stěhuje z GitHub Pages na vlastní doménu https://spider-on.prochst.dev/ a nahrává se přes FTP.
