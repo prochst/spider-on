@@ -143,8 +143,10 @@ stateDiagram-v2
   [*] --> title
   title --> ready: play
   title --> scores: openScores
+  title --> help: openHelp
   title --> settings: openSettings
   scores --> title: back
+  help --> title: back
   settings --> title: back (návrat odkud přišel)
   ready --> playing: start
   playing --> crash: crash (simulace)

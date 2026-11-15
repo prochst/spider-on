@@ -6,6 +6,8 @@ import { CRASH_DURATION } from "./config";
 
 export type TitleScreen = { name: "title" };
 export type ScoresScreen = { name: "scores" };
+/** How to play: the goal of the game and the controls. */
+export type HelpScreen = { name: "help" };
 /** The web is shown and the game waits for the player to start the round. */
 export type ReadyScreen = { name: "ready" };
 export type PlayingScreen = { name: "playing" };
@@ -21,6 +23,7 @@ export type Screen =
   | TitleScreen
   | SettingsScreen
   | ScoresScreen
+  | HelpScreen
   | ReadyScreen
   | PlayingScreen
   | CrashScreen
@@ -34,8 +37,9 @@ export type ScreenEvent =
   /** Start a new game: Hrát on the title, Hrát znovu after game over. */
   | { type: "play" }
   | { type: "openScores" }
+  | { type: "openHelp" }
   | { type: "openSettings" }
-  /** Leave the scores or settings screen. */
+  /** Leave the scores, help or settings screen. */
   | { type: "back" }
   /** The player starts the round from the ready screen. */
   | { type: "start" }
@@ -64,9 +68,11 @@ export function transition(screen: Screen, event: ScreenEvent): Screen {
     case "title":
       if (event.type === "play") return { name: "ready" };
       if (event.type === "openScores") return { name: "scores" };
+      if (event.type === "openHelp") return { name: "help" };
       if (event.type === "openSettings") return { name: "settings", back: screen };
       return screen;
     case "scores":
+    case "help":
       return event.type === "back" ? TITLE : screen;
     case "settings":
       return event.type === "back" ? screen.back : screen;
@@ -124,6 +130,7 @@ export function confirmEvent(screen: Screen): PlayerEvent | null {
       return { type: "nextRound" };
     // Settings will hold a text field, where Enter must not leave the screen.
     case "scores":
+    case "help":
     case "settings":
     case "playing":
     case "crash":
@@ -141,6 +148,7 @@ export function cancelEvent(screen: Screen): PlayerEvent | null {
     case "paused":
       return { type: "resume" };
     case "scores":
+    case "help":
     case "settings":
       return { type: "back" };
     case "title":

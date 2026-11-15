@@ -14,7 +14,7 @@ test("loads without errors and shows the title menu", async ({ page }) => {
 
   await expect(page).toHaveTitle("Spider On");
   await expect(panelTitle(page)).toHaveText("SPIDER ON");
-  for (const label of ["Hrát", "Výsledky", "Nastavení"]) await expect(menuButton(page, label)).toBeVisible();
+  for (const label of ["Hrát", "Jak hrát", "Výsledky", "Nastavení"]) await expect(menuButton(page, label)).toBeVisible();
   // The first button has focus, so Enter works without the mouse (spec chapter 12).
   await expect(menuButton(page, "Hrát")).toBeFocused();
   expect(errors).toEqual([]);
