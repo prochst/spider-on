@@ -56,6 +56,7 @@ function panelFor(game: Game, data: MenuData, handlers: OverlayHandlers): Panel 
         update: data.update ?? undefined,
         buttons: [
           { label: "Hrát", command: { type: "play" } },
+          { label: "Jak hrát", command: { type: "openHelp" } },
           { label: "Výsledky", command: { type: "openScores" } },
           { label: "Nastavení", command: { type: "openSettings" } },
         ],
@@ -66,6 +67,12 @@ function panelFor(game: Game, data: MenuData, handlers: OverlayHandlers): Panel 
         title: "Výsledky",
         lines: data.scores.length === 0 ? ["Zatím žádné výsledky. Zahraj si!"] : [],
         body: data.scores.length === 0 ? undefined : scoreTable(data.scores),
+        buttons: [{ label: "Zpět", command: { type: "back" } }],
+      };
+    case "help":
+      return {
+        title: "Jak hrát",
+        body: helpText(),
         buttons: [{ label: "Zpět", command: { type: "back" } }],
       };
     case "settings":
@@ -256,6 +263,71 @@ function scoreTable(scores: readonly ScoreEntry[]): HTMLElement {
     }
   });
   return table;
+}
+
+/** What a control does, as the help screen lists it: keys or gesture, then the action. */
+type ControlRow = [control: string, action: string];
+
+const GOAL = [
+  "Tvůj pavouk sám leze po pavučině. Sesbírej všechny mouchy a kolo je hotové.",
+  "Nepřátelé lezou proti tobě. Srážka stojí život, začínáš se třemi.",
+  "Kruh změníš jen na čtyřech zvýrazněných vláknech. Pokyn dej těsně před vláknem.",
+  "Od 4. kola se objevují bonusové balíčky: body, zpomalení nepřátel, vzácně život.",
+];
+
+const KEY_CONTROLS: ControlRow[] = [
+  ["Šipky nebo W A S D", "změna kruhu ve směru šipky"],
+  ["Mezerník nebo Shift", "plyn, dokud je držíš"],
+  ["Enter nebo mezerník", "spustit kolo"],
+  ["P nebo Esc", "pauza"],
+];
+
+const TOUCH_CONTROLS: ControlRow[] = [
+  ["Tah vpravo", "změna kruhu ve směru tahu"],
+  ["Držet vlevo", "plyn"],
+  ["Klepnout vpravo", "spustit kolo"],
+  ["Tlačítko v rohu", "pauza"],
+];
+
+/**
+ * Spec chapter 12. Both sets of controls are in the page and the stylesheet
+ * shows the one that matches the "touch" class, so the help switches along
+ * with the controls when a laptop gets its first touch.
+ */
+function helpText(): HTMLElement {
+  const help = document.createElement("div");
+  help.className = "help";
+  const goal = helpSection("Cíl hry");
+  const list = document.createElement("ul");
+  for (const text of GOAL) list.append(Object.assign(document.createElement("li"), { textContent: text }));
+  goal.append(list);
+  const keys = helpSection("Ovládání");
+  keys.classList.add("only-keys");
+  keys.append(controlList(KEY_CONTROLS));
+  const touch = helpSection("Ovládání");
+  touch.classList.add("only-touch");
+  touch.append(controlList(TOUCH_CONTROLS));
+  help.append(goal, keys, touch);
+  return help;
+}
+
+function helpSection(title: string): HTMLElement {
+  const section = document.createElement("section");
+  const heading = document.createElement("h2");
+  heading.textContent = title;
+  section.append(heading);
+  return section;
+}
+
+function controlList(rows: readonly ControlRow[]): HTMLElement {
+  const list = document.createElement("dl");
+  for (const [control, action] of rows) {
+    list.append(
+      Object.assign(document.createElement("dt"), { textContent: control }),
+      Object.assign(document.createElement("dd"), { textContent: action }),
+    );
+  }
+  return list;
 }
 
 /** 2026-10-26 → 26. 10. 2026, the way dates are written in Czech. */

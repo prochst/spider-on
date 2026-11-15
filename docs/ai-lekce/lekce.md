@@ -47,3 +47,6 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **Skryté soubory hlídej při každém balení.** `.htaccess` začíná tečkou a nástroje ho rády vynechají: `upload-artifact` ho bez `include-hidden-files` do archivu nedá a FTP klienti ho často nezobrazují. ([kapitola 3.5](kapitoly/3-web/05-vlastni-hosting.md))
 - **Dokumentaci piš z kódu, ne z názvů souborů.** Tabulka E2E testů odhadnutá podle názvů slibovala test, který neexistuje. Opravilo ji až vypsání skutečných testů. ([kapitola 3.6](kapitoly/3-web/06-dokumentace.md))
 - **Odkazy po přesunu kontroluj skriptem.** Relativní odkazy uvnitř přesunuté složky fungují dál, rozbijí se jen ty ven. Krátký skript je najde všechny i s kotvami. ([kapitola 3.6](kapitoly/3-web/06-dokumentace.md))
+- **Rozhodnutí o zařízení dělej na jednom místě.** Návod Jak hrát ukazuje gesta podle stejné třídy jako dotykové ovladače, takže se nemůžou rozejít. ([kapitola 2.9](kapitoly/2-hra/09-jak-hrat.md))
+- **Na malé obrazovce zkracuj text, ne jen písmo.** Kratší věty ušetřily víc místa než menší písmo. ([kapitola 2.9](kapitoly/2-hra/09-jak-hrat.md))
+- **Prvky v testech hledej podle přesného názvu.** Nové tlačítko „Jak hrát“ rozbilo test, který hledal „Hrát“ jako podřetězec. ([kapitola 2.9](kapitoly/2-hra/09-jak-hrat.md))

@@ -32,5 +32,5 @@ test("describes the game for search engines and link previews", async ({ page, r
 
 test("puts the menus in the main landmark", async ({ page }) => {
   await openGame(page);
-  await expect(page.getByRole("main").getByRole("button", { name: "Hrát" })).toBeVisible();
+  await expect(page.getByRole("main").getByRole("button", { name: "Hrát", exact: true })).toBeVisible();
 });

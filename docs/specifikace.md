@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.21. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.22. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -136,7 +136,7 @@ Hra rozlišuje **číslo kola** (počítá se od 1 a jen roste, používá se pr
 | Spustit kolo | Enter nebo mezerník |
 | Pauza | P nebo Esc |
 
-V menu potvrdí Enter nebo mezerník hlavní volbu obrazovky (Hrát, Další kolo, Hrát znovu) a P nebo Esc vrací zpět: z pauzy do hry, z Výsledků a Nastavení na předchozí obrazovku.
+V menu potvrdí Enter nebo mezerník hlavní volbu obrazovky (Hrát, Další kolo, Hrát znovu) a P nebo Esc vrací zpět: z pauzy do hry, z Jak hrát, Výsledků a Nastavení na předchozí obrazovku.
 
 **Dotyk (telefon a tablet)**, rozložení jako u přenosných herních konzolí:
 
@@ -154,13 +154,17 @@ Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do poz
 
 ## 12. Obrazovky
 
-1. **Úvod**: název hry, nejlepší skóre (když tabulka není prázdná), volba Úroveň obtížnosti (lehká, střední, těžká, kapitola 6), tlačítka Hrát, Výsledky a Nastavení a drobně číslo verze (kapitola 15).
-2. **Nastavení**: jméno hráče, šablona vzhledu, zvuk zapnutý/vypnutý. Každá změna platí a uloží se hned, tlačítko Zpět jen zavře obrazovku.
-3. **Výsledky**: tabulka 10 nejlepších her (kapitola 10).
-4. **Hra**: pavučina a HUD se skóre, číslem kola a životy.
-5. **Kolo dokončeno**: skóre za kolo, bonus, celkové skóre, informace o další ploše, tlačítko Další kolo.
-6. **Pauza**: Pokračovat, Nastavení, Zpět do menu.
-7. **Konec hry**: skóre, dosažené kolo, umístění v tabulce výsledků (nebo informace, že se do ní hra nevešla), Hrát znovu, Zpět do menu.
+1. **Úvod**: název hry, nejlepší skóre (když tabulka není prázdná), volba Úroveň obtížnosti (lehká, střední, těžká, kapitola 6), tlačítka Hrát, Jak hrát, Výsledky a Nastavení a drobně číslo verze (kapitola 15).
+2. **Jak hrát**: krátký návod pro nového hráče ve dvou částech, Cíl hry a Ovládání, a tlačítko Zpět na úvod. Ovládání se ukáže podle toho, jak hráč hraje: na počítači klávesy, na zařízení s dotykovým ovládáním (kapitola 11) dotyková gesta. Když hráč na počítači poprvé sáhne na dotykovou obrazovku, návod se přepne na dotyk stejně jako ovladače. Obsah:
+   - Cíl hry: pavouk sám leze po pavučině a hráč sbírá mouchy, kolo končí sebráním poslední mouchy. Nepřátelští pavouci lezou proti hráči a srážka stojí život, hráč začíná se 3 životy. Na sousední kruh se přelézá jen na 4 zvýrazněných vláknech, pokyn se dává těsně před vláknem. Od 4. kola se objevují bonusové balíčky (body, zpomalení nepřátel, vzácně život).
+   - Ovládání na počítači: šipky nebo W, A, S, D přelezou na sousední kruh ve směru šipky, mezerník nebo Shift (držet) je plyn, Enter nebo mezerník spustí kolo, P nebo Esc pozastaví hru.
+   - Ovládání dotykem: tah po pravé polovině obrazovky přeleze na sousední kruh ve směru tahu, držení levé poloviny je plyn, klepnutí na pravou polovinu spustí kolo, tlačítko v rohu pozastaví hru.
+3. **Nastavení**: jméno hráče, šablona vzhledu, zvuk zapnutý/vypnutý. Každá změna platí a uloží se hned, tlačítko Zpět jen zavře obrazovku.
+4. **Výsledky**: tabulka 10 nejlepších her (kapitola 10).
+5. **Hra**: pavučina a HUD se skóre, číslem kola a životy.
+6. **Kolo dokončeno**: skóre za kolo, bonus, celkové skóre, informace o další ploše, tlačítko Další kolo.
+7. **Pauza**: Pokračovat, Nastavení, Zpět do menu.
+8. **Konec hry**: skóre, dosažené kolo, umístění v tabulce výsledků (nebo informace, že se do ní hra nevešla), Hrát znovu, Zpět do menu.
 
 **Celá obrazovka**: v pravém horním rohu je na obrazovkách menu tlačítko pro celou obrazovku. Od výzvy ke spuštění kola po konec kola je na stejném místě tlačítko pauzy, takže se nikdy nepřekrývají. Druhé stisknutí, nebo Esc, celou obrazovku ukončí. Na dotykovém zařízení hra v celé obrazovce zkusí zamknout orientaci na šířku. Prohlížeče, které celou obrazovku pro stránky nepovolují (Safari na iPhonu), tlačítko neukážou.
 
@@ -233,3 +237,4 @@ Další rozhodnutí uživatele:
 - Verze 0.19 (kapitola 3.3): instalace na plochu, hra offline, číslo verze na úvodní obrazovce a nabídka nové verze.
 - Verze 0.20 (kapitola 3.4): webová verze se zveřejní jen po zelených testech a sdílený odkaz ukáže náhled hry.
 - Verze 0.21 (kapitola 3.5): webová verze se stěhuje z GitHub Pages na vlastní doménu https://spider-on.prochst.dev/ a nahrává se přes FTP.
+- Verze 0.22 (kapitola 2.9): po ručním testu přibyla na úvodní obrazovce položka Jak hrát s cílem hry a ovládáním podle zařízení.

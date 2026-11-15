@@ -131,6 +131,7 @@ Každá obrazovka je obyčejná hodnota s polem `name`. Některé nesou data nav
 | --- | --- | --- |
 | `title` | | Úvodní menu. |
 | `scores` | | Tabulka výsledků. |
+| `help` | | Jak hrát: cíl hry a ovládání. |
 | `settings` | `back` | Nastavení, `back` je obrazovka, kam se vrátit (úvod nebo pauza). |
 | `ready` | | Pavučina je vidět, čeká se na spuštění kola. |
 | `playing` | | Kolo běží. |

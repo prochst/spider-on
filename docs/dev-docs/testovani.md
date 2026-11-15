@@ -46,7 +46,7 @@ Zásady, které se v projektu osvědčily:
 `npm run e2e` sestaví hru, spustí `vite preview` na portu 4173 a testy v `e2e/` pustí ve dvou projektech:
 
 - **`desktop`**: 1280 × 800, myš a klávesnice,
-- **`phone`**: 844 × 390 (telefon na šířku) s dotykem, jen `start`, `touch`, `layout` a `pwa`.
+- **`phone`**: 844 × 390 (telefon na šířku) s dotykem, jen `start`, `touch`, `layout`, `pwa` a `help`.
 
 Seznam testů je v [struktura-projektu.md](struktura-projektu.md#e2e).
 

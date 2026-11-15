@@ -131,7 +131,7 @@ Menu je HTML nad canvasem, ne kresba. Tlačítka tak mají fokus, ovládání kl
 
 Uvnitř `panelFor(game, data, handlers)` popisuje obsah každé obrazovky jako data (`Panel`: nadpis, řádky, tělo, tlačítka, patička) a `renderPanel()` z nich vyrobí prvky. Řádek označený `only: "keys"` nebo `only: "touch"` se ukáže jen při daném ovládání (třída `touch` na `#ui`). Po přestavění dostane fokus první tlačítko.
 
-Úvodní obrazovka má výběr obtížnosti (`difficultyChoice`), nastavení formulář se jménem, vzhledem a zvukem (`settingsForm`), výsledky tabulku (`scoreTable`). Každá změna se hned uloží přes `handlers.settings`.
+Úvodní obrazovka má výběr obtížnosti (`difficultyChoice`), nastavení formulář se jménem, vzhledem a zvukem (`settingsForm`), výsledky tabulku (`scoreTable`). Obrazovka Jak hrát (`helpText`) má texty v konstantách `GOAL`, `KEY_CONTROLS` a `TOUCH_CONTROLS`. Obě sady ovládání jsou ve stránce a CSS ukáže tu, která odpovídá třídě `touch`, takže se návod přepne spolu s ovladači. Každá změna se hned uloží přes `handlers.settings`.
 
 Tlačítko pauzy je vidět na obrazovkách `ready`, `playing` a `crash`, tlačítko celé obrazovky na ostatních (a jen kde to prohlížeč umí).
 

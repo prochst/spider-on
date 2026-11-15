@@ -151,6 +151,76 @@
   }
 }
 
+/* How to play (spec chapter 12): the goal and the controls side by side, so it fits a phone held sideways. */
+.help {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 0.5rem 2rem;
+  max-width: 44rem;
+  text-align: left;
+}
+
+.help h2 {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--menu-accent, #ff6ad5);
+}
+
+.help ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.help li + li {
+  margin-top: 0.35rem;
+}
+
+.help dl {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 0.35rem 0.8rem;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.help dt {
+  font-weight: 700;
+}
+
+.help dd {
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* The help is the widest menu: keep it clear of the corner button on both sides, as it is centred. */
+.panel:has(> .help) {
+  max-width: calc(100% - 2 * (var(--corner-button) + 2 * var(--corner-gap)));
+}
+
+/* A phone held sideways: smaller text keeps the whole help and its button on screen. */
+@media (max-height: 500px) {
+  .help ul,
+  .help dl {
+    font-size: 0.8rem;
+  }
+
+  .help li + li {
+    margin-top: 0.2rem;
+  }
+}
+
+/* A narrow window stacks the two parts. */
+@media (max-width: 600px) {
+  .help {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* Settings form and the difficulty on the title screen: label on the left, control on the right. */
 .settings {
   display: grid;

@@ -19,7 +19,7 @@ try {
   const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
   await page.goto(`http://localhost:${PORT}/?debug&seed=${SEED}`);
   await page.evaluate(() => document.fonts.ready);
-  await page.getByRole("button", { name: "Hrát" }).click();
+  await page.getByRole("button", { name: "Hrát", exact: true }).click();
   await page.keyboard.press("Enter");
   await page.waitForTimeout(2500);
   // Freeze the frame: the pause screen would show a menu, so stop the loop instead.

@@ -17,6 +17,7 @@ function run(screen: Screen, ...events: ScreenEvent[]): Screen {
 const ALL_EVENTS: ScreenEvent[] = [
   { type: "play" },
   { type: "openScores" },
+  { type: "openHelp" },
   { type: "openSettings" },
   { type: "back" },
   { type: "start" },
@@ -50,8 +51,10 @@ describe("transition", () => {
     );
   });
 
-  it("opens scores and settings from the title and returns there", () => {
+  it("opens scores, help and settings from the title and returns there", () => {
     expect(run(TITLE, { type: "openScores" }, { type: "back" })).toEqual(TITLE);
+    expect(run(TITLE, { type: "openHelp" }).name).toBe("help");
+    expect(run(TITLE, { type: "openHelp" }, { type: "back" })).toEqual(TITLE);
     expect(run(TITLE, { type: "openSettings" }, { type: "back" })).toEqual(TITLE);
   });
 
@@ -71,7 +74,8 @@ describe("transition", () => {
   });
 
   it("does not pause menus or finished rounds", () => {
-    for (const screen of [TITLE, run(TITLE, { type: "openScores" }), { name: "roundComplete" } as Screen]) {
+    const menus = [TITLE, run(TITLE, { type: "openScores" }), run(TITLE, { type: "openHelp" })];
+    for (const screen of [...menus, { name: "roundComplete" } as Screen]) {
       expect(transition(screen, { type: "pause" })).toBe(screen);
     }
   });
@@ -115,6 +119,7 @@ describe("keyboard shortcuts", () => {
     const screens: Screen[] = [
       TITLE,
       { name: "scores" },
+      { name: "help" },
       { name: "settings", back: TITLE },
       { name: "ready" },
       { name: "playing" },

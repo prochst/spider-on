@@ -125,6 +125,7 @@ Nový soubor, který hra potřebuje za běhu, přidej i do `PUBLIC_FILES` ve `vi
 | `difficulty.spec.ts` | Volba obtížnosti: počáteční kolo, výběr klávesnicí, barvy seznamu, uložení. |
 | `pwa.spec.ts` | Manifest, service worker a hra offline. |
 | `share.spec.ts` | Meta značky pro vyhledávače a náhled odkazu, menu v oblasti `<main>`. |
+| `help.spec.ts` | Obrazovka Jak hrát: cíl hry, ovládání podle zařízení, přepnutí po prvním dotyku, návrat, místo na nejmenší obrazovce. |
 
 ## `scripts/`
 
