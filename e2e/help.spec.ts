@@ -30,7 +30,7 @@ test("explains the goal and the controls of this device", async ({ page, isMobil
   await expect(page.locator(".help li")).toHaveCount(4);
   if (isMobile) {
     await expect(touchControls(page)).toBeVisible();
-    await expect(touchControls(page)).toContainText("Tah vpravo");
+    await expect(touchControls(page)).toContainText("Pravý touchpad");
     await expect(keyControls(page)).toBeHidden();
   } else {
     await expect(keyControls(page)).toBeVisible();

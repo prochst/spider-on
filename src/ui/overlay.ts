@@ -271,20 +271,26 @@ type ControlRow = [control: string, action: string];
 const GOAL = [
   "Tvůj pavouk sám leze po pavučině. Sesbírej všechny mouchy a kolo je hotové.",
   "Nepřátelé lezou proti tobě. Srážka stojí život, začínáš se třemi.",
-  "Kruh změníš jen na čtyřech zvýrazněných vláknech. Pokyn dej těsně před vláknem.",
+  "Kruh změníš jen na čtyřech zvýrazněných vláknech. Pokyn dej těsně před vláknem. Další pokyn během změny přidá ke změně další úroveň.",
   "Od 4. kola se objevují bonusové balíčky: body, zpomalení nepřátel, vzácně život.",
 ];
 
 const KEY_CONTROLS: ControlRow[] = [
-  ["Šipky nebo W A S D", "změna kruhu ve směru šipky"],
-  ["Mezerník nebo Shift", "plyn, dokud je držíš"],
+  [
+    "Šipky nebo W A S D",
+    "změna kruhu ve směru šipky po zvýrazněném vláknu, další stisknutí během změny přidá další úroveň změny",
+  ],
+  ["Mezerník nebo Shift", "stiskem zrychlíš pohyb svého pavouka"],
   ["Enter nebo mezerník", "spustit kolo"],
   ["P nebo Esc", "pauza"],
 ];
 
 const TOUCH_CONTROLS: ControlRow[] = [
-  ["Tah vpravo", "změna kruhu ve směru tahu"],
-  ["Držet vlevo", "plyn"],
+  [
+    "Pravý touchpad",
+    "změna kruhu tahem prstu v požadovaném směru, další tah během změny přidá další úroveň změny",
+  ],
+  ["Tlačítko vlevo", "držením zrychlíš pohyb svého pavouka"],
   ["Klepnout vpravo", "spustit kolo"],
   ["Tlačítko v rohu", "pauza"],
 ];
