@@ -23,3 +23,8 @@ Po sloučení a ručním testu poslal uživatel nejdřív rozepsanou verzi úpra
 > * Za větu "Kruh změníš ...." přidej "Další pokyn během změny přidá ke změně další úroveň."
 >
 > Ostatní nech jak to je.
+
+Po prohlédnutí snímků ještě:
+
+> V Cíly hry vyměň pořadí vět:
+> Větu "Další pokyn běhen změny ..." dej až za větu  "Pokyn dej těsně ..."
