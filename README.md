@@ -4,10 +4,11 @@ Arkádová hra, ve které pavouk leze po kruhové pavučině, sbírá mouchy a v
 
 **Hrát: [spider-on.prochst.dev](https://spider-on.prochst.dev/)**. Funguje na počítači i na telefonu, dá se nainstalovat na plochu a hrát offline.
 
-Hra vzniká ve spolupráci s AI agentem a celý postup je zdokumentovaný jako výukový materiál v [docs/](docs/00-uvod.md).
+Hra vzniká ve spolupráci s AI agentem a celý postup je zdokumentovaný jako výukový materiál v [docs/ai-lekce/](docs/ai-lekce/00-uvod.md).
 
 - Pravidla hry: [docs/specifikace.md](docs/specifikace.md)
-- Výukový materiál: [docs/00-uvod.md](docs/00-uvod.md)
+- Programátorská dokumentace: [docs/dev-docs/](docs/dev-docs/README.md)
+- Výukový materiál: [docs/ai-lekce/00-uvod.md](docs/ai-lekce/00-uvod.md)
 - Pravidla pro agenta: [CLAUDE.md](CLAUDE.md)
 
 Hra je inspirovaná klasickými bludišťovými arkádami konce 70. let. Nepoužívá žádný kód, grafiku, zvuky ani názvy původních her.

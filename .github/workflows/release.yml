@@ -1,6 +1,6 @@
 name: Release build
 
-# The game is uploaded by hand to its own host (docs/nasazeni.md). This
+# The game is uploaded by hand to its own host (docs/dev-docs/nasazeni.md). This
 # workflow prepares the files: after every check passes, it builds the game
 # and keeps dist/ as a downloadable artifact, ready to go to the host over FTP.
 on:

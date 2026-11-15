@@ -203,7 +203,7 @@ Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do poz
 **Vydání webové verze**
 
 - Webová verze běží na adrese https://spider-on.prochst.dev/, v kořeni vlastní subdomény na běžném webhostingu (Apache). Hra jde jen přes HTTPS, adresa s http:// přesměruje na https://.
-- Na hosting se nahrává ručně přes FTP podle postupu v `docs/nasazeni.md`. Build k nahrání vznikne automaticky jen tehdy, když na něm projdou všechny automatické testy včetně testů v prohlížeči. Bez zelených testů není co nahrát a na webu zůstane předchozí verze.
+- Na hosting se nahrává ručně přes FTP podle postupu v `docs/dev-docs/nasazeni.md`. Build k nahrání vznikne automaticky jen tehdy, když na něm projdou všechny automatické testy včetně testů v prohlížeči. Bez zelených testů není co nahrát a na webu zůstane předchozí verze.
 - Odkaz na hru sdílený v chatu nebo na sociální síti ukáže náhled: název, krátký popis a obrázek ze hry (1200 × 630 px).
 
 ## 16. Mimo rozsah verze 1

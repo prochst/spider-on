@@ -5,6 +5,7 @@ Arkádová hra v prohlížeči (později Android a iOS přes Capacitor): pavouk 
 ## Zdroj pravdy
 
 - Pravidla hry: `docs/specifikace.md`. Před změnou chování hry nejdřív uprav specifikaci, nebo se zeptej.
+- Programátorská dokumentace: `docs/dev-docs/`. Když změníš strukturu projektu, závislosti nebo provázání modulů, uprav ji ve stejném pull requestu.
 - Laditelné konstanty patří do `src/game/config.ts`, ne roztroušené po kódu.
 
 ## Příkazy
@@ -34,12 +35,13 @@ Před každým commitem musí projít `npm run typecheck`, `npm test` a `npm run
 - `src/storage/`: nastavení a tabulka výsledků v `localStorage`. Když úložiště selže, hra běží dál bez něj.
 - `e2e/`: E2E testy (Playwright) proti produkčnímu buildu, projekty `desktop` (1280×800) a `phone` (844×390 s dotykem). Stav hry čtou přes `?debug` a `window.spiderOn` (rozložení přes `window.spiderOnView`), dotyk posílají přes CDP (`e2e/touch.ts`).
 - `src/main.ts`: spojuje vše dohromady a řídí herní smyčku s pevným krokem 1/120 s.
-- Vydání: hra běží na https://spider-on.prochst.dev/ (kořen domény, `base: "/"`). Workflow `release.yml` po zelených testech na `main` připraví `dist/` ke stažení, nahrává se ručně přes FTP podle `docs/nasazeni.md`.
+- Vydání: hra běží na https://spider-on.prochst.dev/ (kořen domény, `base: "/"`). Workflow `release.yml` po zelených testech na `main` připraví `dist/` ke stažení, nahrává se ručně přes FTP podle `docs/dev-docs/nasazeni.md`.
 - Žádný herní framework. Nové závislosti jen po dohodě.
 
 ## Konvence
 
 - Kód, identifikátory a komentáře v kódu anglicky. Dokumentace v `docs/`, README a popisy pull requestů česky.
+- `docs/` má tři části: `specifikace.md` (pravidla hry), `dev-docs/` (programátorská dokumentace) a `ai-lekce/` (výukový materiál o vývoji s AI).
 - TypeScript ve striktním režimu, žádné `any`.
 - Malé, čitelné funkce. Komentář vysvětluje proč, ne co.
 - Nepoužívej název, grafiku ani zvuky původní hry Head On.
@@ -50,9 +52,9 @@ Před každým commitem musí projít `npm run typecheck`, `npm test` a `npm run
 
 ## Výuková dokumentace
 
-Každý pull request odpovídá jedné kapitole v `docs/kapitoly/<fáze>/`. Ke každé kapitole:
+Každý pull request odpovídá jedné kapitole v `docs/ai-lekce/kapitoly/<fáze>/`. Ke každé kapitole:
 
-1. Ulož doslovné zadání uživatele do `docs/prompty/<fáze>/`.
-2. Kapitolu napiš podle osnovy v `docs/00-uvod.md`: cíl, zadání, co agent udělal, kde se spletl, lidská kontrola, metriky, poučení.
+1. Ulož doslovné zadání uživatele do `docs/ai-lekce/prompty/<fáze>/`.
+2. Kapitolu napiš podle osnovy v `docs/ai-lekce/00-uvod.md`: cíl, zadání, co agent udělal, kde se spletl, lidská kontrola, metriky, poučení.
 3. Chyby a slepé uličky nezamlčuj, jsou pro čtenáře nejcennější.
-4. Obecná poučení přidej do `docs/lekce.md`.
+4. Obecná poučení přidej do `docs/ai-lekce/lekce.md`.
