@@ -212,6 +212,38 @@
   .help li + li {
     margin-top: 0.2rem;
   }
+
+  /* The controls are long sentences: each one under its key gets the full column width. */
+  .help {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .help dl {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .help dd + dt {
+    margin-top: 0.3rem;
+  }
+}
+
+/* The smallest phones (640 × 360): a notch smaller still, so the Zpět button stays on screen. */
+@media (max-height: 370px) {
+  .panel:has(> .help) {
+    gap: 0.35rem;
+    padding-block: 0.6rem;
+  }
+
+  .help ul,
+  .help dl {
+    font-size: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .help h2 {
+    margin-bottom: 0.25rem;
+  }
 }
 
 /* A narrow window stacks the two parts. */

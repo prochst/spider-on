@@ -1,6 +1,6 @@
 # Specifikace hry Spider On
 
-Verze 0.22. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
+Verze 0.23. Tento dokument je jediný zdroj pravdy o pravidlech hry. Když se kód a specifikace rozcházejí, platí specifikace, nebo se nejdřív upraví specifikace.
 
 Hodnoty označené **(laditelné)** jsou výchozí odhady. Upraví se při hraní a jejich konečné hodnoty budou v `src/game/config.ts`.
 
@@ -156,9 +156,9 @@ Hra se pozastaví sama, když okno ztratí fokus nebo se aplikace přepne do poz
 
 1. **Úvod**: název hry, nejlepší skóre (když tabulka není prázdná), volba Úroveň obtížnosti (lehká, střední, těžká, kapitola 6), tlačítka Hrát, Jak hrát, Výsledky a Nastavení a drobně číslo verze (kapitola 15).
 2. **Jak hrát**: krátký návod pro nového hráče ve dvou částech, Cíl hry a Ovládání, a tlačítko Zpět na úvod. Ovládání se ukáže podle toho, jak hráč hraje: na počítači klávesy, na zařízení s dotykovým ovládáním (kapitola 11) dotyková gesta. Když hráč na počítači poprvé sáhne na dotykovou obrazovku, návod se přepne na dotyk stejně jako ovladače. Obsah:
-   - Cíl hry: pavouk sám leze po pavučině a hráč sbírá mouchy, kolo končí sebráním poslední mouchy. Nepřátelští pavouci lezou proti hráči a srážka stojí život, hráč začíná se 3 životy. Na sousední kruh se přelézá jen na 4 zvýrazněných vláknech, pokyn se dává těsně před vláknem. Od 4. kola se objevují bonusové balíčky (body, zpomalení nepřátel, vzácně život).
-   - Ovládání na počítači: šipky nebo W, A, S, D přelezou na sousední kruh ve směru šipky, mezerník nebo Shift (držet) je plyn, Enter nebo mezerník spustí kolo, P nebo Esc pozastaví hru.
-   - Ovládání dotykem: tah po pravé polovině obrazovky přeleze na sousední kruh ve směru tahu, držení levé poloviny je plyn, klepnutí na pravou polovinu spustí kolo, tlačítko v rohu pozastaví hru.
+   - Cíl hry: pavouk sám leze po pavučině a hráč sbírá mouchy, kolo končí sebráním poslední mouchy. Nepřátelští pavouci lezou proti hráči a srážka stojí život, hráč začíná se 3 životy. Na sousední kruh se přelézá jen na 4 zvýrazněných vláknech, další pokyn během změny přidá další kruh (kapitola 5), pokyn se dává těsně před vláknem. Od 4. kola se objevují bonusové balíčky (body, zpomalení nepřátel, vzácně život).
+   - Ovládání na počítači: šipky nebo W, A, S, D změní kruh ve směru šipky po zvýrazněném vláknu a další stisknutí během změny přidá další kruh, mezerník nebo Shift zrychlí hráčova pavouka, Enter nebo mezerník spustí kolo, P nebo Esc pozastaví hru.
+   - Ovládání dotykem: tah prstem po pravém touchpadu změní kruh v požadovaném směru a další tah během změny přidá další kruh, držení tlačítka vlevo zrychlí hráčova pavouka, klepnutí na pravou polovinu spustí kolo, tlačítko v rohu pozastaví hru.
 3. **Nastavení**: jméno hráče, šablona vzhledu, zvuk zapnutý/vypnutý. Každá změna platí a uloží se hned, tlačítko Zpět jen zavře obrazovku.
 4. **Výsledky**: tabulka 10 nejlepších her (kapitola 10).
 5. **Hra**: pavučina a HUD se skóre, číslem kola a životy.
@@ -238,3 +238,4 @@ Další rozhodnutí uživatele:
 - Verze 0.20 (kapitola 3.4): webová verze se zveřejní jen po zelených testech a sdílený odkaz ukáže náhled hry.
 - Verze 0.21 (kapitola 3.5): webová verze se stěhuje z GitHub Pages na vlastní doménu https://spider-on.prochst.dev/ a nahrává se přes FTP.
 - Verze 0.22 (kapitola 2.9): po ručním testu přibyla na úvodní obrazovce položka Jak hrát s cílem hry a ovládáním podle zařízení.
+- Verze 0.23: po ručním testu upravené texty návodu Jak hrát podle uživatele: ovládání popisuje i přidání dalšího kruhu během změny.

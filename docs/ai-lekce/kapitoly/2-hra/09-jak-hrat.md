@@ -20,9 +20,12 @@ Viz [prompty/2-hra/09-jak-hrat.md](../../prompty/2-hra/09-jak-hrat.md). Přání
 
 - **Návod zakryl tlačítko v rohu.** První verze měla panel široký až 44rem. Na telefonu na šířku pak pravý horní roh panelu zajel pod tlačítko celé obrazovky. Agent to viděl na snímku, žádný test na to nebyl. Panel s návodem teď nechá na obou stranách místo pro rohové tlačítko.
 - **Na nejmenší obrazovce se nevešel.** Užší panel se na obrazovce 640 × 360 protáhl do výšky a tlačítko Zpět bylo až po posunutí. Menší písmo pomohlo jen trochu, víc pomohlo zkrátit texty: „změna kruhu ve směru tahu“ místo „přelézt na sousední kruh ve směru tahu“, „Nepřátelé“ místo „Nepřátelští pavouci“. Jestli test „vejde se“ projde, ověřil agent i obráceně: bez zmenšeného písma selže.
+- **V návodu chyběl přelez o dva kruhy.** Při zkracování textů kvůli malé obrazovce agent vynechal pravidlo, že další pokyn během přelézání přidá další kruh (specifikace, kapitola 5). Přitom je to jedna z mála věcí, na které hráč sám nepřijde. Doplnil ho až uživatel po ručním testu, viz níže. Zkrácený text se vešel, ale přestal být úplný.
 - **„Hrát“ je i v „Jak hrát“.** Test hlavní oblasti z kapitoly 3.4 hledal tlačítko podle názvu „Hrát“. Playwright ve výchozím stavu hledá podřetězec, takže teď našel dvě tlačítka a selhal. Stejná chyba čekala ve skriptu `scripts/share-image.mjs`, který by po spuštění klikl na nejednoznačné tlačítko. Obě místa teď hledají přesný název (`exact: true`). Pomocná funkce `menuButton` v E2E testech to dělala správně od začátku.
 
 ## Lidská kontrola
+
+- **Úprava textů po ručním testu.** Uživatel návod přepsal vlastními slovy: ovládání popisuje i přidání dalšího kruhu, plyn je „zrychlíš pohyb svého pavouka“ a touchpad je „Pravý touchpad“, ne „Tah vpravo“. Delší texty se na nejmenší obrazovku 640 × 360 nevešly, test „vejde se“ selhal a tlačítko Zpět bylo pod okrajem. Agent texty nezkracoval, protože jsou uživatelovy. Změnil rozložení: na nízké obrazovce je popis ovládání pod klávesou, ne vedle ní, takže dostane celou šířku sloupce. Na nejmenší obrazovce je ještě o kousek menší písmo a panel má menší okraje. Specifikace má verzi 0.23.
 
 - **Texty návodu.** Jestli je cíl hry srozumitelný pro někoho, kdo hru nikdy neviděl, a jestli tón sedí ke hře. Texty jsou v konstantách `GOAL`, `KEY_CONTROLS` a `TOUCH_CONTROLS` v `src/ui/overlay.ts`.
 - **Telefon v ruce.** Návod by měl ukázat gesta, ne klávesy, a vejít se na obrazovku bez posouvání.
@@ -38,5 +41,5 @@ Viz [prompty/2-hra/09-jak-hrat.md](../../prompty/2-hra/09-jak-hrat.md). Přání
 ## Poučení
 
 - Když má něco záviset na zařízení, použij rozhodnutí, které hra už dělá jinde. Druhá detekce „je to mobil?“ by se dřív nebo později rozešla s první.
-- Text v menu je taky rozložení. Na malé obrazovce pomohlo zkrátit věty víc než zmenšit písmo.
+- Text v menu je taky rozložení. Na malé obrazovce pomohlo zkrátit věty víc než zmenšit písmo. Zkracování ale nesmí vypustit pravidlo, a když text dodá člověk, přizpůsobí se rozložení textu, ne text rozložení.
 - Hledej prvky podle přesného názvu. Nové tlačítko „Jak hrát“ rozbilo test, který hledal „Hrát“.
