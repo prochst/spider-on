@@ -26,6 +26,7 @@ Viz [prompty/2-hra/09-jak-hrat.md](../../prompty/2-hra/09-jak-hrat.md). Přání
 ## Lidská kontrola
 
 - **Úprava textů po ručním testu.** Uživatel návod přepsal vlastními slovy: ovládání popisuje i přidání dalšího kruhu, plyn je „zrychlíš pohyb svého pavouka“ a touchpad je „Pravý touchpad“, ne „Tah vpravo“. Delší texty se na nejmenší obrazovku 640 × 360 nevešly, test „vejde se“ selhal a tlačítko Zpět bylo pod okrajem. Agent texty nezkracoval, protože jsou uživatelovy. Změnil rozložení: na nízké obrazovce je popis ovládání pod klávesou, ne vedle ní, takže dostane celou šířku sloupce. Na nejmenší obrazovce je ještě o kousek menší písmo a panel má menší okraje. Specifikace má verzi 0.23.
+- **Návod na hraně místa.** Místně se upravený návod na 640 × 360 vešel s rezervou 2 px. V CI se o řádek víc zalomilo, panel měl 348 px místo 332 a test „vejde se“ selhal. Agent nejdřív ověřil, jestli za tím není pomalé načtení písma: s náhradním písmem měl panel 327 px, takže písmo to nebylo. Prohlížeč v CI jen zalamuje text o kousek jinak. Rozložení s rezervou 2 px je křehké, proto agent místo zvětšení tolerance v testu přidal místo: sloupec s cílem hry je na nejmenší obrazovce širší, řádkování těsnější a nadpis menší. Rezerva je teď 32 px, víc než dva řádky textu.
 
 - **Texty návodu.** Jestli je cíl hry srozumitelný pro někoho, kdo hru nikdy neviděl, a jestli tón sedí ke hře. Texty jsou v konstantách `GOAL`, `KEY_CONTROLS` a `TOUCH_CONTROLS` v `src/ui/overlay.ts`.
 - **Telefon v ruce.** Návod by měl ukázat gesta, ne klávesy, a vejít se na obrazovku bez posouvání.

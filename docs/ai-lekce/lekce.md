@@ -50,3 +50,4 @@ Průběžný seznam obecných poučení z práce s AI agentem. U každého je od
 - **Rozhodnutí o zařízení dělej na jednom místě.** Návod Jak hrát ukazuje gesta podle stejné třídy jako dotykové ovladače, takže se nemůžou rozejít. ([kapitola 2.9](kapitoly/2-hra/09-jak-hrat.md))
 - **Na malé obrazovce zkracuj text, ne jen písmo.** Kratší věty ušetřily víc místa než menší písmo. ([kapitola 2.9](kapitoly/2-hra/09-jak-hrat.md))
 - **Prvky v testech hledej podle přesného názvu.** Nové tlačítko „Jak hrát“ rozbilo test, který hledal „Hrát“ jako podřetězec. ([kapitola 2.9](kapitoly/2-hra/09-jak-hrat.md))
+- **Rozložení „tak akorát“ v jiném prohlížeči nevyjde.** Návod se místně vešel s rezervou 2 px, v CI se jeden řádek zalomil jinak a test selhal. Nech rezervu aspoň na řádek textu. ([kapitola 2.9](kapitoly/2-hra/09-jak-hrat.md))

@@ -232,13 +232,23 @@
 @media (max-height: 370px) {
   .panel:has(> .help) {
     gap: 0.35rem;
-    padding-block: 0.6rem;
+    padding: 0.6rem 1.25rem;
+  }
+
+  .panel:has(> .help) h1 {
+    font-size: 1.1rem;
+  }
+
+  /* The goal is the longer part, so it gets the wider column. */
+  .help {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    column-gap: 1.25rem;
   }
 
   .help ul,
   .help dl {
     font-size: 0.75rem;
-    line-height: 1.3;
+    line-height: 1.2;
   }
 
   .help h2 {
