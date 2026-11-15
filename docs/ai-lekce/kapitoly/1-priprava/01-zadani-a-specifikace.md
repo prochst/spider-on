@@ -15,7 +15,7 @@ Doslovná zadání jsou v [prompty/1-priprava/01-zadani-a-specifikace.md](../../
 3. **Srovnání technologií.** Na žádost uživatele rozšířil srovnání na šest stacků (Phaser, PixiJS, čistý Canvas, Godot, Flutter, Unity) s tabulkou kritérií a tabulkou pro a proti. Rozhodujícím kritériem bylo, jestli agent v cloudu dokáže hru sestavit a otestovat bez grafického editoru.
 4. **Vývoj jen přes GitHub.** Vysvětlil, že pro webovou verzi není potřeba žádné lokální prostředí, popsal cyklus úkol → pull request → GitHub Actions → GitHub Pages a ukázal workflow pro nasazení. Verze akcí ověřil v dokumentaci GitHubu.
 5. **Grafický styl.** Uživatel přišel s nápadem pavouků na kruhové pavučině. Agent navrhl, jak pravidla originálu přenést (kruhy jako pruhy, radiální vlákna jako přechody, mouchy jako tečky), nabídl čtyři styly a na požádání vytvořil animovaný náhled dvou z nich přímo v Canvasu.
-6. **Specifikace.** Z rozhodnutí sepsal [specifikaci hry](../../specifikace.md) se všemi čísly, která bude kód potřebovat, a s otevřenými otázkami pro uživatele.
+6. **Specifikace.** Z rozhodnutí sepsal [specifikaci hry](../../../specifikace.md) se všemi čísly, která bude kód potřebovat, a s otevřenými otázkami pro uživatele.
 
 ## Kde se agent spletl
 

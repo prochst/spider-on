@@ -16,7 +16,7 @@ Viz [prompty/3-web/05-vlastni-hosting.md](../../prompty/3-web/05-vlastni-hosting
 - **`.htaccess`.** Nový soubor `public/.htaccess` Vite zkopíruje do buildu. Přesměruje http na https, doplní typy souborů, které starší Apache nezná (`.webmanifest`, `.woff2`), zakáže ukládání `index.html`, `sw.js` a manifestu do mezipaměti (jinak by se hráč nedozvěděl o nové verzi) a soubory v `assets/` naopak nechá uložit na rok, protože mají otisk obsahu v názvu. Do offline mezipaměti service workeru nepatří, takže v `PUBLIC_FILES` není.
 - **Ikony v `app-icons/`.** Viz „Kde se agent spletl“.
 - **Místo nasazení release build.** Workflow `deploy.yml` nasazoval na Pages, kde by build pro kořen domény nefungoval. Nahradil ho `release.yml`: po sloučení do `main` spustí stejné testy jako dřív (včetně E2E) a když projdou, nabídne složku `dist/` ke stažení jako artefakt. Nahrání přes FTP dělá člověk. Pravidlo „k hráčům se dostane jen otestovaný build“ tak platí dál, jen s ručním posledním krokem.
-- **Postup nahrání** v [docs/nasazeni.md](../../nasazeni.md): co hosting potřebuje, kde vzít soubory, nahrání přes FTP, kontrola po nahrání a tabulka častých potíží.
+- **Postup nahrání** v [docs/dev-docs/nasazeni.md](../../../dev-docs/nasazeni.md): co hosting potřebuje, kde vzít soubory, nahrání přes FTP, kontrola po nahrání a tabulka častých potíží.
 - **Ověření na skutečném Apache.** Agent nainstaloval do svého prostředí Apache 2.4 s `AllowOverride All`, nahrál do něj build a prošel ho prohlížečem: přesměrování na https, typy a hlavičky souborů, gzip, instalace service workeru, všech 12 souborů v mezipaměti a načtení hry offline. Žádný požadavek neskončil chybou.
 - Verze 0.3.5, specifikace 0.21.
 
@@ -28,14 +28,14 @@ Viz [prompty/3-web/05-vlastni-hosting.md](../../prompty/3-web/05-vlastni-hosting
 
 ## Lidská kontrola
 
-- **Nahrát build a projít „Kontrolu po nahrání“** z [docs/nasazeni.md](../../nasazeni.md): https, přesměrování z http, manifest a service worker v Nástrojích pro vývojáře, hra offline, instalace na telefonu, náhled odkazu v chatu.
+- **Nahrát build a projít „Kontrolu po nahrání“** z [docs/dev-docs/nasazeni.md](../../../dev-docs/nasazeni.md): https, přesměrování z http, manifest a service worker v Nástrojích pro vývojáře, hra offline, instalace na telefonu, náhled odkazu v chatu.
 - **Hra nainstalovaná z GitHub Pages** se na novou adresu sama nepřestěhuje. Je to jiná doména, tedy jiná aplikace s vlastním úložištěm i tabulkou výsledků. Starou ikonu je potřeba odinstalovat a hru nainstalovat znovu z nové adresy.
 - **Stará verze na Pages.** Zůstane viset, dokud ji uživatel v nastavení repozitáře nevypne (Settings → Pages).
 
 ## Metriky
 
 - Čas: asi 45 minut od zadání po pull request.
-- Nové soubory: `public/.htaccess`, `.github/workflows/release.yml`, `docs/nasazeni.md`, kapitola a zadání. Smazaný `deploy.yml`, přejmenovaná složka ikon.
+- Nové soubory: `public/.htaccess`, `.github/workflows/release.yml`, `docs/dev-docs/nasazeni.md`, kapitola a zadání. Smazaný `deploy.yml`, přejmenovaná složka ikon.
 - Testy: 158 unit testů a 41 E2E testů beze změny počtu, `check-update.mjs` prošel. Navíc jednorázová kontrola na Apache.
 
 ## Poučení

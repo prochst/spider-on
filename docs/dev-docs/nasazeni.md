@@ -1,5 +1,7 @@
 # Nasazení webové verze na vlastní hosting
 
+[← Programátorská dokumentace](README.md)
+
 Hra běží na **https://spider-on.prochst.dev/**, v kořeni subdomény na běžném webhostingu s Apache. Je to statický web: žádné PHP, databáze ani Node.js na serveru. Stačí nahrát soubory přes FTP.
 
 ## Co hosting potřebuje
