@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 // End-to-end tests run the production build in a real browser, the same files
-// GitHub Pages serves. Unit tests for the logic stay in src/ (Vitest).
+// that go to the web host. Unit tests for the logic stay in src/ (Vitest).
 const PORT = 4173;
 
 export default defineConfig({
@@ -10,7 +10,7 @@ export default defineConfig({
   fullyParallel: false,
   reporter: [["list"], ["html", { open: "never" }]],
   use: {
-    baseURL: `http://localhost:${PORT}/spider-on/`,
+    baseURL: `http://localhost:${PORT}/`,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
@@ -29,7 +29,7 @@ export default defineConfig({
   ],
   webServer: {
     command: `npm run build && npx vite preview --port ${PORT} --strictPort`,
-    url: `http://localhost:${PORT}/spider-on/`,
+    url: `http://localhost:${PORT}/`,
     // Locally a running preview is reused; in CI nothing runs yet, so it starts fresh.
     reuseExistingServer: true,
     timeout: 120_000,

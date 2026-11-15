@@ -6,13 +6,15 @@ import pkg from "./package.json" with { type: "json" };
  * Files from public/ are copied as they are and never pass through the
  * bundle, so the service worker learns about them from this list.
  * share.png is left out on purpose: only link previews fetch it, never the game.
+ * The icons live in app-icons/, not icons/: many Apache hosts map /icons/ to
+ * their own folder of directory-listing icons, and the game's would never load.
  */
 const PUBLIC_FILES = [
   "manifest.webmanifest",
-  "icons/icon.svg",
-  "icons/icon-192.png",
-  "icons/icon-512.png",
-  "icons/apple-touch-icon.png",
+  "app-icons/icon.svg",
+  "app-icons/icon-192.png",
+  "app-icons/icon-512.png",
+  "app-icons/apple-touch-icon.png",
 ];
 const SERVICE_WORKER = "sw.js";
 
@@ -52,8 +54,8 @@ export default defineConfig(({ mode }) => {
   // GitHub Actions sets GITHUB_SHA; a local build has no commit to show.
   const commit = loadEnv(mode, ".", "").GITHUB_SHA?.slice(0, 7) ?? "local";
   return {
-    // GitHub Pages serves the game from https://<user>.github.io/spider-on/
-    base: "/spider-on/",
+    // The game lives at the root of its own domain, https://spider-on.prochst.dev/
+    base: "/",
     define: {
       // Shown on the title screen, so a tester can tell which build is running (spec chapter 15).
       __APP_VERSION__: JSON.stringify(`${pkg.version} · ${commit}`),

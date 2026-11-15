@@ -20,7 +20,7 @@ const server = await preview({ preview: { port: PORT, strictPort: true }, logLev
 const browser = await chromium.launch();
 try {
   const page = await browser.newPage();
-  await page.goto(`http://localhost:${PORT}/spider-on/`);
+  await page.goto(`http://localhost:${PORT}/`);
   await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
   const footer = page.locator(".panel .footer");
   console.log("running:", await footer.textContent());

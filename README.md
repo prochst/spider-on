@@ -2,7 +2,7 @@
 
 Arkádová hra, ve které pavouk leze po kruhové pavučině, sbírá mouchy a vyhýbá se nepřátelským pavoukům. Svítící neonový styl, kreslený čistě kódem v Canvasu.
 
-**Hrát: [prochst.github.io/spider-on](https://prochst.github.io/spider-on/)**. Funguje na počítači i na telefonu, dá se nainstalovat na plochu a hrát offline.
+**Hrát: [spider-on.prochst.dev](https://spider-on.prochst.dev/)**. Funguje na počítači i na telefonu, dá se nainstalovat na plochu a hrát offline.
 
 Hra vzniká ve spolupráci s AI agentem a celý postup je zdokumentovaný jako výukový materiál v [docs/](docs/00-uvod.md).
 
